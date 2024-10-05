@@ -43,11 +43,7 @@ For development purposes, you can use `--watch` to automatically restart the ser
 
 ## Testing
 
-To run tests, use the following command:
-
-```sh
-npm test
-```
+To be defined
 
 ## Environment Variables
 
@@ -57,13 +53,3 @@ Create a `.env` file in the `server` directory and add any necessary environment
 PORT=3000
 DATABASE_URL=mongodb://localhost:27017/ctp-project
 ```
-
-## Troubleshooting
-
-If you encounter any issues, check the following:
-
-- Ensure all dependencies are installed.
-- Verify that the required environment variables are set correctly.
-- Check the server logs for error messages.
-
-For further assistance, refer to the project's [issue tracker](https://github.com/your-username/ctp-project/issues).
