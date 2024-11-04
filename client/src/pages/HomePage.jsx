@@ -1,7 +1,6 @@
-import React from 'react';
-import './HomePage.css';
-import Logo from '../../public/check-icon.png';
-import Calender from '../assets/calender.jpeg'
+import "./HomePage.css";
+import Logo from "../../public/check-icon.png";
+import Calender from "../assets/calender.jpeg";
 
 const HomePage = () => {
   return (
@@ -13,10 +12,18 @@ const HomePage = () => {
         </div>
         <nav className="nav">
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/my-habits">My Habits</a></li>
-            <li><a href="/statistics">Statistics</a></li>
-            <li><a href="/settings">Settings</a></li>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/my-habits">My Habits</a>
+            </li>
+            <li>
+              <a href="/statistics">Statistics</a>
+            </li>
+            <li>
+              <a href="/settings">Settings</a>
+            </li>
           </ul>
           <button className="sign-in-btn">Sign In / Sign Up</button>
         </nav>
@@ -25,7 +32,10 @@ const HomePage = () => {
       <section className="hero">
         <div className="hero-text">
           <h2>Track Your Habits, Build Your Future</h2>
-          <p>Consistency is key. Start tracking your daily habits and turn small steps into big changes!</p>
+          <p>
+            Consistency is key. Start tracking your daily habits and turn small
+            steps into big changes!
+          </p>
           <button className="cta-btn">Get Started Now</button>
         </div>
         <div className="hero-image">
@@ -59,23 +69,36 @@ const HomePage = () => {
       <section className="testimonials">
         <h2>What Our Users Say</h2>
         <div className="testimonial">
-          <p>"Habit Tracker has helped me stay consistent and achieve my goals like never before!"</p>
+          <p>
+            &quot;Habit Tracker has helped me stay consistent and achieve my
+            goals like never before!&quot;
+          </p>
           <p>— Sarah, daily user</p>
         </div>
         <div className="testimonial">
-          <p>"This app transformed the way I approach my daily routine."</p>
+          <p>
+            &quot;This app transformed the way I approach my daily
+            routine.&quot;
+          </p>
           <p>— Jake, user for 6 months</p>
         </div>
       </section>
 
       <footer className="footer">
         <div className="footer-links">
-          <a href="/about">About Us</a> | <a href="/privacy">Privacy Policy</a> | <a href="/contact">Contact Support</a>
+          <a href="/about">About Us</a> | <a href="/privacy">Privacy Policy</a>{" "}
+          | <a href="/contact">Contact Support</a>
         </div>
         <div className="social-media">
-          <a href="https://facebook.com"><img src="/icon-facebook.png" alt="Facebook" /></a>
-          <a href="https://twitter.com"><img src="/icon-twitter.png" alt="Twitter" /></a>
-          <a href="https://instagram.com"><img src="/icon-instagram.png" alt="Instagram" /></a>
+          <a href="https://facebook.com">
+            <img src="/icon-facebook.png" alt="Facebook" />
+          </a>
+          <a href="https://twitter.com">
+            <img src="/icon-twitter.png" alt="Twitter" />
+          </a>
+          <a href="https://instagram.com">
+            <img src="/icon-instagram.png" alt="Instagram" />
+          </a>
         </div>
         <p>© 2024 Habit Tracker</p>
       </footer>
