@@ -1,0 +1,43 @@
+name: Server CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'server/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'server/**'
+      - '.github/workflows/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './server/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: ./server
+      run: npm ci
+
+    - name: Run linter
+      working-directory: ./server
+      run: npm run lint --if-present
+      
+    - name: Run tests
+      working-directory: ./server
+      run: npm test --if-present
