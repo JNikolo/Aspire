@@ -1,4 +1,3 @@
-import React from 'react';
 import signInGoogleIcon from '../assets/signInGoogleIcon.png'; 
 import journeyIcon from '../assets/journeyIcon.png'; 
 
