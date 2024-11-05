@@ -1,6 +1,6 @@
-import React from 'react';
 import Logo from '../../public/check-icon.png';
 import Calender from '../assets/calender.jpeg';
+
 
 const HomePage = () => {
   return (
@@ -58,11 +58,11 @@ const HomePage = () => {
       <section className="text-center p-12 bg-gray-100">
         <h2 className="text-2xl text-teal-700 mb-8">What Our Users Say</h2>
         <div className="italic mb-6">
-          <p>"Habit Tracker has helped me stay consistent and achieve my goals like never before!"</p>
+          <p>&quot;Habit Tracker has helped me stay consistent and achieve my goals like never before!&quot;</p>
           <p>— Sarah, daily user</p>
         </div>
         <div className="italic">
-          <p>"This app transformed the way I approach my daily routine."</p>
+          <p>&quot;This app transformed the way I approach my daily routine.&quot;</p>
           <p>— Jake, user for 6 months</p>
         </div>
       </section>
