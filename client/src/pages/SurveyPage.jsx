@@ -1,18 +1,29 @@
-import React from "react";
 import { useState } from "react";
+import trash from "../assets/trash.png";
 
 export const SurveyPage = () => {
   const [habitName, setHabitName] = useState(null);
-  const [frequency, setFrequency] = useState(null);
+  const [profileName, setProfileName] = useState(null);
+  const [frequency, setFrequency] = useState([]);
   const [notifications, setNotifications] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [privacy, setPrivacy] = useState(null);
-  const [selectedColor, setSelectedColor] = useState(null);
+  const [deleteHabit, setDeleteHabit] = useState(false);
 
-  // Notifications
+  // Frequency of Habit
+  const handleFrequencyChange = (day) => {
+    setFrequency(
+      (prevSelectedDays) =>
+        prevSelectedDays.includes(day)
+          ? prevSelectedDays.filter((d) => d !== day) // Remove day if it's already selected
+          : [...prevSelectedDays, day] // Add day if it's not selected
+    );
+  };
+
+  // Notification Preferences
   const handleNotificationChange = () => {
     setNotifications((prevNotifications) => !prevNotifications);
   };
+
   // Handle individual day selection for notifications
   const handleNotificationDaysChange = (day) => {
     setSelectedDays(
@@ -23,40 +34,44 @@ export const SurveyPage = () => {
     );
   };
 
-  //color picker
-
-  // Define pastel colors
-  const colors = [
-    { name: "Soft Pink", hex: "#FFD1DC" },
-    { name: "Light Lavender", hex: "#D7BDE2" },
-    { name: "Pale Mint", hex: "#D5F5E3" },
-    { name: "Sky Blue", hex: "#AED6F1" },
-    { name: "Lemon Yellow", hex: "#FCF3CF" },
-  ];
-  //
-
-  const [customColor, setCustomColor] = useState("#FFFFFF");
-
-  const handleCustomColorChange = (event) => {
-    const color = event.target.value;
-    setCustomColor(color);
-    setSelectedColor(color);
+  // Delete Habit
+  const deleteUserHabit = () => {
+    setDeleteHabit(true);
   };
 
   return (
-    <div className="bg-gray min-h-screen flex items-center justify-center p-4">
+    <div className=" bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex items-center justify-center p-4">
       {/* card from daisyui used to display content*/}
-      <div className="bg-blue-light card w-full max-w-4xl shadow-xl">
-        <div className="card-body center">
-          <h2 className="card-title text-brown-dark text-2xl font-bold mb-6">
-            Let's Get Your Habit Ready!
-          </h2>
+      <div className="bg-stone-100 transparent card w-full max-w-4xl shadow-xl bg-opacity-85">
+        <div className="card-body flex">
           <h3 className="card-title text-brown-dark text-2xl font-bold mb-6">
-            Please take a few moments to complete this survey
+            Let's Get Your
+            <span className="text-[#93C5FD]">Habit </span>
+            Ready!
           </h3>
-          <hr className="my-1 border-t-4 border-brown-dark w-full shadow-xl" />
+          <h2 className="card-title text-[#32292F] text-2xl font-bold mb-6">
+            Please Take A Moment To Fill Out This Survey
+          </h2>
+          <hr className="my-1 border-t-4 border-[#60A5FA] w-full shadow-xl" />
           <form>
             {/* Survey questions */}
+            {/* Profile Name */}
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="font-bold text-brown-dark label-text">
+                  Choose a Profile Username
+                </span>
+              </label>
+              <input
+                type="text"
+                placeholder="Your Profile Name"
+                value={profileName}
+                onChange={(e) => setProfileName(e.target.value)}
+                className="input input-bordered w-full rounded-md border-gray-300 bg-white focus:border-blue-500 text-black"
+                required
+              />
+            </div>
+            {/* Habit Name */}
             <div className="form-control mb-4">
               <label className="label">
                 <span className="font-bold text-brown-dark label-text">
@@ -65,48 +80,42 @@ export const SurveyPage = () => {
               </label>
               <input
                 type="text"
-                placeholder="Your answer"
+                placeholder="Your Habit Name"
                 value={habitName}
                 onChange={(e) => setHabitName(e.target.value)}
-                className="input input-bordered w-full rounded-md border-gray-300 bg-white focus:border-blue-500"
+                className="input input-bordered w-full rounded-md border-gray-300 bg-white focus:border-blue-500 text-black"
                 required
               />
             </div>
-
+            {/* Frequency of Habit*/}
             <div className="form-control mb-4">
               <label className="label">
                 <span className="font-bold text-brown-dark label-text">
-                  How Often Will You Work On Your Habit?
+                  How Often Would You Like to Work On This Habit?
                 </span>
               </label>
-              {/* Frequency of Task, Daily or Weekly */}
-              <div className="flex flex-row gap-2">
-                <div className="form-control">
-                  <label className="label cursor-pointer">
-                    <input
-                      type="radio"
-                      name="frequency"
-                      className="radio hidden peer"
-                      value="daily"
-                      required
-                    />
-                    <span className="label-text btn btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl">
-                      Daily
-                    </span>
-                  </label>
-                </div>
-                <div className="form-control">
-                  <label className="label cursor-pointer">
-                    <input
-                      type="radio"
-                      name="frequency"
-                      className="radio hidden peer"
-                      value="weekly"
-                    />
-                    <span className="label-text btn btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl">
-                      Weekly
-                    </span>
-                  </label>
+              <div className="form-control mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"].map(
+                    (day) => (
+                      <div key={day} className="form-control">
+                        <label className="label cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="checkbox hidden peer"
+                            checked={frequency.includes(day)}
+                            onChange={() => handleFrequencyChange(day)}
+                            required
+                          />
+                          <span
+                            className={`label-text btn btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl`}
+                          >
+                            {day}
+                          </span>
+                        </label>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             </div>
@@ -115,13 +124,13 @@ export const SurveyPage = () => {
               <div className="flex items-center gap-4">
                 <label className="label">
                   <span className="font-bold text-brown-dark label-text">
-                    Do You Want to Receive Notifications?
+                    Do You Want to Receive Notifications For This Habit?
                   </span>
                 </label>
                 <input
                   type="checkbox"
                   onChange={handleNotificationChange}
-                  className="toggle bg-blue-dark [--tglbg:white]"
+                  className="toggle [--tglbg:white] bg-blue-dark"
                   checked={notifications}
                 />
               </div>
@@ -156,111 +165,6 @@ export const SurveyPage = () => {
                 </div>
               </div>
             )}
-            {/* Public or Private Habit */}
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="font-bold text-brown-dark label-text">
-                  Public or Private Profile?
-                </span>
-              </label>
-              <div className="flex flex-row gap-2">
-                {/* Public option */}
-                <div className="form-control">
-                  <label className="label cursor-pointer">
-                    <input
-                      type="radio"
-                      name="privacy"
-                      value="public"
-                      className="radio hidden peer"
-                      checked={privacy === "public"}
-                      onChange={() => setPrivacy("public")}
-                    />
-                    <span className="label-text btn btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl">
-                      Public
-                    </span>
-                  </label>
-                </div>
-                {/* Private option */}
-                <div className="form-control">
-                  <label className="label cursor-pointer">
-                    <input
-                      type="radio"
-                      name="privacy"
-                      value="private"
-                      className="radio hidden peer"
-                      checked={privacy === "private"}
-                      onChange={() => setPrivacy("private")}
-                    />
-                    <span className="label-text btn btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl">
-                      Private
-                    </span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Theme Color Picker */}
-            <div className="form-control mb-4">
-              <label className="label text-brown-dark font-bold">
-                Choose a Color:
-              </label>
-              <div className="flex gap-4">
-                {colors.map((color) => (
-                  <div
-                    key={color.name}
-                    onClick={() => setSelectedColor(color.hex)}
-                    className={`w-12 h-12 rounded-full cursor-pointer border-2 ${
-                      selectedColor === color.hex
-                        ? "border-black"
-                        : "border-transparent"
-                    }`}
-                    style={{ backgroundColor: color.hex }}
-                  />
-                ))}
-
-                {/* Custom Color Picker */}
-                <div className="relative">
-                  <div
-                    className={`w-12 h-12 rounded-full cursor-pointer border-2 ${
-                      selectedColor === customColor
-                        ? "border-gray"
-                        : "border-transparent"
-                    }`}
-                    style={{ backgroundColor: customColor }}
-                  >
-                    <i
-                      className="fas fa-pencil-alt absolute text-black"
-                      style={{
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%,-50%)",
-                        fontSize: "1.25rem",
-                      }}
-                    />
-                  </div>
-                  <input
-                    type="color"
-                    value={customColor}
-                    onChange={handleCustomColorChange}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Selected Color Display */}
-            {/* {selectedColor && (
-              <div
-                className="mt-4 p-4 w-full max-w-xs rounded-lg shadow-lg"
-                style={{ backgroundColor: selectedColor }}
-              >
-                <p className="text-center font-bold text-brown-dark">
-                  Selected Color:{" "}
-                  {colors.find((color) => color.hex === selectedColor)?.name ||
-                    "Custom"}
-                </p>
-              </div>
-            )} */}
             {/* Save Button */}
             <div className="form-control mt-6">
               <button className="btn bg-brown-dark hover:bg-brown-light text-white">
@@ -268,26 +172,47 @@ export const SurveyPage = () => {
               </button>
             </div>
           </form>
-
-          {/*Trash can*/}
+          {/*Trash icon*/}
           <label
             htmlFor="my_modal_6"
-            className="btn bg-red-800 btn-circle px-10 absolute bottom-4 right-4"
+            className="btn bg-red-600 btn-circle px-3 absolute top-4 right-4 flex items-center hover:bg-red-800"
           >
-            Trash Can
+            <img src={trash} alt="Delete" className="w-12" />
           </label>
         </div>
       </div>
-
-      {/* Delete Confirmation Modal */}
+      {/* Delete Habit */}
       <input type="checkbox" id="my_modal_6" className="modal-toggle" />
       <div className="modal" role="dialog">
         <div className="modal-box">
-          <h3 className="text-lg font-bold">Hello!</h3>
-          <p className="py-4">This modal works with a hidden checkbox!</p>
+          <h3 className="text-lg font-bold">Delete Habit</h3>
+          <p className="py-4">Are you sure you want to delete this habit?</p>
           <div className="modal-action">
-            <label htmlFor="my_modal_6" className="btn">
-              Close!
+            <label
+              htmlFor="my_modal_6"
+              className="btn bg-blue-light text-black hover:bg-gray"
+            >
+              <span>Yes</span>
+              <input
+                type="checkbox"
+                name="frequency"
+                className="radio hidden peer"
+                checked={deleteHabit}
+                onChange={() => deleteUserHabit()}
+              />
+            </label>
+            <label
+              htmlFor="my_modal_6"
+              className="btn bg-blue-300 text-black hover:bg-gray"
+            >
+              <span>No</span>
+              <input
+                type="checkbox"
+                name="frequency"
+                className="radio hidden peer"
+                checked={deleteHabit}
+                onChange={() => deleteUserHabit()}
+              />
             </label>
           </div>
         </div>
