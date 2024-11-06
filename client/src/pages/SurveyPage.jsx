@@ -45,7 +45,7 @@ export const SurveyPage = () => {
       <div className="bg-stone-100 transparent card w-full max-w-4xl shadow-xl bg-opacity-85">
         <div className="card-body flex">
           <h3 className="card-title text-brown-dark text-2xl font-bold mb-6">
-            Let's Get Your
+            Let&apos;s Get Your
             <span className="text-[#93C5FD]">Habit </span>
             Ready!
           </h3>
