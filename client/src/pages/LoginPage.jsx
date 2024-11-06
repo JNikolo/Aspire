@@ -1,8 +1,7 @@
 import signInGoogleIcon from '../assets/signInGoogleIcon.png'; 
 import journeyIcon from '../assets/journeyIcon.png'; 
 
-function LoginPage() {
-  return (
+export const LoginPage = () => (
     <div className="flex h-screen">
       <div className="w-1/2 bg-blue-500 text-white p-10 flex flex-col justify-center items-start">
         <h1 className="text-4xl font-bold mb-4">Aspire</h1>
@@ -54,7 +53,7 @@ function LoginPage() {
       </div>
     </div>
   );
-}
+
 
 export default LoginPage;
 
