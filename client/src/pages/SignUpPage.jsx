@@ -1,8 +1,7 @@
 import signUpGoogleIcon from '../assets/signUpGoogleIcon.png'; 
 import journeyIcon from '../assets/journeyIcon.png'; 
 
-function SignupPage() {
-  return (
+export const SignUpPage = () => (
     <div className="flex h-screen">
       <div className="w-1/2 bg-blue-500 text-white p-10 flex flex-col justify-center items-start">
         <h1 className="text-4xl font-bold mb-4">Aspire</h1>
@@ -63,6 +62,6 @@ function SignupPage() {
       </div>
     </div>
   );
-}
 
-export default SignupPage;
+
+export default SignUpPage;
