@@ -12,16 +12,16 @@ export default {
         // 705D56 - Light Brown
         // 86919C - Gray
         blue: {
-          dark: "#60A5FA",
-          light: "#93C5FD",
+          dark: '#60A5FA',
+          light: '#93C5FD',
         },
         brown: {
-          dark: "#32292F",
-          light: "#705D56",
+          dark: '#32292F',
+          light: '#705D56',
         },
-        gray: "#86919C",
-      },
-    },
+        gray: '#86919C',
+      }
+    }
   },
   plugins: [daisyui]
 }
