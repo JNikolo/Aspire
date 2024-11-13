@@ -1,6 +1,12 @@
 // import { useState } from "react";
 
+import { useSearchParams } from "react-router-dom";
+
 export const DashboardPage = () => {
+  const [daysDisplayed, setDaysDisplayed] = useState([]);
+  const [weekOf, setWeekOf] = useState(null);
+  const [tasksPerDay, setTasksPerDay] = useState(null);
+  const [tasks, setTasks] = useState(null);
   return (
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-row items-center justify-center p-4">
       {/* Habit Selector */}
