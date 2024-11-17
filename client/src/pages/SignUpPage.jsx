@@ -10,7 +10,7 @@ import { SsoButton } from "../components/SsoButton";
 
 function SignupPage() {
   const { isLoaded: isSignUpLoaded, signUp, setActive } = useSignUp();
-  const { getToken, signOut, isSignedIn } = useAuth();
+  const { getToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -29,12 +29,6 @@ function SignupPage() {
     mode: "onChange",
   });
 
-  useEffect(() => {
-    if (isSignedIn) {
-      signOut();
-    }
-  }, [isSignedIn, signOut]);
-
   const onSubmit = async (data) => {
     if (!isSignUpLoaded || loading) return;
 
@@ -48,15 +42,12 @@ function SignupPage() {
         password: data.password,
       });
 
-      console.log("Sign up result:", result);
-
       if (result.createdSessionId) {
         await setActive({ session: result.createdSessionId });
         // Get the token after setting active session
         const token = await getToken();
-        console.log("Token:", token);
         const response = await fetch(
-          "http://localhost:3000/user/create-after-signup",
+          "http://localhost:3000/register/create-after-signup",
           {
             method: "POST",
             headers: {
@@ -68,13 +59,10 @@ function SignupPage() {
         if (!response.ok) {
           throw new Error("Failed to sign up");
         } else {
-          const data = await response.json();
-          console.log("User data:", data);
           navigate("/");
         }
       }
     } catch (err) {
-      console.error("Error during sign up:", err);
       setError(err.errors?.[0]?.message || "An error occurred during sign up");
     } finally {
       setLoading(false);

@@ -2,11 +2,11 @@ import { Router } from "express";
 import { prisma } from "../middlewares/prisma.js";
 import { clerkClient } from "../middlewares/clerk.js";
 import { clerkMiddleware } from "@clerk/express";
-const signRouter = Router();
+const registerRouter = Router();
 
-signRouter.use(clerkMiddleware());
+registerRouter.use(clerkMiddleware());
 
-signRouter.post("/create-after-signup", async (req, res) => {
+registerRouter.post("/create-after-signup", async (req, res) => {
   try {
     const { userId } = req.auth;
 
@@ -33,4 +33,4 @@ signRouter.post("/create-after-signup", async (req, res) => {
   }
 });
 
-export default signRouter;
+export default registerRouter;

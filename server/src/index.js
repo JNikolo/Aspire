@@ -1,12 +1,12 @@
 import Express from "express";
-import signRouter from "./routes/signRoutes.js";
+import registerRouter from "./routes/registerRoutes.js";
 import cors from "cors";
 
 const app = Express();
 
 app.use(Express.json());
 app.use(cors());
-app.use("/user", signRouter);
+app.use("/register", registerRouter);
 
 app.get("/", (req, res) => {
   console.log("got requested");
