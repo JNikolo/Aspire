@@ -1,12 +1,13 @@
-// import { useState } from "react";
+import { useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
-
+import TaskCard from "./TaskCard";
 export const DashboardPage = () => {
   const [daysDisplayed, setDaysDisplayed] = useState([]);
   const [weekOf, setWeekOf] = useState(null);
   const [tasksPerDay, setTasksPerDay] = useState(null);
   const [tasks, setTasks] = useState(null);
+
   return (
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-row items-center justify-center p-4">
       {/* Habit Selector */}
@@ -18,20 +19,7 @@ export const DashboardPage = () => {
         
       </ul> */}
       {/* card from daisyui used to display content*/}
-      <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
-        <input type="checkbox" />
-        <div className="collapse-title text-xl font-medium">Habit 1</div>
-        <div className="collapse-content">
-          <p>hello</p>
-          <div>
-            <input
-              type="checkbox"
-              defaultChecked
-              className="checkbox border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-            />
-          </div>
-        </div>
-      </div>
+      <TaskCard> </TaskCard>
     </div>
   );
 };
