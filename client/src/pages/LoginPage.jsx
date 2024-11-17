@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { SsoButton } from "../components/SsoButton";
 import journeyIcon from "../assets/journeyIcon.png";
 
-function LoginPage() {
+export function LoginPage() {
   const { isLoaded: isSignInLoaded, signIn, setActive } = useSignIn();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -186,7 +186,7 @@ function LoginPage() {
           </form>
 
           <p className="mt-6 text-sm text-gray-600 text-center">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <a href="signup" className="link link-primary font-bold">
               Sign Up
             </a>
@@ -195,7 +195,4 @@ function LoginPage() {
       </div>
     </div>
   );
-
-
-export default LoginPage;
-
+}

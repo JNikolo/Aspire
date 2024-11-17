@@ -1,5 +1,5 @@
-import React from "react";
 import { LuEye, LuEyeOff, LuAlertCircle } from "react-icons/lu";
+import PropTypes from "prop-types";
 
 export const FormInput = ({
   label,
@@ -53,3 +53,17 @@ export const FormInput = ({
     )}
   </div>
 );
+
+FormInput.propTypes = {
+  label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  registerOptions: PropTypes.object.isRequired,
+  error: PropTypes.object,
+  icon: PropTypes.node,
+  isPassword: PropTypes.bool,
+  showPassword: PropTypes.bool,
+  togglePassword: PropTypes.func,
+  disabled: PropTypes.bool,
+};

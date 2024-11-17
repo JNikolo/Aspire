@@ -1,6 +1,6 @@
 import journeyIcon from "../assets/journeyIcon.png";
 import { useSignUp, useAuth } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FormInput } from "../components/FormInput";
@@ -8,7 +8,7 @@ import { LuMail, LuAlertCircle, LuUser2 } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { SsoButton } from "../components/SsoButton";
 
-function SignupPage() {
+export function SignUpPage() {
   const { isLoaded: isSignUpLoaded, signUp, setActive } = useSignUp();
   const { getToken } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -237,6 +237,4 @@ function SignupPage() {
       </div>
     </div>
   );
-
-
-export default SignUpPage;
+}

@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
+import { LoginPage } from "./pages/LoginPage";
+import { SignUpPage } from "./pages/SignUpPage";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 
 export const router = createBrowserRouter([
