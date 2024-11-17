@@ -59,7 +59,7 @@ export function SignUpPage() {
         if (!response.ok) {
           throw new Error("Failed to sign up");
         } else {
-          navigate("/");
+          navigate("/survey", { state: { fromSource: "/signup" } });
         }
       }
     } catch (err) {

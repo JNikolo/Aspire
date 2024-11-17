@@ -3,17 +3,22 @@ import Calender from "../assets/calender.jpeg";
 import { useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
+export const HomePage = () => {
   const { isSignedIn, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
+      if (!isSignedIn) return;
       await signOut();
       navigate("/login");
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleSignIn = () => {
+    navigate("/login");
   };
 
   return (
@@ -56,7 +61,7 @@ const HomePage = () => {
             </button>
           ) : (
             <button
-              onClick={navigate("/login")}
+              onClick={handleSignIn}
               className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
             >
               Sign In
@@ -182,5 +187,3 @@ const HomePage = () => {
     </div>
   );
 };
-
-export default HomePage;
