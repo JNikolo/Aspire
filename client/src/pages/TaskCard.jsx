@@ -3,11 +3,13 @@ import {
   format,
   startOfWeek,
   startOfMonth,
+  endOfWeek,
   endOfMonth,
   eachDayOfInterval,
   addDays,
   subDays,
   addMonths,
+  subMonths,
   isSameDay,
 } from "date-fns";
 
@@ -26,16 +28,39 @@ const TaskCard = () => {
   const [currentWeekStart, setCurrentWeekStart] = useState(
     startOfWeek(new Date(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
   );
+  const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
+  const [monthDates, setMonthDates] = useState([]);
+  const [weekDates, setWeekDates] = useState([]);
+
+  useEffect(() => {
+    const newMonthDates = eachDayOfInterval({
+      start: startOfMonth(currentMonth),
+      end: endOfMonth(currentMonth),
+    }).filter((date) => predefinedSelectedDays.includes(format(date, "EEEE")));
+    setMonthDates(newMonthDates);
+  }, [currentMonth, predefinedSelectedDays]);
+
+  useEffect(() => {
+    const newWeekDates = eachDayOfInterval({
+      start: startOfWeek(currentWeekStart, { weekStartsOn: 0 }),
+      end: endOfWeek(currentWeekStart, { weekStartsOn: 0 }),
+    }).filter((date) => predefinedSelectedDays.includes(format(date, "EEEE")));
+    setWeekDates(newWeekDates);
+  }, [currentWeekStart, predefinedSelectedDays]);
+
   const goToPreviousWeek = () => {
     setCurrentWeekStart((prev) => subDays(prev, 7));
   };
   const goToNextWeek = () => {
     setCurrentWeekStart((prev) => addDays(prev, 7));
   };
-  const monthDates = eachDayOfInterval({
-    start: startOfMonth(currentDate),
-    end: endOfMonth(currentDate),
-  });
+
+  const goToNextMonth = () => {
+    setCurrentMonth((prev) => addMonths(prev, 1));
+  };
+  const goToPreviousMonth = () => {
+    setCurrentMonth((prev) => subMonths(prev, 1));
+  };
   // Load the task from localStorage on mount
   useEffect(() => {
     const savedTask = JSON.parse(localStorage.getItem(TASK_KEY));
@@ -67,13 +92,6 @@ const TaskCard = () => {
     return Array.from({ length: 7 }, (_, i) => addDays(start, i));
   };
 
-  // Generate dates for the current month
-  const getMonthDates = () => {
-    const start = startOfMonth(currentDate);
-    const daysInMonth = addMonths(start, 1).getDate();
-    return Array.from({ length: daysInMonth }, (_, i) => addDays(start, i));
-  };
-
   // Check if a date matches a selected day
   const isSelectedDay = (date) => {
     const dayName = format(date, "EEEE"); // Get full day name
@@ -85,15 +103,6 @@ const TaskCard = () => {
       <input type="checkbox" />
       <div className="collapse-title text-xl font-medium">{task.name}</div>
       <div className="collapse-content">
-        <h2></h2>
-        {/* Week Navigation */}
-        <div>
-          <button onClick={goToPreviousWeek}>Previous Week</button>
-          <span style={{ margin: "0 20px" }}>
-            Week of {format(currentWeekStart, "MMM d, yyyy")}
-          </span>
-          <button onClick={goToNextWeek}>Next Week</button>
-        </div>
         {/* View Mode Selector */}
         <div>
           <button
@@ -113,42 +122,16 @@ const TaskCard = () => {
         {/* Render Week or Month View */}
         <div>
           {viewMode === "week" && (
-            <div>
-              <h3>Week View</h3>
-
-              <ul
-                style={{ display: "flex", listStyleType: "none", padding: 0 }}
-              >
-                {getWeekDates().map(
-                  (date) =>
-                    isSelectedDay(date) && (
-                      <li
-                        key={date}
-                        style={{
-                          marginRight: "1em",
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          defaultChecked
-                          className="checkbox border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                        />
-                        {format(date, "EEE ")}{" "}
-                      </li>
-                    )
-                )}
-              </ul>
-            </div>
-          )}
-
-          {viewMode === "month" && (
-            <div className="flex flex-col items-center">
-              <h3>Month View</h3>
-              <div className="grid grid-cols-7 gap-2 border w-3/4 ">
-                {monthDates.map((date) => {
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex justify-center items-center">
+                <button onClick={goToPreviousWeek}>{`<`} </button>
+                <span style={{ margin: "0 20px" }}>
+                  Week of {format(currentWeekStart, "MMM d, yyyy")}
+                </span>
+                <button onClick={goToNextWeek}>{`>`}</button>
+              </div>
+              <div className="w-3/5 px-20 py-4 grid grid-cols-3 gap-2">
+                {weekDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
                   const isCompleted = !!task.completion[formattedDate]; // Check if task is completed on this day
 
@@ -163,7 +146,40 @@ const TaskCard = () => {
                         className="checkbox w-8 h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
                         onChange={() => toggleCompletion(date)}
                       />
-                      <div>{format(date, "d")}</div>
+                      <div>{format(date, "EE d")}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {viewMode === "month" && (
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex justify-center items-center">
+                <button onClick={goToPreviousMonth}>{`<`}</button>
+                <span style={{ margin: "0 20px" }}>
+                  {format(currentMonth, "MMMM yyyy")}
+                </span>
+                <button onClick={goToNextMonth}>{`>`}</button>
+              </div>
+              <div className=" px-20 py-4 grid grid-cols-7 gap-2">
+                {monthDates.map((date) => {
+                  const formattedDate = format(date, "yyyy-MM-dd");
+                  const isCompleted = !!task.completion[formattedDate]; // Check if task is completed on this day
+
+                  return (
+                    <div
+                      key={formattedDate}
+                      className="flex flex-col justify-center items-center"
+                    >
+                      <div>{format(date, " EE d")}</div>
+                      <input
+                        type="checkbox"
+                        checked={isCompleted}
+                        className="checkbox w-8 h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
+                        onChange={() => toggleCompletion(date)}
+                      />
                     </div>
                   );
                 })}
