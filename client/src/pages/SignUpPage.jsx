@@ -237,6 +237,6 @@ function SignupPage() {
       </div>
     </div>
   );
-}
 
-export default SignupPage;
+
+export default SignUpPage;
