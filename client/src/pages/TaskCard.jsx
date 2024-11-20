@@ -3,6 +3,8 @@ import {
   format,
   startOfWeek,
   startOfMonth,
+  startOfYear,
+  endOfYear,
   endOfWeek,
   endOfMonth,
   eachDayOfInterval,
@@ -14,9 +16,9 @@ import {
 } from "date-fns";
 
 const TASK_KEY = "customTask";
-
+const predefinedSelectedDays = ["Monday", "Wednesday", "Friday"];
 const TaskCard = () => {
-  const predefinedSelectedDays = ["Monday", "Wednesday", "Friday"];
+  
   const [task, setTask] = useState({
     id: 1,
     name: "Workout",
@@ -29,6 +31,8 @@ const TaskCard = () => {
     startOfWeek(new Date(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
   );
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
+  const [currentYear, setCurrentYear] = useState(startOfYear(new Date()));
+
   const [monthDates, setMonthDates] = useState([]);
   const [weekDates, setWeekDates] = useState([]);
 
@@ -38,7 +42,7 @@ const TaskCard = () => {
       end: endOfMonth(currentMonth),
     }).filter((date) => predefinedSelectedDays.includes(format(date, "EEEE")));
     setMonthDates(newMonthDates);
-  }, [currentMonth, predefinedSelectedDays]);
+  }, [currentMonth]);
 
   useEffect(() => {
     const newWeekDates = eachDayOfInterval({
@@ -46,7 +50,17 @@ const TaskCard = () => {
       end: endOfWeek(currentWeekStart, { weekStartsOn: 0 }),
     }).filter((date) => predefinedSelectedDays.includes(format(date, "EEEE")));
     setWeekDates(newWeekDates);
-  }, [currentWeekStart, predefinedSelectedDays]);
+  }, [currentWeekStart]);
+
+  const [yearDates, setYearDates] = useState([]);
+
+  useEffect(() => {
+    const newYearDates = eachDayOfInterval({
+      start: startOfYear(new Date()),
+      end: endOfYear(new Date()),
+    });
+    setYearDates(newYearDates);
+  }, []);
 
   const goToPreviousWeek = () => {
     setCurrentWeekStart((prev) => subDays(prev, 7));
@@ -61,22 +75,31 @@ const TaskCard = () => {
   const goToPreviousMonth = () => {
     setCurrentMonth((prev) => subMonths(prev, 1));
   };
+
+  const goToNextYear = () => {
+    setCurrentYear((prev) => addMonths(prev, 12));
+  };
+  const goToPreviousYear = () => {
+    setCurrentYear((prev) => subMonths(prev, 12));
+  };
+
   // Load the task from localStorage on mount
-  useEffect(() => {
-    const savedTask = JSON.parse(localStorage.getItem(TASK_KEY));
-    if (savedTask) {
-      setTask(savedTask);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedTask = JSON.parse(localStorage.getItem(TASK_KEY));
+  //   if (savedTask) {
+  //     setTask(savedTask);
+  //   }
+  // }, []);
 
   // Save the task to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem(TASK_KEY, JSON.stringify(task));
-  }, [task]);
+  // useEffect(() => {
+  //   localStorage.setItem(TASK_KEY, JSON.stringify(task));
+  // }, [task]);
 
   // Toggle task completion for a specific day
   const toggleCompletion = (date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
+    console.log(formattedDate);
     setTask((prevTask) => ({
       ...prevTask,
       completion: {
@@ -84,19 +107,9 @@ const TaskCard = () => {
         [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
       },
     }));
+    console.log(task.completion)
   };
 
-  // Generate dates for the current week
-  const getWeekDates = () => {
-    const start = startOfWeek(currentDate, { weekStartsOn: 0 }); // Sunday start
-    return Array.from({ length: 7 }, (_, i) => addDays(start, i));
-  };
-
-  // Check if a date matches a selected day
-  const isSelectedDay = (date) => {
-    const dayName = format(date, "EEEE"); // Get full day name
-    return task.selectedDays.includes(dayName);
-  };
 
   return (
     <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
@@ -116,6 +129,12 @@ const TaskCard = () => {
             disabled={viewMode === "month"}
           >
             Month View
+          </button>
+          <button
+            onClick={() => setViewMode("allTime")}
+            disabled={viewMode === "allTime"}
+          >
+            All Time View
           </button>
         </div>
 
@@ -186,6 +205,40 @@ const TaskCard = () => {
               </div>
             </div>
           )}
+          {viewMode === "allTime" && (
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex justify-center items-center">
+                <button onClick={goToPreviousYear}>{`<`}</button>
+                <span style={{ margin: "0 20px" }}>
+                  {format(currentYear, "yyyy")}
+                </span>
+                <button onClick={goToNextYear}>{`>`}</button>
+              </div>
+              <div className="overflow-x-auto">
+              <div className="flex flex-wrap space-2 flex-col h-40" >
+                {yearDates.map((date) => {
+                  const formattedDate = format(date, "yyyy-MM-dd");
+                  const isCompleted = !!task.completion[formattedDate];
+
+                  return (
+                    <div
+                      key={formattedDate}
+                      className="flex flex-col justify-center p-px items-center"
+                      // 365 / 5 = 73
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isCompleted}
+                        className="checkbox w-4 h-4 border-2 rounded-sm border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
+                        onChange={() => toggleCompletion(date)}
+                      />
+                    </div>
+                          );
+                        })}
+                </div>
+                  </div>
+              </div>
+            )}
         </div>
       </div>
     </div>

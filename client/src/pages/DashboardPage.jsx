@@ -1,15 +1,15 @@
-import { useState } from "react";
+// import { useState } from "react";
 
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 import TaskCard from "./TaskCard";
 export const DashboardPage = () => {
-  const [daysDisplayed, setDaysDisplayed] = useState([]);
-  const [weekOf, setWeekOf] = useState(null);
-  const [tasksPerDay, setTasksPerDay] = useState(null);
-  const [tasks, setTasks] = useState(null);
+  // const [daysDisplayed, setDaysDisplayed] = useState([]);
+  // const [weekOf, setWeekOf] = useState(null);
+  // const [tasksPerDay, setTasksPerDay] = useState(null);
+  // const [tasks, setTasks] = useState(null);
 
   return (
-    <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-row items-center justify-center p-4">
+    <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center justify-center p-4">
       {/* Habit Selector */}
       {/* <ul className="basis-1/4 m-3 bg-stone-100 transparent menu w-full rounded-box shadow-xl bg-opacity-85 flex flex-col space-y-2">
         <li className="menu-title text-brown-dark text-2xl font-bold">My Habits</li>
@@ -19,7 +19,10 @@ export const DashboardPage = () => {
         
       </ul> */}
       {/* card from daisyui used to display content*/}
+      {/* <div className=""> */}
       <TaskCard> </TaskCard>
+      <TaskCard> </TaskCard>
+      {/* </div> */}
     </div>
   );
 };
