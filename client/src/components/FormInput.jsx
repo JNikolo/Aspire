@@ -14,7 +14,7 @@ export const FormInput = ({
   togglePassword,
   disabled,
 }) => (
-  <div className="w-full max-w-md mx-auto mb-6">
+  <div className="w-full max-w-md mx-auto mb-2">
     <label htmlFor={id} className="text-sm text-gray-600 mb-1 block">
       {label}
     </label>
@@ -45,12 +45,14 @@ export const FormInput = ({
         )
       )}
     </div>
-    {error && (
-      <div className="alert alert-error mt-2 py-2 pl-4 pr-2 min-h-0 h-auto">
-        <LuAlertCircle className="h-5 w-5" />
-        <span className="text-sm">{error.message}</span>
-      </div>
-    )}
+    <div className="h-5 md:h-6 mt-1">
+      {error && (
+        <div className="alert alert-error py-1 px-2 md:px-8 sm:px-6 min-h-0 flex flex-row">
+          <LuAlertCircle className="h-3 w-3 md:h-4 md:w-4" />
+          <span className="text-xs md:text-sm">{error.message}</span>
+        </div>
+      )}
+    </div>
   </div>
 );
 

@@ -72,6 +72,23 @@ export function LoginPage() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen relative">
+      {/* Floating Error Alert */}
+      {error && (
+        <div className="fixed top-2 w-full z-50 p-4">
+          <div className="alert alert-error flex justify-between items-center p-4 shadow-lg text-white bg-red-600">
+            <div className="flex items-center">
+              <LuAlertCircle className="h-6 w-6 mr-2" />
+              <span>{error}</span>
+            </div>
+            <button
+              className="btn btn-sm btn-circle text-black hover:bg-red-700"
+              onClick={() => setError("")}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
       {/* Loading Overlay */}
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -110,13 +127,6 @@ export function LoginPage() {
             Welcome Back!
           </h2>
           <div className="divider"></div>
-
-          {error && (
-            <div className="alert alert-error mb-6">
-              <LuAlertCircle className="h-6 w-6 flex-shrink-0" />
-              <span className="text-sm">{error}</span>
-            </div>
-          )}
 
           <SsoButton
             provider="Google"

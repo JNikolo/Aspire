@@ -1,11 +1,22 @@
 import Logo from "../../public/check-icon.png";
 import Calender from "../assets/calender.jpeg";
-import { useAuth } from "@clerk/clerk-react";
+import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export const HomePage = () => {
-  const { isSignedIn, signOut } = useAuth();
+  const { isSignedIn, user } = useUser();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  useEffect(() => {
+    if (isSignedIn) {
+      console.log("User is signed in");
+      console.log(user);
+      console.log(user.publicMetadata);
+      console.log(window.location.pathname);
+    }
+  }, [isSignedIn, navigate]);
 
   const handleSignOut = async () => {
     try {
