@@ -169,12 +169,11 @@ export function SignUpPage() {
             />
 
             <FormInput
-              label="Username"
+              label="Username (Optional)"
               id="username"
               type="text"
               placeholder="Enter your username"
               registerOptions={register("username", {
-                required: "Username is required",
                 minLength: {
                   value: 3,
                   message: "Username must be at least 3 characters",

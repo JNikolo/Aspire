@@ -23,7 +23,10 @@ export const router = createBrowserRouter([
     path: "/sso-callback",
     element: (
       <AuthenticateWithRedirectCallback
+        signInUrl="/login"
+        signUpUrl="/signup"
         signInFallbackRedirectUrl={"/sso-fallback"}
+        signUpFallbackRedirectUrl={"/sso-fallback"}
       />
     ),
   },

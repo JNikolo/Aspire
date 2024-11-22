@@ -17,8 +17,7 @@ datasource db {
 model User {
   id             String   @id @default(uuid())
   authId         String   @unique
-  email          String   @unique
-  username       String   @unique
+  profileName    String?
   profilePicture String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

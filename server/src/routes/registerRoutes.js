@@ -19,8 +19,6 @@ registerRouter.post("/create-after-signup", async (req, res) => {
     await prisma.user.create({
       data: {
         authId: user.id,
-        email: user.emailAddresses[0].emailAddress,
-        username: user.username,
       },
     });
 
@@ -51,16 +49,14 @@ registerRouter.post("/sso-callback", async (req, res) => {
       await prisma.user.create({
         data: {
           authId: user.id,
-          email: user.emailAddresses[0].emailAddress,
-          username: user.username,
           profilePicture: user.imageUrl,
         },
       });
 
       res.json({ message: "User logged in successfully", newUser: true });
+    } else {
+      res.json({ message: "User logged in successfully", newUser: false });
     }
-
-    res.json({ message: "User logged in successfully", newUser: false });
   } catch (err) {
     console.error("Error during sso-callback:", err);
     res.status(500).json({ error: "An error occurred during sso-callback" });
