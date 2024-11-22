@@ -39,13 +39,13 @@ export const SSOFallback = () => {
           navigate("/");
         }
       } catch (err) {
-        console.error("Error during SSO callback handling");
+        console.error("Error during SSO callback handling: ", err);
         navigate("/login");
       }
     };
 
     processCallback();
-  }, []);
+  }, [navigate, getToken]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">

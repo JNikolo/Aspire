@@ -16,7 +16,7 @@ export const HomePage = () => {
       console.log(user.publicMetadata);
       console.log(window.location.pathname);
     }
-  }, [isSignedIn, navigate]);
+  }, [isSignedIn, navigate, user]);
 
   const handleSignOut = async () => {
     try {
