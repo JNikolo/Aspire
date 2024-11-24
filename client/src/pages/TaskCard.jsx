@@ -16,9 +16,14 @@ import {
 } from "date-fns";
 
 const TASK_KEY = "customTask";
-const predefinedSelectedDays = ["Monday", "Wednesday", "Friday"];
+const predefinedSelectedDays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+];
 const TaskCard = () => {
-  
   const [task, setTask] = useState({
     id: 1,
     name: "Workout",
@@ -35,6 +40,7 @@ const TaskCard = () => {
 
   const [monthDates, setMonthDates] = useState([]);
   const [weekDates, setWeekDates] = useState([]);
+  const [monthHover, setMonthHover] = useState(null);
 
   useEffect(() => {
     const newMonthDates = eachDayOfInterval({
@@ -58,7 +64,7 @@ const TaskCard = () => {
     const newYearDates = eachDayOfInterval({
       start: startOfYear(new Date()),
       end: endOfYear(new Date()),
-    });
+    }).filter((date) => predefinedSelectedDays.includes(format(date, "EEEE")));
     setYearDates(newYearDates);
   }, []);
 
@@ -107,10 +113,22 @@ const TaskCard = () => {
         [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
       },
     }));
-    console.log(task.completion)
+    console.log(task.completion);
   };
-
-
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   return (
     <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
       <input type="checkbox" />
@@ -192,7 +210,7 @@ const TaskCard = () => {
                       key={formattedDate}
                       className="flex flex-col justify-center items-center"
                     >
-                      <div>{format(date, " EE d")}</div>
+                      <div>{format(date, "EE d")}</div>
                       <input
                         type="checkbox"
                         checked={isCompleted}
@@ -214,31 +232,44 @@ const TaskCard = () => {
                 </span>
                 <button onClick={goToNextYear}>{`>`}</button>
               </div>
-              <div className="overflow-x-auto">
-              <div className="flex flex-wrap space-2 flex-col h-40" >
-                {yearDates.map((date) => {
-                  const formattedDate = format(date, "yyyy-MM-dd");
-                  const isCompleted = !!task.completion[formattedDate];
+              <div className="overflow-x-auto w-full">
+                {/* <div className="flex flex-row">
+                  {months.map((month, index) => (
+                    <h2 key={index}>{month}</h2>
+                  ))}
+                </div> */}
+                <div className="flex flex-wrap flex-col h-40">
+                  {yearDates.map((date) => {
+                    const formattedDate = format(date, "yyyy-MM-dd");
+                    const isCompleted = !!task.completion[formattedDate];
+                    const monthBox = format(date, "MM");
 
-                  return (
-                    <div
-                      key={formattedDate}
-                      className="flex flex-col justify-center p-px items-center"
-                      // 365 / 5 = 73
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isCompleted}
-                        className="checkbox w-4 h-4 border-2 rounded-sm border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                        onChange={() => toggleCompletion(date)}
-                      />
-                    </div>
-                          );
-                        })}
+                    return (
+                      <div
+                        key={formattedDate}
+                        className="flex flex-col justify-center p-px items-center"
+                        // 365 / 5 = 73
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isCompleted}
+                          onMouseEnter={() => setMonthHover(format(date, "MM"))}
+                          onMouseLeave={() => setMonthHover(null)}
+                          className={`checkbox  w-5 h-5 border-2 rounded-sm border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56] 
+                          ${
+                            monthHover == monthBox
+                              ? "border-brown-light [--chkbg:#FF0000] [--chkfg:#FFFFFF]"
+                              : "border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
+                          }`}
+                          onChange={() => toggleCompletion(date)}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
-                  </div>
               </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
     </div>
