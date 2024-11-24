@@ -1,11 +1,8 @@
-import SurveyPage from './pages/SurveyPage'
-import LoginPage from './pages/LoginPage'
-import './App.css'
+import { HomePage } from "./pages/HomePage";
+import "./App.css";
 
 function App() {
-  return (
-      <SurveyPage />
-  )
+  return <HomePage />;
 }
 
-export default App
+export default App;

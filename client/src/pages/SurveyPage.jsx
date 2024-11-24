@@ -1,6 +1,7 @@
 import { useState } from "react";
 import trash from "../assets/trash.png";
 import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 
 export const SurveyPage = () => {
   const {
@@ -26,6 +27,8 @@ export const SurveyPage = () => {
   const notifications = watch("notifications", false);
   const [frequency, setFrequency] = useState([]);
   const [deleteHabit, setDeleteHabit] = useState(false);
+  const navigate = useLocation();
+  const fromSource = navigate.state?.fromSource;
 
   // Frequency of Habit
   const handleFrequencyChange = (day) => {
@@ -62,7 +65,6 @@ export const SurveyPage = () => {
   //         : [...prevSelectedDays, day] // Add day if it's not selected
   //   );
   // };
-
 
   return (
     <div className=" bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex items-center justify-center p-4">
@@ -248,6 +250,7 @@ export const SurveyPage = () => {
                 className="radio hidden peer"
                 checked={deleteHabit}
                 onChange={() => deleteUserHabit()}
+                disabled={fromSource}
               />
             </label> */}
             </div>
