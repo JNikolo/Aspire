@@ -1,11 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import App from "./App";
 import { LoginPage } from "./pages/LoginPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { SurveyPage } from "./pages/SurveyPage";
 import { SSOFallback } from "./components/SSOFallback";
 import { DashboardPage } from "./pages/DashboardPage";
+
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
+
+// import {  } from "./pages/";
 
 export const router = createBrowserRouter([
   {
@@ -39,8 +43,8 @@ export const router = createBrowserRouter([
     path: "/sso-fallback",
     element: <SSOFallback />,
   },
-    {
-        path: '/dashboard',
-        element: <DashboardPage />
-    },
+  {
+    path: "/dashboard",
+    element: <DashboardPage />,
+  },
 ]);
