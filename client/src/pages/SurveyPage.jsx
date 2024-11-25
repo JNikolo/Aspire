@@ -1,5 +1,6 @@
 import { useState } from "react";
 import trash from "../assets/trash.png";
+import { useLocation } from "react-router-dom";
 
 export const SurveyPage = () => {
   const [habitName, setHabitName] = useState(null);
@@ -8,6 +9,8 @@ export const SurveyPage = () => {
   const [notifications, setNotifications] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
   const [deleteHabit, setDeleteHabit] = useState(false);
+  const navigate = useLocation();
+  const fromSource = navigate.state?.fromSource;
 
   // Frequency of Habit
   const handleFrequencyChange = (day) => {
@@ -212,6 +215,7 @@ export const SurveyPage = () => {
                 className="radio hidden peer"
                 checked={deleteHabit}
                 onChange={() => deleteUserHabit()}
+                disabled={fromSource}
               />
             </label>
           </div>
