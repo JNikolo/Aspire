@@ -1,7 +1,7 @@
 import { useState } from "react";
-import trash from "../assets/trash.png";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { BsTrash3 } from "react-icons/bs";
 
 export const SurveyPage = () => {
   const {
@@ -18,27 +18,32 @@ export const SurveyPage = () => {
     },
   });
 
+  const { surveyId } = useParams();
+  const isEditMode = Boolean(surveyId);
+
   const onSubmit = (data) => {
     // handle form submission
     console.log("submitted data", data);
+    console.log("id", surveyId);
+    console.log("isEditMode", isEditMode);
   };
 
   // watch is used to dynamically show/hide sections
   const notifications = watch("notifications", false);
-  const [frequency, setFrequency] = useState([]);
+  const frequency = watch("frequency", []);
   const [deleteHabit, setDeleteHabit] = useState(false);
   const navigate = useLocation();
-  const fromSource = navigate.state?.fromSource;
+  const redirected = navigate.state?.redirected;
 
   // Frequency of Habit
-  const handleFrequencyChange = (day) => {
-    setFrequency(
-      (prevSelectedDays) =>
-        prevSelectedDays.includes(day)
-          ? prevSelectedDays.filter((d) => d !== day) // Remove day if it's already selected
-          : [...prevSelectedDays, day] // Add day if it's not selected
-    );
-  };
+  // const handleFrequencyChange = (day) => {
+  //   setFrequency(
+  //     (prevSelectedDays) =>
+  //       prevSelectedDays.includes(day)
+  //         ? prevSelectedDays.filter((d) => d !== day) // Remove day if it's already selected
+  //         : [...prevSelectedDays, day] // Add day if it's not selected
+  //   );
+  // };
 
   // Delete Habit
   const deleteUserHabit = () => {
@@ -72,14 +77,30 @@ export const SurveyPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="bg-stone-100 transparent card w-full max-w-4xl shadow-xl bg-opacity-85">
           <div className="card-body flex">
-            <h3 className="card-title text-brown-dark text-2xl font-bold mb-6">
-              Let&apos;s Get Your
-              <span className="text-[#93C5FD]">Habit </span>
-              Ready!
-            </h3>
-            <h2 className="card-title text-[#32292F] text-2xl font-bold mb-6">
-              Please Take A Moment To Fill Out This Survey
-            </h2>
+            {(isEditMode && (
+              <>
+                <h3 className="card-title text-brown-dark text-2xl font-bold mb-6">
+                  Edit Your
+                  <span className="text-[#93C5FD]">Habit </span>
+                </h3>
+                <h2 className="card-title text-[#32292F] text-2xl font-bold mb-6">
+                  Please Take A Moment To Edit Your
+                  <span className="text-[#93C5FD]">Habit </span>
+                  Info
+                </h2>
+              </>
+            )) || (
+              <>
+                <h3 className="card-title text-brown-dark text-2xl font-bold mb-6">
+                  Let&apos;s Get Your
+                  <span className="text-[#93C5FD]">Habit </span>
+                  Ready!
+                </h3>
+                <h2 className="card-title text-[#32292F] text-2xl font-bold mb-6">
+                  Please Take A Moment To Fill Out This Survey
+                </h2>
+              </>
+            )}
             <hr className="my-1 border-t-4 border-[#60A5FA] w-full shadow-xl" />
             {/* Survey questions */}
             {/* Habit Name */}
@@ -97,7 +118,7 @@ export const SurveyPage = () => {
                 })}
                 className="input input-bordered w-full rounded-md border-gray-300 bg-white focus:border-blue-500 text-black"
               />
-              {errors.habitNamee && (
+              {errors.habitName && (
                 <span className="text-red-600">{errors.habitName.message}</span>
               )}
             </div>
@@ -117,8 +138,10 @@ export const SurveyPage = () => {
                           <input
                             type="checkbox"
                             value={day}
-                            {...register("frequency")}
-                            onChange={() => handleFrequencyChange(day)}
+                            {...register("frequency", {
+                              required: "Please select at least one day",
+                            })}
+                            // onChange={() => handleFrequencyChange(day)}
                             className="checkbox hidden peer"
                             //checked={frequency.includes(day)}
                           />
@@ -174,7 +197,9 @@ export const SurveyPage = () => {
                           <input
                             type="checkbox"
                             value={day}
-                            {...register("selectedDays")}
+                            {...register("selectedDays", {
+                              required: "Please select at least one day",
+                            })}
                             className="radio hidden peer"
                           />
                           <span
@@ -191,6 +216,11 @@ export const SurveyPage = () => {
                     )
                   )}
                 </div>
+                {errors.selectedDays && (
+                  <span className="text-red-600">
+                    Please select at least one day
+                  </span>
+                )}
               </div>
             )}
             {/* Save Button */}
@@ -203,12 +233,14 @@ export const SurveyPage = () => {
               </button>
             </div>
             {/*Trash icon*/}
-            <label
-              htmlFor="my_modal_6"
-              className="btn btn-outline px-3 absolute top-4 right-4 flex items-center text-black hover:border-5 hover:border-white"
-            >
-              <img src={trash} alt="Delete" className="w-6 h-6" /> Delete
-            </label>
+            {isEditMode && (
+              <label
+                htmlFor="my_modal_6"
+                className="btn btn-outline px-3 absolute top-4 right-4 flex items-center text-black hover:border-5 hover:border-white"
+              >
+                <BsTrash3 size={20} /> Delete
+              </label>
+            )}
           </div>
         </div>
         {/* Delete Habit */}
@@ -226,7 +258,7 @@ export const SurveyPage = () => {
               </button>
               <label
                 htmlFor="my_modal_6"
-                className="btn text-white text-black hover:bg-gray hover:text-white borrder-5 border-white"
+                className="btn text-black hover:bg-gray hover:text-white borrder-5 border-white"
               >
                 <span>Cancel</span>
               </label>

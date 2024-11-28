@@ -59,7 +59,7 @@ export function SignUpPage() {
         if (!response.ok) {
           throw new Error("Failed to sign up");
         } else {
-          navigate("/survey", { state: { fromSource: "/signup" } });
+          navigate("/survey/new");
         }
       }
     } catch (err) {
@@ -79,7 +79,6 @@ export function SignUpPage() {
       await signUp.authenticateWithRedirect({
         strategy: "oauth_google",
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/",
       });
     } catch (err) {
       console.error("Error during Google sign in:", err);
