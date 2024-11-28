@@ -30,7 +30,7 @@ model Habit {
   habitName     String // The name of the habit
   notifications Boolean // Whether notifications are enabled
   userId        String // Foreign key to User
-  user          User    @relation(fields: [userId], references: [id])
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,11 +44,11 @@ model Habit {
 
 // HabitSelectedDays table (storing days selected for the habit)
 model HabitSelectedDay {
-  id        Int    @id @default(autoincrement())
-  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
+  id        Int       @id @default(autoincrement())
+  dayOfWeek DayOfWeek // Day of the week (e.g., 'Monday', 'Tuesday')
   habitId   Int // Foreign key to Habit
 
-  habit Habit @relation(fields: [habitId], references: [id])
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,12 +56,22 @@ model HabitSelectedDay {
 
 // HabitFrequency table (storing frequency days for the habit)
 model HabitFrequency {
-  id        Int    @id @default(autoincrement())
-  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
+  id        Int       @id @default(autoincrement())
+  dayOfWeek DayOfWeek // Day of the week (e.g., 'Monday', 'Tuesday')
   habitId   Int // Foreign key to Habit
 
-  habit Habit @relation(fields: [habitId], references: [id])
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum DayOfWeek {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }

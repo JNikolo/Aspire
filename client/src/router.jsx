@@ -36,12 +36,16 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/survey",
+    path: "/survey/:surveyId/edit",
     element: <SurveyPage />,
   },
   {
     path: "/sso-fallback",
     element: <SSOFallback />,
+  },
+  {
+    path: "/survey/new",
+    element: <SurveyPage />,
   },
   {
     path: "/dashboard",
