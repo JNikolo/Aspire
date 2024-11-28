@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Timeline from "./Timeline";
 import {
   format,
   startOfWeek,
@@ -101,8 +102,7 @@ const TaskCard = (props) => {
       <div className="collapse-title text-xl text-brown-light font-medium">
         {task.name}
       </div>
-      <div className="collapse-content">
-        {/* View Mode Selector */}
+      <div className="collapse-content flex flex-col space-y-5">
         <div role="tablist" className="tabs tabs-lifted">
           <input
             type="radio"
@@ -290,6 +290,9 @@ const TaskCard = (props) => {
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <Timeline></Timeline>
         </div>
       </div>
     </div>
