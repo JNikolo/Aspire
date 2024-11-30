@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useLocation, useParams } from "react-router-dom";
 import { BsTrash3 } from "react-icons/bs";
 import { useAuth } from "@clerk/clerk-react";
@@ -9,6 +9,7 @@ export const SurveyPage = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -19,15 +20,47 @@ export const SurveyPage = () => {
     },
   });
 
-  const { surveyId } = useParams();
-  const isEditMode = Boolean(surveyId);
+  const { habitId } = useParams();
+  const isEditMode = Boolean(habitId);
   const { getToken } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchHabit = async () => {
+      try {
+        const token = await getToken();
+        const response = await fetch(
+          `http://127.0.0.1:3000/habit/${habitId}/survey`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await response.json();
+        console.log("Habit data", data);
+        const { habitName, frequency, notifications, selectedDays } = data;
+        reset({
+          habitName,
+          frequency: frequency.map((f) => f.dayOfWeek),
+          notifications,
+          selectedDays: selectedDays.map((d) => d.dayOfWeek),
+        });
+      } catch (err) {
+        console.error("Error during habit fetch:", err);
+      }
+    };
+
+    if (isEditMode) {
+      fetchHabit();
+    }
+  }, [isEditMode]);
 
   const onSubmit = (data) => {
     // handle form submission
     console.log("submitted data", data);
-    console.log("id", surveyId);
+    console.log("id", habitId);
     console.log("isEditMode", isEditMode);
     setLoading(true);
 
@@ -48,7 +81,19 @@ export const SurveyPage = () => {
     };
 
     const updateHabit = async () => {
-      console.log("Updating habit...");
+      try {
+        const token = await getToken();
+        await fetch(`http://127.0.0.1:3000/habit/${habitId}/survey`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+      } catch (err) {
+        console.error("Error during habit update:", err);
+      }
     };
 
     if (isEditMode) {
@@ -60,6 +105,7 @@ export const SurveyPage = () => {
       console.log("Create Mode");
       createHabit();
     }
+    setLoading(false);
   };
 
   // watch is used to dynamically show/hide sections

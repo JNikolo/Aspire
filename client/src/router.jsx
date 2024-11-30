@@ -31,7 +31,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/survey/:surveyId/edit",
+    path: "/survey/:habitId/edit",
     element: <SurveyPage />,
   },
   {
