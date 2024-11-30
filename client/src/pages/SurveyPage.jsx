@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BsTrash3 } from "react-icons/bs";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -24,6 +24,11 @@ export const SurveyPage = () => {
   const isEditMode = Boolean(habitId);
   const { getToken } = useAuth();
   const [loading, setLoading] = useState(false);
+  // watch is used to dynamically show/hide sections
+  const notifications = watch("notifications", false);
+  const frequency = watch("frequency", []);
+  const [deleteHabit, setDeleteHabit] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHabit = async () => {
@@ -55,7 +60,7 @@ export const SurveyPage = () => {
     if (isEditMode) {
       fetchHabit();
     }
-  }, [isEditMode]);
+  }, [isEditMode, habitId, getToken, reset]);
 
   const onSubmit = (data) => {
     // handle form submission
@@ -108,13 +113,6 @@ export const SurveyPage = () => {
     setLoading(false);
   };
 
-  // watch is used to dynamically show/hide sections
-  const notifications = watch("notifications", false);
-  const frequency = watch("frequency", []);
-  const [deleteHabit, setDeleteHabit] = useState(false);
-  const navigate = useLocation();
-  const redirected = navigate.state?.redirected;
-
   // Frequency of Habit
   // const handleFrequencyChange = (day) => {
   //   setFrequency(
@@ -126,9 +124,28 @@ export const SurveyPage = () => {
   // };
 
   // Delete Habit
-  const deleteUserHabit = () => {
+  const handleDeleteHabit = async () => {
     setDeleteHabit(true);
-    console.log("Habit Deleted");
+    try {
+      const token = await getToken();
+      const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        navigate("/");
+      } else {
+        console.error("Failed to delete habit");
+      }
+    } catch (err) {
+      console.error("Error during habit deletion:", err);
+    }
+
+    setDeleteHabit(false);
   };
 
   //const [habitName, setHabitName] = useState(null);
@@ -158,7 +175,9 @@ export const SurveyPage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4 bg-white p-6 rounded-lg mx-4">
             <span className="loading loading-spinner loading-lg text-primary"></span>
-            <p className="text-gray-700 font-medium">Creating your habit...</p>
+            <p className="text-gray-700 font-medium">
+              {isEditMode ? "Updating your habit..." : "Creating your habit..."}
+            </p>
           </div>
         </div>
       )}
@@ -340,14 +359,14 @@ export const SurveyPage = () => {
             <p className="py-4">Are you sure you want to delete this habit?</p>
             <div className="modal-action">
               <button
-                onClick={deleteUserHabit}
-                className="btn bg-blue-light text-black hover:bg-gray hover:text-white border-5 border-white"
+                className="btn text-black hover:bg-gray hover:text-white borrder-5 border-white"
+                onClick={handleDeleteHabit}
               >
                 <span>Delete</span>
               </button>
               <label
                 htmlFor="my_modal_6"
-                className="btn text-black hover:bg-gray hover:text-white borrder-5 border-white"
+                className="btn bg-blue-light text-black hover:bg-gray hover:text-white border-5 border-white"
               >
                 <span>Cancel</span>
               </label>
@@ -375,6 +394,11 @@ export const SurveyPage = () => {
               />
             </label> */}
             </div>
+            {deleteHabit && (
+              <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+              </div>
+            )}
           </div>
         </div>
       </form>

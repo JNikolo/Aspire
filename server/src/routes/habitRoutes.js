@@ -122,11 +122,20 @@ habitRouter.put("/:habitId/survey", async (req, res) => {
 
 habitRouter.delete("/:habitId", async (req, res) => {
   try {
+    const { userId } = req.auth;
     const { habitId } = req.params;
 
-    await prisma.habitFrequency.deleteMany({
-      where: { habitId: parseInt(habitId) },
+    const user = await prisma.user.findUnique({ where: { authId: userId } });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    await prisma.habit.delete({
+      where: { id: parseInt(habitId) },
     });
+
+    res.json({ message: "Habit deleted successfully" });
   } catch (err) {
     console.error("Error during habit deletion:", err);
     res.status(500).json({ error: "An error occurred during habit deletion" });
