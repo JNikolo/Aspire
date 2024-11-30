@@ -44,8 +44,8 @@ model Habit {
 
 // HabitSelectedDays table (storing days selected for the habit)
 model HabitSelectedDay {
-  id        Int       @id @default(autoincrement())
-  dayOfWeek DayOfWeek // Day of the week (e.g., 'Monday', 'Tuesday')
+  id        Int    @id @default(autoincrement())
+  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
   habitId   Int // Foreign key to Habit
 
   habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -56,22 +56,12 @@ model HabitSelectedDay {
 
 // HabitFrequency table (storing frequency days for the habit)
 model HabitFrequency {
-  id        Int       @id @default(autoincrement())
-  dayOfWeek DayOfWeek // Day of the week (e.g., 'Monday', 'Tuesday')
+  id        Int    @id @default(autoincrement())
+  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
   habitId   Int // Foreign key to Habit
 
   habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum DayOfWeek {
-  Monday
-  Tuesday
-  Wednesday
-  Thursday
-  Friday
-  Saturday
-  Sunday
 }

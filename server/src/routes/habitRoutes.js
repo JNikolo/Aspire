@@ -43,7 +43,7 @@ habitRouter.post("/", async (req, res) => {
         habitName: habitName,
         notifications: notifications,
         user: {
-          connect: { authId: user.id }, // Assuming user with id 1 exists
+          connect: { id: user.id }, // Connect habit to user
         },
         frequency: {
           create: frequency.map((day) => ({ dayOfWeek: day })), // Frequency of the habit
@@ -58,6 +58,78 @@ habitRouter.post("/", async (req, res) => {
   } catch (err) {
     console.error("Error during habit creation:", err);
     res.status(500).json({ error: "An error occurred during habit creation" });
+  }
+});
+
+habitRouter.get("/:habitId/survey", async (req, res) => {
+  try {
+    const { userId } = req.auth;
+    const { habitId } = req.params;
+
+    const user = await prisma.user.findUnique({ where: { authId: userId } });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const habit = await prisma.habit.findUnique({
+      where: { id: parseInt(habitId) },
+    });
+    const frequency = await prisma.habitFrequency.findMany({
+      where: { habitId: parseInt(habitId) },
+    });
+    const selectedDays = await prisma.habitSelectedDay.findMany({
+      where: { habitId: parseInt(habitId) },
+    });
+    if (!habit) {
+      return res.status(404).json({ error: "Habit not found" });
+    }
+
+    res.json({ ...habit, frequency, selectedDays });
+  } catch (err) {
+    console.error("Error during habit fetch:", err);
+    res.status(500).json({ error: "An error occurred during habit fetch" });
+  }
+});
+
+habitRouter.put("/:habitId/survey", async (req, res) => {
+  try {
+    const { habitId } = req.params;
+    const { habitName, frequency, notifications, selectedDays } = req.body;
+
+    const habit = await prisma.habit.update({
+      where: { id: parseInt(habitId) },
+      data: {
+        habitName: habitName,
+        notifications: notifications,
+        frequency: {
+          deleteMany: {},
+          create: frequency.map((day) => ({ dayOfWeek: day })),
+        },
+        selectedDays: {
+          deleteMany: {},
+          create: selectedDays.map((day) => ({ dayOfWeek: day })),
+        },
+      },
+    });
+
+    res.json(habit);
+  } catch (err) {
+    console.error("Error during habit update:", err);
+    res.status(500).json({ error: "An error occurred during habit update" });
+  }
+});
+
+habitRouter.delete("/:habitId", async (req, res) => {
+  try {
+    const { habitId } = req.params;
+
+    await prisma.habitFrequency.deleteMany({
+      where: { habitId: parseInt(habitId) },
+    });
+  } catch (err) {
+    console.error("Error during habit deletion:", err);
+    res.status(500).json({ error: "An error occurred during habit deletion" });
   }
 });
 

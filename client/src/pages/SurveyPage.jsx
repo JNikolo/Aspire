@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useLocation, useParams } from "react-router-dom";
 import { BsTrash3 } from "react-icons/bs";
+import { useAuth } from "@clerk/clerk-react";
 
 export const SurveyPage = () => {
   const {
@@ -20,12 +21,45 @@ export const SurveyPage = () => {
 
   const { surveyId } = useParams();
   const isEditMode = Boolean(surveyId);
+  const { getToken } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (data) => {
     // handle form submission
     console.log("submitted data", data);
     console.log("id", surveyId);
     console.log("isEditMode", isEditMode);
+    setLoading(true);
+
+    const createHabit = async () => {
+      try {
+        const token = await getToken();
+        await fetch("http://127.0.0.1:3000/habit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+      } catch (err) {
+        console.error("Error during habit creation:", err);
+      }
+    };
+
+    const updateHabit = async () => {
+      console.log("Updating habit...");
+    };
+
+    if (isEditMode) {
+      // handle edit mode
+      console.log("Edit Mode");
+      updateHabit();
+    } else {
+      // handle create mode
+      console.log("Create Mode");
+      createHabit();
+    }
   };
 
   // watch is used to dynamically show/hide sections
@@ -73,6 +107,15 @@ export const SurveyPage = () => {
 
   return (
     <div className=" bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex items-center justify-center p-4">
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4 bg-white p-6 rounded-lg mx-4">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+            <p className="text-gray-700 font-medium">Creating your habit...</p>
+          </div>
+        </div>
+      )}
       {/* card from daisyui used to display content*/}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="bg-stone-100 transparent card w-full max-w-4xl shadow-xl bg-opacity-85">
