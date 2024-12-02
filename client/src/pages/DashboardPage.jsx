@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // import { useSearchParams } from "react-router-dom";
 import TaskCard from "../components/TaskCard";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
+
 export const DashboardPage = () => {
   const { isSignedIn, user } = useUser();
   useEffect(() => {

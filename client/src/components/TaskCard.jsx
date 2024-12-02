@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Timeline from "./Timeline";
+import Select from "react-select";
 import {
   format,
   startOfWeek,
@@ -77,27 +78,155 @@ const TaskCard = (props) => {
   const goToPreviousYear = () => {
     setCurrentYear((prev) => subMonths(prev, 12));
   };
+  const [completionDate, setCompletionDate] = useState(null);
 
-  // Load the task from localStorage on mount useEffect(() => {   const savedTask
-  // = JSON.parse(localStorage.getItem(TASK_KEY));   if (savedTask) {
-  // setTask(savedTask);   } }, []); Save the task to localStorage whenever it
-  // changes useEffect(() => {   localStorage.setItem(TASK_KEY,
-  // JSON.stringify(task)); }, [task]); Toggle task completion for a specific day
   const toggleCompletion = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    console.log(formattedDate);
-    setTask((prevTask) => ({
-      ...prevTask,
-      completion: {
-        ...prevTask.completion,
-        [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
-      },
-    }));
+    console.log("Toggling completion for date:", date);
+    setCompletionDate(format(date, "MMM d, yyyy"));
+    console.log(completionDate);
+
+    //if post already exists for that day unclicking the checkbox will delete the post
+    // if (task.completion[formattedDate]) {
+    //   deletePost(formattedDate);
+    //   setTask((prevTask) => ({
+    //     ...prevTask,
+    //     completion: {
+    //       ...prevTask.completion,
+    //       [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
+    //     },
+    //   }));
+    //   console.log(task.completion);
+    // }
+    //}
+    //else {
+    // show modal to create a post
+    document.getElementById("my_modal_3").showModal();
+
+    // setTask((prevTask) => ({
+    //   ...prevTask,
+    //   completion: {
+    //     ...prevTask.completion,
+    //     [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
+    //   },
+    // }));
     console.log(task.completion);
   };
 
+  const [image, setImage] = useState(null);
+  const fileInputRef = useRef(null);
+  const [postToCommunities, setPostToCommunities] = useState(false);
+  const handleTakePhoto = async () => {
+    alert("Camera access would be implemented here");
+  };
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const communityOptions = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
   return (
     <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
+      <dialog id="my_modal_3" className="modal">
+        <div className="modal-box flex flex-col max-h-screen overflow-y-auto bg-stone-100 shadow-xl rounded-lg p-6">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <form className="flex flex-col space-y-4 flex-grow">
+            <h3 className="font-bold text-xl text-brown-dark">
+              Completion Log for {completionDate}
+            </h3>
+            <input
+              type="text"
+              placeholder="Title"
+              className="input input-bordered input-primary w-full border-stone-400 bg-stone-50 max-w-xs"
+            />
+            <textarea
+              className="textarea textarea-bordered border-stone-400 bg-stone-50"
+              placeholder="Notes / Description"
+            ></textarea>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              accept="image/*"
+              className="hidden"
+            />
+          </form>
+          <div className="flex flex-col space-y-5 pt-5 mt-auto">
+            {image && (
+              <div className="mt-2">
+                <img
+                  src={image}
+                  alt="Uploaded"
+                  className="max-w-full h-auto rounded-md max-h-40"
+                />
+              </div>
+            )}
+            <div className="flex space-x-2">
+              <button
+                className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark text-brown-dark"
+                onClick={() => fileInputRef.current.click()}
+              >
+                Upload Image
+              </button>
+              <button
+                className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark hover:bg-blue-light text-brown-dark"
+                onClick={handleTakePhoto}
+              >
+                Take Photo
+              </button>
+              {image && (
+                <button
+                  className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark hover:bg-blue-light text-brown-dark"
+                  onClick={() => {
+                    setImage(null);
+                    fileInputRef.current.value = null;
+                  }}
+                >
+                  Remove Image
+                </button>
+              )}
+            </div>
+            <div className="flex items-center space-x-2">
+              <label className="label cursor-pointer">
+                <span className="label-text">Post to your communities?</span>
+              </label>
+              <input
+                type="checkbox"
+                className="toggle toggle-primary  [--tglbg:white] bg-blue-dark hover:bg-blue-light"
+                checked={postToCommunities}
+                onChange={() => setPostToCommunities(!postToCommunities)}
+              />
+            </div>
+            <div className="pb-12">
+              {postToCommunities && (
+                <Select
+                  isMulti
+                  maxMenuHeight={100}
+                  name="communitiesPost"
+                  placeholder="Select Communities"
+                  options={communityOptions}
+                />
+              )}
+            </div>
+          </div>
+          <button className="btn sticky bottom-0 border-5 border-white bg-brown-dark hover:bg-brown-light hover:border-white text-white">
+            {postToCommunities ? "Create Public Post" : "Create Private Post"}
+          </button>
+        </div>
+      </dialog>
       <input type="checkbox" />
       <div className="collapse-title text-xl text-brown-light font-medium">
         {task.name}
@@ -112,13 +241,11 @@ const TaskCard = (props) => {
             aria-label="Week"
             defaultChecked
           />
-
           <div
             role="tabpanel"
-            className="tab-content bg-[#f0f8ff] border-brown-dark rounded-box p-6  "
+            className="tab-content bg-[#f0f8ff] border-brown-dark rounded-box p-6"
           >
-            <div className="flex flex-col items-center justify-evenly h-40  space-y-5">
-              {/* Week Selector */}
+            <div className="flex flex-col items-center justify-evenly h-40 space-y-5">
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousWeek}>{`<`}</button>
                 <span
@@ -130,22 +257,16 @@ const TaskCard = (props) => {
                 </span>
                 <button onClick={goToNextWeek}>{`>`}</button>
               </div>
-              {/* Calendar Grid */}
-              <div
-                className="flex flex-row justify-evenly w-4/5
-               items-center "
-              >
+              <div className="flex flex-row justify-evenly w-4/5 items-center">
                 {weekDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
-                  const isCompleted = !!task.completion[formattedDate]; // Check if task is completed on this day
-
+                  const isCompleted = !!task.completion[formattedDate];
                   return (
                     <div
                       key={formattedDate}
-                      className="flex flex-col justify-center items-center w-1/7 "
+                      className="flex flex-col justify-center items-center w-1/7"
                     >
-                      <div className="font-bold">{format(date, "EE")}</div>{" "}
-                      {/* Full day name */}
+                      <div className="font-bold">{format(date, "EE")}</div>
                       <input
                         type="checkbox"
                         checked={isCompleted}
@@ -153,14 +274,12 @@ const TaskCard = (props) => {
                         onChange={() => toggleCompletion(date)}
                       />
                       <div>{format(date, "d")}</div>
-                      {/* Date number */}
                     </div>
                   );
                 })}
               </div>
             </div>
           </div>
-
           <input
             type="radio"
             name={task.name}
@@ -173,7 +292,6 @@ const TaskCard = (props) => {
             className="tab-content bg-[#f0f8ff] border-base-300 rounded-box p-6"
           >
             <div className="flex flex-col items-center justify-center space-y-5">
-              {/* Month Selector */}
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousMonth}>{`<`}</button>
                 <span
@@ -185,14 +303,12 @@ const TaskCard = (props) => {
                 </span>
                 <button onClick={goToNextMonth}>{`>`}</button>
               </div>
-              {/* Calendar Grid */}
               <div
                 className={`w-4/5 grid`}
                 style={{
                   gridTemplateColumns: `repeat(${task.selectedDays.length}, minmax(0, 1fr))`,
                 }}
               >
-                {/* Day Labels */}
                 {task.selectedDays.map((day) => (
                   <div
                     key={day}
@@ -201,7 +317,6 @@ const TaskCard = (props) => {
                     {day.slice(0, 3)}
                   </div>
                 ))}
-                {/* Empty cells for the days after the end of the month */}
                 {Array.from({
                   length: startOfMonth(currentMonth).getDay(),
                 }).map((_, index) => (
@@ -210,11 +325,9 @@ const TaskCard = (props) => {
                     className="flex flex-col justify-center items-center"
                   ></div>
                 ))}
-                {/* Render the checkboxes for days of the month */}
                 {monthDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
-                  const isCompleted = !!task.completion[formattedDate]; // Check if task is completed on this day
-
+                  const isCompleted = !!task.completion[formattedDate];
                   return (
                     <div
                       key={formattedDate}
@@ -233,7 +346,6 @@ const TaskCard = (props) => {
               </div>
             </div>
           </div>
-
           <input
             type="radio"
             name={task.name}
@@ -246,7 +358,6 @@ const TaskCard = (props) => {
             className="tab-content bg-[#f0f8ff] border-base-300 rounded-box p-6"
           >
             <div className="flex flex-col items-center space-y-6">
-              {/* Year Selector */}
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousYear}>{`<`}</button>
                 <span
@@ -258,14 +369,12 @@ const TaskCard = (props) => {
                 </span>
                 <button onClick={goToNextYear}>{`>`}</button>
               </div>
-              {/* Calendar Grid */}
               <div className="overflow-x-auto w-full">
                 <div className="flex flex-wrap flex-col h-40">
                   {yearDates.map((date) => {
                     const formattedDate = format(date, "yyyy-MM-dd");
                     const isCompleted = !!task.completion[formattedDate];
                     const monthBox = format(date, "MM");
-
                     return (
                       <div
                         key={formattedDate}
