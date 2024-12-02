@@ -21,4 +21,47 @@ model User {
   profilePicture String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  Habit          Habit[]
+}
+
+// Habits table
+model Habit {
+  id            Int     @id @default(autoincrement()) // Unique habit ID
+  habitName     String // The name of the habit
+  notifications Boolean // Whether notifications are enabled
+  userId        String // Foreign key to User
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One-to-many relation with HabitSelectedDays
+  selectedDays HabitSelectedDay[]
+
+  // One-to-many relation with HabitFrequency (days of the week for frequency)
+  frequency HabitFrequency[]
+}
+
+// HabitSelectedDays table (storing days selected for the habit)
+model HabitSelectedDay {
+  id        Int    @id @default(autoincrement())
+  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
+  habitId   Int // Foreign key to Habit
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// HabitFrequency table (storing frequency days for the habit)
+model HabitFrequency {
+  id        Int    @id @default(autoincrement())
+  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
+  habitId   Int // Foreign key to Habit
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

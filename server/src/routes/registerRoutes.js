@@ -19,6 +19,7 @@ registerRouter.post("/create-after-signup", async (req, res) => {
     await prisma.user.create({
       data: {
         authId: user.id,
+        profileName: user.emailAddresses[0].emailAddress.split("@")[0],
       },
     });
 
@@ -49,6 +50,7 @@ registerRouter.post("/sso-callback", async (req, res) => {
       await prisma.user.create({
         data: {
           authId: user.id,
+          profileName: user.fullName,
           profilePicture: user.imageUrl,
         },
       });

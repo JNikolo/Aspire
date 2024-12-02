@@ -34,7 +34,7 @@ export const SSOFallback = () => {
 
         // Redirect the user to the appropriate page
         if (newUser) {
-          navigate("/survey", { state: { fromSource: "/signup" } });
+          navigate("/survey/new");
         } else {
           navigate("/");
         }
