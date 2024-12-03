@@ -22,6 +22,7 @@ const TASK_KEY = "customTask";
 
 const TaskCard = (props) => {
   const [task, setTask] = useState(props.task);
+  const taskId = task.id;
   const [currentDate, setCurrentDate] = useState(new Date()); // Track the current date
   const [currentWeekStart, setCurrentWeekStart] = useState(
     startOfWeek(new Date(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
@@ -102,10 +103,10 @@ const TaskCard = (props) => {
     //}
     //else {
     // show modal to create a post
-    document.getElementById("my_modal_3").showModal();
   };
 
   const toggleCompletion = (date) => {
+    console.log("HELLO");
     const formattedDate = format(date, "yyyy-MM-dd");
     setTask((prevTask) => ({
       ...prevTask,
@@ -114,15 +115,25 @@ const TaskCard = (props) => {
         [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
       },
     }));
-    document.getElementById("my_modal_3").close();
+    document.getElementById(`my_modal_${taskId}`).close();
+    setToggleDate(null);
     console.log(task.completion);
   };
+
+  useEffect(() => {
+    if (completionDate && toggleDate) {
+      document.getElementById(`my_modal_${taskId}`).showModal();
+    }
+  }, [completionDate, toggleDate, taskId]);
+
   return (
     <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
       <CompletionModal
         completionDate={completionDate}
         toggleCompletion={toggleCompletion}
         toggleDate={toggleDate}
+        habit={task}
+        modalId={`my_modal_${taskId}`}
       ></CompletionModal>
       <input type="checkbox" />
       <div className="collapse-title text-xl text-brown-light font-medium">

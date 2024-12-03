@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 // import { useSearchParams } from "react-router-dom";
-import TaskCard from "../components/TaskCard";
+import TaskCard from "../components/Dashboard/TaskCard";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 
@@ -17,9 +17,6 @@ export const DashboardPage = () => {
     }
   }, [isSignedIn, user]);
 
-  // const [daysDisplayed, setDaysDisplayed] = useState([]);
-  // const [weekOf, setWeekOf] = useState(null);
-  // const [tasks, setTasks] = useState(null);
   const predefinedSelectedDays = [
     "Monday",
     "Tuesday",
@@ -59,11 +56,24 @@ export const DashboardPage = () => {
     },
   ]);
 
-  return (
-    <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="flex flex-col w-full items-center space-y-10 h-full">
-        <h1 className="text-4xl">Welcome, {user?.username}</h1>
+  useEffect(() => {
+    const fetchHabits = async () => {
+      try {
+        const response = await fetch("/habits");
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching habits:", error);
+      }
+    };
 
+    fetchHabits();
+  }, []);
+
+  return (
+    <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
+      <div className="flex flex-col w-full items-center space-y-10 h-full">
+        <h1 className="pt-10 pb-10 text-4xl">Welcome, {user?.username}</h1>
         {tasks.map((task) => (
           <TaskCard task={task} key={task.id}></TaskCard>
         ))}

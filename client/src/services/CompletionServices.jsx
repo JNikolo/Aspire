@@ -36,7 +36,7 @@ export const createHabit = async (getToken, data, navigate) => {
     });
 
     if (response.ok) {
-      navigate("/dashboard");
+      navigate("/");
     }
   } catch (err) {
     console.error("Error during habit creation:", err);
@@ -58,7 +58,7 @@ export const updateHabit = async (getToken, habitId, data, navigate) => {
       }
     );
     if (response.ok) {
-      navigate("/dashboard");
+      navigate("/");
     }
   } catch (err) {
     console.error("Error during habit update:", err);
@@ -77,7 +77,7 @@ export const deleteHabit = async (habitId, getToken, navigate) => {
     });
 
     if (response.ok) {
-      navigate("/dashboard");
+      navigate("/");
     } else {
       console.error("Failed to delete habit");
     }
