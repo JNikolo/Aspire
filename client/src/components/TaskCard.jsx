@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Timeline from "./Timeline";
-import Select from "react-select";
+import CompletionModal from "./CompletionModal";
+
 import {
   format,
   startOfWeek,
@@ -79,11 +80,12 @@ const TaskCard = (props) => {
     setCurrentYear((prev) => subMonths(prev, 12));
   };
   const [completionDate, setCompletionDate] = useState(null);
-
-  const toggleCompletion = (date) => {
+  const [toggleDate, setToggleDate] = useState(null);
+  const handleCheckbox = (date) => {
     console.log("Toggling completion for date:", date);
     setCompletionDate(format(date, "MMM d, yyyy"));
     console.log(completionDate);
+    setToggleDate(date);
 
     //if post already exists for that day unclicking the checkbox will delete the post
     // if (task.completion[formattedDate]) {
@@ -101,132 +103,27 @@ const TaskCard = (props) => {
     //else {
     // show modal to create a post
     document.getElementById("my_modal_3").showModal();
+  };
 
-    // setTask((prevTask) => ({
-    //   ...prevTask,
-    //   completion: {
-    //     ...prevTask.completion,
-    //     [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
-    //   },
-    // }));
+  const toggleCompletion = (date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setTask((prevTask) => ({
+      ...prevTask,
+      completion: {
+        ...prevTask.completion,
+        [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
+      },
+    }));
+    document.getElementById("my_modal_3").close();
     console.log(task.completion);
   };
-
-  const [image, setImage] = useState(null);
-  const fileInputRef = useRef(null);
-  const [postToCommunities, setPostToCommunities] = useState(false);
-  const handleTakePhoto = async () => {
-    alert("Camera access would be implemented here");
-  };
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  const communityOptions = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-
   return (
     <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
-      <dialog id="my_modal_3" className="modal">
-        <div className="modal-box flex flex-col max-h-screen overflow-y-auto bg-stone-100 shadow-xl rounded-lg p-6">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <form className="flex flex-col space-y-4 flex-grow">
-            <h3 className="font-bold text-xl text-brown-dark">
-              Completion Log for {completionDate}
-            </h3>
-            <input
-              type="text"
-              placeholder="Title"
-              className="input input-bordered input-primary w-full border-stone-400 bg-stone-50 max-w-xs"
-            />
-            <textarea
-              className="textarea textarea-bordered border-stone-400 bg-stone-50"
-              placeholder="Notes / Description"
-            ></textarea>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              accept="image/*"
-              className="hidden"
-            />
-          </form>
-          <div className="flex flex-col space-y-5 pt-5 mt-auto">
-            {image && (
-              <div className="mt-2">
-                <img
-                  src={image}
-                  alt="Uploaded"
-                  className="max-w-full h-auto rounded-md max-h-40"
-                />
-              </div>
-            )}
-            <div className="flex space-x-2">
-              <button
-                className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark text-brown-dark"
-                onClick={() => fileInputRef.current.click()}
-              >
-                Upload Image
-              </button>
-              <button
-                className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark hover:bg-blue-light text-brown-dark"
-                onClick={handleTakePhoto}
-              >
-                Take Photo
-              </button>
-              {image && (
-                <button
-                  className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark hover:bg-blue-light text-brown-dark"
-                  onClick={() => {
-                    setImage(null);
-                    fileInputRef.current.value = null;
-                  }}
-                >
-                  Remove Image
-                </button>
-              )}
-            </div>
-            <div className="flex items-center space-x-2">
-              <label className="label cursor-pointer">
-                <span className="label-text">Post to your communities?</span>
-              </label>
-              <input
-                type="checkbox"
-                className="toggle toggle-primary  [--tglbg:white] bg-blue-dark hover:bg-blue-light"
-                checked={postToCommunities}
-                onChange={() => setPostToCommunities(!postToCommunities)}
-              />
-            </div>
-            <div className="pb-12">
-              {postToCommunities && (
-                <Select
-                  isMulti
-                  maxMenuHeight={100}
-                  name="communitiesPost"
-                  placeholder="Select Communities"
-                  options={communityOptions}
-                />
-              )}
-            </div>
-          </div>
-          <button className="btn sticky bottom-0 border-5 border-white bg-brown-dark hover:bg-brown-light hover:border-white text-white">
-            {postToCommunities ? "Create Public Post" : "Create Private Post"}
-          </button>
-        </div>
-      </dialog>
+      <CompletionModal
+        completionDate={completionDate}
+        toggleCompletion={toggleCompletion}
+        toggleDate={toggleDate}
+      ></CompletionModal>
       <input type="checkbox" />
       <div className="collapse-title text-xl text-brown-light font-medium">
         {task.name}
@@ -271,7 +168,7 @@ const TaskCard = (props) => {
                         type="checkbox"
                         checked={isCompleted}
                         className="checkbox w-8 h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                        onChange={() => toggleCompletion(date)}
+                        onChange={() => handleCheckbox(date)}
                       />
                       <div>{format(date, "d")}</div>
                     </div>
@@ -337,7 +234,7 @@ const TaskCard = (props) => {
                         type="checkbox"
                         checked={isCompleted}
                         className="checkbox w-7 h-7 sm:w-8 sm:h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                        onChange={() => toggleCompletion(date)}
+                        onChange={() => handleCheckbox(date)}
                       />
                       <div className="text-sm">{format(date, "d")}</div>
                     </div>
@@ -390,7 +287,7 @@ const TaskCard = (props) => {
                               ? "border-brown-light [--chkbg:#FF0000] [--chkfg:#FFFFFF]"
                               : "border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
                           }`}
-                          onChange={() => toggleCompletion(date)}
+                          // onChange={() => handleCheckbox(date)}
                         />
                       </div>
                     );
