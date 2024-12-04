@@ -17,12 +17,21 @@ import {
   subMonths,
   isSameDay,
 } from "date-fns";
-
+const initialData = {
+  title: "Hello",
+  description: "bruh",
+  postToCommunities: true,
+  communitiesPost: [],
+  image: null,
+};
 const TASK_KEY = "customTask";
 
 const TaskCard = (props) => {
   const [task, setTask] = useState(props.task);
-  const taskId = task.id;
+  const taskId = task?.id;
+  const [initialData, setInitialData] = useState(null);
+  const selectedDays = task.frequency.map((freq) => freq.dayOfWeek);
+
   const [currentDate, setCurrentDate] = useState(new Date()); // Track the current date
   const [currentWeekStart, setCurrentWeekStart] = useState(
     startOfWeek(new Date(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
@@ -35,29 +44,40 @@ const TaskCard = (props) => {
   const [monthHover, setMonthHover] = useState(null);
 
   useEffect(() => {
-    const newMonthDates = eachDayOfInterval({
-      start: startOfMonth(currentMonth),
-      end: endOfMonth(currentMonth),
-    }).filter((date) => task.selectedDays.includes(format(date, "EEEE")));
-    setMonthDates(newMonthDates);
+    if (selectedDays && selectedDays.length > 0) {
+      const newMonthDates = eachDayOfInterval({
+        start: startOfMonth(currentMonth),
+        end: endOfMonth(currentMonth),
+      }).filter((date) => selectedDays.includes(format(date, "EEE")));
+      setMonthDates(newMonthDates);
+    }
   }, [currentMonth]);
 
   useEffect(() => {
-    const newWeekDates = eachDayOfInterval({
-      start: startOfWeek(currentWeekStart, { weekStartsOn: 0 }),
-      end: endOfWeek(currentWeekStart, { weekStartsOn: 0 }),
-    }).filter((date) => task.selectedDays.includes(format(date, "EEEE")));
-    setWeekDates(newWeekDates);
+    if (selectedDays && selectedDays.length > 0) {
+      const newWeekDates = eachDayOfInterval({
+        start: startOfWeek(currentWeekStart, { weekStartsOn: 0 }),
+        end: endOfWeek(currentWeekStart, { weekStartsOn: 0 }),
+      }).filter((date) => selectedDays.includes(format(date, "EEE")));
+
+      setWeekDates(newWeekDates);
+    }
   }, [currentWeekStart]);
 
   const [yearDates, setYearDates] = useState([]);
 
   useEffect(() => {
-    const newYearDates = eachDayOfInterval({
-      start: startOfYear(new Date()),
-      end: endOfYear(new Date()),
-    }).filter((date) => task.selectedDays.includes(format(date, "EEEE")));
-    setYearDates(newYearDates);
+    if (selectedDays && selectedDays.length > 0) {
+      const newYearDates = eachDayOfInterval({
+        start: startOfYear(new Date()),
+        end: endOfYear(new Date()),
+      }).filter((date) => {
+        const formattedDate = format(date, "EEE");
+
+        return selectedDays.includes(formattedDate);
+      });
+      setYearDates(newYearDates);
+    }
   }, []);
 
   const goToPreviousWeek = () => {
@@ -82,10 +102,11 @@ const TaskCard = (props) => {
   };
   const [completionDate, setCompletionDate] = useState(null);
   const [toggleDate, setToggleDate] = useState(null);
+  const [completion, setCompletion] = useState([]);
+  const [editMode, setEditMode] = useState(false);
   const handleCheckbox = (date) => {
-    console.log("Toggling completion for date:", date);
     setCompletionDate(format(date, "MMM d, yyyy"));
-    console.log(completionDate);
+
     setToggleDate(date);
 
     //if post already exists for that day unclicking the checkbox will delete the post
@@ -106,22 +127,34 @@ const TaskCard = (props) => {
   };
 
   const toggleCompletion = (date) => {
-    console.log("HELLO");
     const formattedDate = format(date, "yyyy-MM-dd");
-    setTask((prevTask) => ({
-      ...prevTask,
-      completion: {
-        ...prevTask.completion,
-        [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
-      },
+    console.log("formattedDate:", formattedDate);
+    setCompletion((prevCompletion) => ({
+      ...prevCompletion,
+      [formattedDate]: !prevCompletion[formattedDate], // Toggle status
     }));
-    document.getElementById(`my_modal_${taskId}`).close();
     setToggleDate(null);
-    console.log(task.completion);
+    document.getElementById(`my_modal_${taskId}`).close();
   };
 
   useEffect(() => {
     if (completionDate && toggleDate) {
+      console.log(completion);
+      console.log("toggle", completionDate);
+      setEditMode(false);
+      if (completion[format(toggleDate, "yyyy-MM-dd")]) {
+        //set edit mode to true
+        setEditMode(true);
+        console.log("edit mode:", editMode);
+        setInitialData({
+          title: "",
+          description: "",
+          postToCommunities: true,
+          communitiesPost: [],
+          image: null,
+        });
+      }
+      // console.log("edit mode:", editMode);
       document.getElementById(`my_modal_${taskId}`).showModal();
     }
   }, [completionDate, toggleDate, taskId]);
@@ -131,19 +164,24 @@ const TaskCard = (props) => {
       <CompletionModal
         completionDate={completionDate}
         toggleCompletion={toggleCompletion}
+        completion={completion}
         toggleDate={toggleDate}
         habit={task}
+        key={`my_modal_${taskId}`}
         modalId={`my_modal_${taskId}`}
+        editMode={editMode}
+        setToggleDate={setToggleDate}
+        initialData={initialData}
       ></CompletionModal>
       <input type="checkbox" />
       <div className="collapse-title text-xl text-brown-light font-medium">
-        {task.name}
+        {task.habitName}
       </div>
       <div className="collapse-content flex flex-col space-y-5">
         <div role="tablist" className="tabs tabs-lifted">
           <input
             type="radio"
-            name={task.name}
+            name={task.habitName}
             role="tab"
             className="tab [--tab-bg:aliceblue] [--tab-border-color:#32292F]"
             aria-label="Week"
@@ -168,7 +206,8 @@ const TaskCard = (props) => {
               <div className="flex flex-row justify-evenly w-4/5 items-center">
                 {weekDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
-                  const isCompleted = !!task.completion[formattedDate];
+
+                  const isCompleted = !!completion[formattedDate];
                   return (
                     <div
                       key={formattedDate}
@@ -190,7 +229,7 @@ const TaskCard = (props) => {
           </div>
           <input
             type="radio"
-            name={task.name}
+            name={task.habitName}
             role="tab"
             className="tab [--tab-bg:aliceblue]"
             aria-label="Month"
@@ -214,10 +253,10 @@ const TaskCard = (props) => {
               <div
                 className={`w-4/5 grid`}
                 style={{
-                  gridTemplateColumns: `repeat(${task.selectedDays.length}, minmax(0, 1fr))`,
+                  gridTemplateColumns: `repeat(${selectedDays.length}, minmax(0, 1fr))`,
                 }}
               >
-                {task.selectedDays.map((day) => (
+                {selectedDays.map((day) => (
                   <div
                     key={day}
                     className="flex flex-col justify-center items-center font-bold"
@@ -235,7 +274,7 @@ const TaskCard = (props) => {
                 ))}
                 {monthDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
-                  const isCompleted = !!task.completion[formattedDate];
+                  const isCompleted = !!completion[formattedDate];
                   return (
                     <div
                       key={formattedDate}
@@ -256,7 +295,7 @@ const TaskCard = (props) => {
           </div>
           <input
             type="radio"
-            name={task.name}
+            name={task.habitName}
             role="tab"
             className="tab [--tab-bg:aliceblue]"
             aria-label="Year"
@@ -281,7 +320,7 @@ const TaskCard = (props) => {
                 <div className="flex flex-wrap flex-col h-40">
                   {yearDates.map((date) => {
                     const formattedDate = format(date, "yyyy-MM-dd");
-                    const isCompleted = !!task.completion[formattedDate];
+                    const isCompleted = !!completion[formattedDate];
                     const monthBox = format(date, "MM");
                     return (
                       <div

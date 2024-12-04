@@ -1,31 +1,24 @@
-import { useState, useRef } from "react";
-
-// import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import TaskCard from "../components/Dashboard/TaskCard";
 import { useUser, useAuth } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import { getHabits, deleteHabit } from "../services/habitServices";
 
 export const DashboardPage = () => {
   const { isSignedIn, user } = useUser();
+  const { getToken } = useAuth();
+  const [tasks, setTasks] = useState();
+
   useEffect(() => {
     if (isSignedIn) {
       console.log("User is signed in");
-      console.log("user:", user?.username);
+      console.log("user:", user);
       console.log(user.publicMetadata);
       console.log(window.location.pathname);
       console.log(user);
     }
   }, [isSignedIn, user]);
 
-  const predefinedSelectedDays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Sunday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  const predefinedSelectedDays = ["Monday", "Thursday", "Saturday"];
   const dayOrder = [
     "Sunday",
     "Monday",
@@ -41,42 +34,45 @@ export const DashboardPage = () => {
     return dayOrder.indexOf(a) - dayOrder.indexOf(b);
   });
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Workout",
-      selectedDays: sortedSelectedDays,
-      completion: {}, // Stores completion status by date
-    },
-    {
-      id: 2,
-      name: "Running",
-      selectedDays: sortedSelectedDays,
-      completion: {}, // Stores completion status by date
-    },
-  ]);
-
   useEffect(() => {
-    const fetchHabits = async () => {
-      try {
-        const response = await fetch("/habits");
-        const data = await response.json();
+    getHabits(getToken)
+      .then((data) => {
         setTasks(data);
-      } catch (error) {
-        console.error("Error fetching habits:", error);
-      }
-    };
+        console.log("Tasks:", data);
+        console.log("hello");
+      })
+      .catch((err) => {
+        console.error("Error during fetching all habits:", err);
+      });
+  }, [getToken]);
 
-    fetchHabits();
-  }, []);
+  const deleteHabits = async (habitId) => {
+    try {
+      console.log("Deleting habit with id:", habitId);
+      const token = getToken;
+      await deleteHabit(habitId, token);
+      // setTasks((prevTasks) => prevTasks.filter((task) => task.id !== habitId));
+      console.log(`Habit with id ${habitId} deleted successfully`);
+    } catch (err) {
+      console.error("Error deleting habit:", err);
+    }
+  };
 
   return (
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
       <div className="flex flex-col w-full items-center space-y-10 h-full">
-        <h1 className="pt-10 pb-10 text-4xl">Welcome, {user?.username}</h1>
-        {tasks.map((task) => (
-          <TaskCard task={task} key={task.id}></TaskCard>
-        ))}
+        <h1 className="pt-10 pb-10 text-4xl">Welcome, Kevin</h1>
+        {tasks &&
+          tasks.map((task) => (
+            // <div> {task.habitName} </div>
+            <TaskCard
+              task={task}
+              key={task.id}
+              taskId={task.id}
+              deleteHabit={deleteHabit}
+            />
+          ))}
+        {/* {tasks && tasks.map((task) => <div> {task.habitName} </div>)} */}
       </div>
     </div>
   );

@@ -8,24 +8,51 @@ const CompletionModal = ({
   toggleCompletion,
   toggleDate,
   habit,
+  editMode,
+  setToggleDate,
+  initialData,
   modalId, // Receive unique modal ID as a prop
 }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setError,
     clearErrors,
     reset,
-  } = useForm();
+    watch,
+  } = useForm({
+    defaultValues: {
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      postToCommunities: initialData?.postToCommunities || false,
+      communitiesPost: initialData?.communitiesPost || [],
+      image: initialData?.image || null,
+    },
+  });
+
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const formRef = useRef(null);
   const [image, setImage] = useState(null);
-  const [postToCommunities, setPostToCommunities] = useState(false);
-  const [selectedCommunities, setSelectedCommunities] = useState([]);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [selectedCommunities, setSelectedCommunities] = useState([]);
+
+  const formData = watch();
+  const postToCommunities = watch("postToCommunities");
+
+  useEffect(() => {
+    reset({
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      postToCommunities: initialData?.postToCommunities || false,
+      communitiesPost: initialData?.communitiesPost || [],
+      image: initialData?.image || null,
+    });
+    setImage(initialData?.image || null);
+    setSelectedCommunities(initialData?.communitiesPost || []);
+  }, [initialData, reset]);
 
   useEffect(() => {
     const modal = document.getElementById(modalId);
@@ -34,6 +61,7 @@ const CompletionModal = ({
         reset();
         setImage(null);
         setPostToCommunities(false);
+        setToggleDate(null);
         setSelectedCommunities([]);
       };
 
@@ -154,6 +182,7 @@ const CompletionModal = ({
             onClick={() => {
               const modal = document.getElementById(modalId);
               if (modal) {
+                setToggleDate(null);
                 modal.close();
               }
             }}
@@ -169,6 +198,8 @@ const CompletionModal = ({
           <input
             type="text"
             placeholder="Title"
+            name="title"
+            value={formData.title}
             className="input input-bordered input-primary w-full border-stone-400 bg-stone-50 max-w-xs"
             {...register("title", { required: postToCommunities })}
           />
@@ -178,6 +209,8 @@ const CompletionModal = ({
           <textarea
             className="textarea textarea-bordered border-stone-400 bg-stone-50"
             placeholder="Notes / Description"
+            name="description"
+            value={formData.description}
             {...register("description", { required: postToCommunities })}
           ></textarea>
           <input
@@ -233,8 +266,7 @@ const CompletionModal = ({
             <input
               type="checkbox"
               className="toggle toggle-primary  [--tglbg:white] bg-blue-dark hover:bg-blue-light"
-              checked={postToCommunities}
-              onChange={() => setPostToCommunities(!postToCommunities)}
+              {...register("postToCommunities")}
             />
           </div>
           <div className="pb-12">
@@ -246,12 +278,9 @@ const CompletionModal = ({
                   name="communitiesPost"
                   placeholder="Select Communities"
                   options={communityOptions}
-                  onChange={(selectedOptions) => {
-                    setSelectedCommunities(selectedOptions || []);
-                    if (selectedOptions && selectedOptions.length > 0) {
-                      clearErrors("communitiesPost");
-                    }
-                  }}
+                  onChange={(selectedOptions) =>
+                    reset({ ...formData, communitiesPost: selectedOptions })
+                  }
                 />
                 {errors.communitiesPost && (
                   <div className="text-red-500 text-sm">
@@ -261,6 +290,18 @@ const CompletionModal = ({
               </>
             )}
           </div>
+          {/* {isDirty && (
+            <div className="text-red-500 text-sm">Changes have been made</div>
+          )} */}
+          {editMode && (
+            <button
+              type="button"
+              // onClick={handleDeleteButton} // Trigger form submission programmatically
+              className="btn sticky bottom-0 border-5 border-white bg-red-600 hover:bg-brown-light hover:border-white text-white"
+            >
+              {postToCommunities ? "Delete Public Post" : "Delete Private Post"}
+            </button>
+          )}
           <button
             type="button"
             onClick={handleButtonClick} // Trigger form submission programmatically

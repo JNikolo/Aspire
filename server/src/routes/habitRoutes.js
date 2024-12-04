@@ -16,8 +16,12 @@ habitRouter.get("/", async (req, res) => {
 
     const habits = await prisma.habit.findMany({
       where: { userId: user.id },
+      include: {
+        frequency: true, // Include the frequency field
+        selectedDays: true, // Include the selectedDays field if needed
+      },
     });
-
+    console.log(habits);
     res.json(habits);
   } catch (err) {
     console.error("Error during habits fetch:", err);

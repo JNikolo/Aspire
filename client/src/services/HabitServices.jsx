@@ -22,6 +22,26 @@ export const fetchHabit = async (habitId, reset, getToken) => {
     console.error("Error during habit fetch:", err);
   }
 };
+export const getHabits = async (getToken) => {
+  try {
+    const token = await getToken();
+    const response = await fetch("http://127.0.0.1:3000/habit", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch habits");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error during fetching all habits:", err);
+    throw err;
+  }
+};
 
 export const createHabit = async (getToken, data, navigate) => {
   try {
