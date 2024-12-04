@@ -103,7 +103,7 @@ const TaskCard = (props) => {
         {task.name}
       </div>
       <div className="collapse-content flex flex-col space-y-5">
-        <div role="tablist" className="tabs tabs-lifted">
+        <div role="tablist" className="tabs tabs-lifted max-w-[866px]">
           <input
             type="radio"
             name={task.name}
@@ -291,9 +291,9 @@ const TaskCard = (props) => {
             </div>
           </div>
         </div>
-        <div>
-          <Timeline></Timeline>
-        </div>
+      <div className="max-w-[866px]">
+        <Timeline ></Timeline>
+      </div>
       </div>
     </div>
   );
