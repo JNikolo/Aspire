@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import shrek from "../assets/shrek.png";
 import { useNavigate } from "react-router-dom";
+//import { useUser } from "@clerk/clerk-react";
+//import supabase from "../utils/supabaseClient";
 
 export const ProfilePage = () => {
+  //const { user } = useUser();
+  //const [profileName, setProfileName] = useState("");
+  //const [profileImage, setProfileImage] = useState(null);
+  //const [habits, setHabits] = useState([]);
   const [communities, setCommunities] = useState([
     "Riding a bike",
     "Drinking water",
@@ -16,12 +22,49 @@ export const ProfilePage = () => {
   ]);
 
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [profileName, setProfileName] = useState("Shrek");
+  const [profileName, setProfileName] = useState("Kevin");
   const [profileImage, setProfileImage] = useState(shrek);
   const [tempName, setTempName] = useState(profileName);
   const [tempImage, setTempImage] = useState(profileImage);
 
   const navigate = useNavigate();
+
+  /*
+  useEffect(() => {
+    // Fetch user profile data from Supabase
+    const fetchProfile = async () => {
+      const { data, error } = await supabase
+        .from("User")
+        .select("profilePicture, username")
+        .eq("id", user.id)
+        .single();
+      if (error) {
+        console.error("Error fetching profile data:", error);
+      } else {
+        setProfileName(data?.username || "Default Name");
+        setProfileImage(data?.profilePicture || "default-image-url");
+        setTempName(data?.username || "Default Name");
+        setTempImage(data?.profilePicture || "default-image-url");
+      }
+    };
+
+    // Fetch user habits from Supabase
+    const fetchHabits = async () => {
+      const { data, error } = await supabase
+        .from("Habit")
+        .select("*")
+        .eq("userId", user.id);
+      if (error) {
+        console.error("Error fetching habits:", error);
+      } else {
+        setHabits(data);
+      }
+    };
+
+    fetchProfile();
+    fetchHabits();
+  }, [user]);
+  */
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -31,6 +74,23 @@ export const ProfilePage = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  /*
+  const saveChanges = async () => {
+    const { error } = await supabase
+      .from("User")
+      .update({ username: tempName, profilePicture: tempImage })
+      .eq("id", user.id);
+
+    if (error) {
+      console.error("Error saving profile changes:", error);
+    } else {
+      setProfileName(tempName);
+      setProfileImage(tempImage);
+      setIsEditingProfile(false);
+    }
+  };
+  */
 
   const saveChanges = () => {
     setProfileName(tempName);
