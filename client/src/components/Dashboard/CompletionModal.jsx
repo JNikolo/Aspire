@@ -28,6 +28,7 @@ const CompletionModal = ({
       postToCommunities: initialData?.postToCommunities || false,
       communitiesPost: initialData?.communitiesPost || [],
       image: initialData?.image || null,
+      selectedCommunities: [],
     },
   });
 
@@ -150,19 +151,16 @@ const CompletionModal = ({
   };
 
   const onSubmit = (data) => {
-    if (postToCommunities && !image) {
-      alert("Please upload an image or take a photo.");
-      return;
-    }
-    if (postToCommunities && selectedCommunities.length === 0) {
-      setError("communitiesPost", {
-        type: "manual",
-        message: "Please select at least one community.",
-      });
-      return;
-    } else {
-      clearErrors("communitiesPost");
-    }
+    // if (postToCommunities && selectedCommunities.length === 0) {
+    //   console.log(postToCommunities, selectedCommunities);
+    //   setError("communitiesPost", {
+    //     type: "manual",
+    //     message: "Please select at least one community.",
+    //   });
+    //   return;
+    // } else {
+    //   clearErrors("communitiesPost");
+    // }
     toggleCompletion(toggleDate);
     console.log("Completion submitted", data);
     // Add your submission logic here
@@ -190,7 +188,7 @@ const CompletionModal = ({
             ✕
           </button>
           <h3 className="font-bold text-xl text-brown-dark">
-            Completion Log for {completionDate}
+            Completion Log {completionDate}
           </h3>
           {errors.title && (
             <div className="text-red-500 text-sm">Title is required</div>
@@ -278,6 +276,7 @@ const CompletionModal = ({
                   name="communitiesPost"
                   placeholder="Select Communities"
                   options={communityOptions}
+                  {...register("selectedCommunities")}
                   onChange={(selectedOptions) =>
                     reset({ ...formData, communitiesPost: selectedOptions })
                   }

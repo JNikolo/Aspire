@@ -165,6 +165,11 @@ const TaskCard = (props) => {
         completionDate={completionDate}
         toggleCompletion={toggleCompletion}
         completion={completion}
+        communityOptions={[
+          { value: "fitness", label: "Fitness" },
+          { value: "coding", label: "Coding" },
+          { value: "reading", label: "Reading" },
+        ]}
         toggleDate={toggleDate}
         habit={task}
         key={`my_modal_${taskId}`}
@@ -348,7 +353,11 @@ const TaskCard = (props) => {
           </div>
         </div>
         <div className="max-w-[866px]">
-          <Timeline></Timeline>
+          <Timeline
+            newPost={() => {
+              document.getElementById(`my_modal_${taskId}`).showModal();
+            }}
+          ></Timeline>
         </div>
       </div>
     </div>

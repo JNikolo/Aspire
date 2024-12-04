@@ -61,7 +61,14 @@ export const DashboardPage = () => {
   return (
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
       <div className="flex flex-col w-full items-center space-y-10 h-full">
-        <h1 className="pt-10 pb-10 text-4xl">Welcome, Kevin</h1>
+        <h1 className="pt-10 pb-10 text-4xl">Welcome, {user?.firstName}</h1>
+        {!tasks && <div>Loading Your Habits...</div>}
+        {tasks && tasks.length === 0 && (
+          <div>
+            <h2 className="text-2xl">You have no habits yet</h2>
+            <p className="text-lg">Add a habit to get started</p>
+          </div>
+        )}
         {tasks &&
           tasks.map((task) => (
             // <div> {task.habitName} </div>

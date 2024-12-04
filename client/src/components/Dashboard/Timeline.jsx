@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { MdAddCircle } from "react-icons/md";
 
-const Timeline = () => {
+const Timeline = ({ newPost }) => {
   const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState(false); //modal to upload a new post
+  // const [newPost, setNewPost] = useState(false); //modal to upload a new post
 
   return (
     <div>
@@ -90,7 +90,10 @@ const Timeline = () => {
           </div>
         </div>
         <div className="block"></div>
-        <button className="carousel-item bg-white items-center justify-center w-32 md:w-48 lg:w-56 hover:white-100">
+        <button
+          onClick={newPost}
+          className="carousel-item bg-white items-center justify-center w-32 md:w-48 lg:w-56 hover:white-100"
+        >
           <MdAddCircle className="w-[50px] h-[50px]" />
           {/* add a new entry */}
         </button>
