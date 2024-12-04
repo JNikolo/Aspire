@@ -8,19 +8,19 @@ chatRouter.use(clerkMiddleware());
 
 chatRouter.post("/", async (req, res) => {
   try {
-    // const { userId } = req.auth;
+    const { userId } = req.auth;
 
-    // const user = await prisma.user.findUnique({
-    //   where: { authId: userId },
-    // });
+    const user = await prisma.user.findUnique({
+      where: { authId: userId },
+    });
 
-    // if (!user) {
-    //   return res.status(404).json({ error: "User not found" });
-    // }
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-    const { messages, userId } = req.body;
+    const { messages } = req.body;
 
-    const response = await generateResponse(messages, userId);
+    const response = await generateResponse(messages, user.id);
 
     res.json({ response });
   } catch (error) {

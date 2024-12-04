@@ -89,6 +89,7 @@ async function executeTool(toolName, args, userId) {
 }
 
 export async function generateResponse(messages, userId) {
+  console.log("Generating response for messages:", messages);
   const currentMessageContent = messages[messages.length - 1].content;
 
   try {
