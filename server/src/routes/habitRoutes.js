@@ -1,4 +1,4 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "../middlewares/prisma.js";
 
