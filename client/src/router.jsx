@@ -4,6 +4,7 @@ import App from "./App";
 import { LoginPage } from "./pages/LoginPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { SurveyPage } from "./pages/SurveyPage";
+import { HomePage } from "./pages/HomePage";
 import { SSOFallback } from "./components/SSOFallback";
 import { DashboardPage } from "./pages/DashboardPage";
 
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/home",
+    element: <HomePage />,
   },
   {
     path: "/signup",

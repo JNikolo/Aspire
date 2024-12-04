@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FormInput } from "../components/FormInput";
-import { LuUser2, LuAlertCircle } from "react-icons/lu";
+import { LuCircleAlert, LuUser } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { SsoButton } from "../components/SsoButton";
 import journeyIcon from "../assets/journeyIcon.png";
@@ -77,7 +77,7 @@ export function LoginPage() {
         <div className="fixed top-2 w-full z-50 p-4">
           <div className="alert alert-error flex justify-between items-center p-4 shadow-lg text-white bg-red-600">
             <div className="flex items-center">
-              <LuAlertCircle className="h-6 w-6 mr-2" />
+              <LuCircleAlert className="h-6 w-6 mr-2" />
               <span>{error}</span>
             </div>
             <button
@@ -154,7 +154,7 @@ export function LoginPage() {
                 },
               })}
               error={errors.username}
-              icon={<LuUser2 size={20} />}
+              icon={<LuUser size={20} />}
             />
 
             <FormInput

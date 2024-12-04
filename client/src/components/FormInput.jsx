@@ -1,4 +1,6 @@
-import { LuEye, LuEyeOff, LuAlertCircle } from "react-icons/lu";
+// import { LuEye, LuEyeOff,  } from "react-icons/lu";
+import { LuCircleAlert, LuEyeOff, LuEye } from "react-icons/lu";
+
 import PropTypes from "prop-types";
 
 export const FormInput = ({
@@ -48,7 +50,7 @@ export const FormInput = ({
     <div className="h-5 md:h-6 mt-1">
       {error && (
         <div className="alert alert-error py-1 px-2 md:px-8 sm:px-6 min-h-0 flex flex-row">
-          <LuAlertCircle className="h-3 w-3 md:h-4 md:w-4" />
+          <LuCircleAlert className="h-3 w-3 md:h-4 md:w-4" />
           <span className="text-xs md:text-sm">{error.message}</span>
         </div>
       )}
