@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Timeline from "./Timeline";
-import CompletionModal from "./CompletionModal";
-
 import {
   format,
   startOfWeek,
@@ -17,21 +15,11 @@ import {
   subMonths,
   isSameDay,
 } from "date-fns";
-const initialData = {
-  title: "Hello",
-  description: "bruh",
-  postToCommunities: true,
-  communitiesPost: [],
-  image: null,
-};
+
 const TASK_KEY = "customTask";
 
 const TaskCard = (props) => {
   const [task, setTask] = useState(props.task);
-  const taskId = task?.id;
-  const [initialData, setInitialData] = useState(null);
-  const selectedDays = task.frequency.map((freq) => freq.dayOfWeek);
-
   const [currentDate, setCurrentDate] = useState(new Date()); // Track the current date
   const [currentWeekStart, setCurrentWeekStart] = useState(
     startOfWeek(new Date(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
@@ -44,40 +32,29 @@ const TaskCard = (props) => {
   const [monthHover, setMonthHover] = useState(null);
 
   useEffect(() => {
-    if (selectedDays && selectedDays.length > 0) {
-      const newMonthDates = eachDayOfInterval({
-        start: startOfMonth(currentMonth),
-        end: endOfMonth(currentMonth),
-      }).filter((date) => selectedDays.includes(format(date, "EEE")));
-      setMonthDates(newMonthDates);
-    }
+    const newMonthDates = eachDayOfInterval({
+      start: startOfMonth(currentMonth),
+      end: endOfMonth(currentMonth),
+    }).filter((date) => task.selectedDays.includes(format(date, "EEEE")));
+    setMonthDates(newMonthDates);
   }, [currentMonth]);
 
   useEffect(() => {
-    if (selectedDays && selectedDays.length > 0) {
-      const newWeekDates = eachDayOfInterval({
-        start: startOfWeek(currentWeekStart, { weekStartsOn: 0 }),
-        end: endOfWeek(currentWeekStart, { weekStartsOn: 0 }),
-      }).filter((date) => selectedDays.includes(format(date, "EEE")));
-
-      setWeekDates(newWeekDates);
-    }
+    const newWeekDates = eachDayOfInterval({
+      start: startOfWeek(currentWeekStart, { weekStartsOn: 0 }),
+      end: endOfWeek(currentWeekStart, { weekStartsOn: 0 }),
+    }).filter((date) => task.selectedDays.includes(format(date, "EEEE")));
+    setWeekDates(newWeekDates);
   }, [currentWeekStart]);
 
   const [yearDates, setYearDates] = useState([]);
 
   useEffect(() => {
-    if (selectedDays && selectedDays.length > 0) {
-      const newYearDates = eachDayOfInterval({
-        start: startOfYear(new Date()),
-        end: endOfYear(new Date()),
-      }).filter((date) => {
-        const formattedDate = format(date, "EEE");
-
-        return selectedDays.includes(formattedDate);
-      });
-      setYearDates(newYearDates);
-    }
+    const newYearDates = eachDayOfInterval({
+      start: startOfYear(new Date()),
+      end: endOfYear(new Date()),
+    }).filter((date) => task.selectedDays.includes(format(date, "EEEE")));
+    setYearDates(newYearDates);
   }, []);
 
   const goToPreviousWeek = () => {
@@ -100,98 +77,48 @@ const TaskCard = (props) => {
   const goToPreviousYear = () => {
     setCurrentYear((prev) => subMonths(prev, 12));
   };
-  const [completionDate, setCompletionDate] = useState(null);
-  const [toggleDate, setToggleDate] = useState(null);
-  const [completion, setCompletion] = useState([]);
-  const [editMode, setEditMode] = useState(false);
-  const handleCheckbox = (date) => {
-    setCompletionDate(format(date, "MMM d, yyyy"));
 
-    setToggleDate(date);
-
-    //if post already exists for that day unclicking the checkbox will delete the post
-    // if (task.completion[formattedDate]) {
-    //   deletePost(formattedDate);
-    //   setTask((prevTask) => ({
-    //     ...prevTask,
-    //     completion: {
-    //       ...prevTask.completion,
-    //       [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
-    //     },
-    //   }));
-    //   console.log(task.completion);
-    // }
-    //}
-    //else {
-    // show modal to create a post
-  };
-
+  // Load the task from localStorage on mount useEffect(() => {   const savedTask
+  // = JSON.parse(localStorage.getItem(TASK_KEY));   if (savedTask) {
+  // setTask(savedTask);   } }, []); Save the task to localStorage whenever it
+  // changes useEffect(() => {   localStorage.setItem(TASK_KEY,
+  // JSON.stringify(task)); }, [task]); Toggle task completion for a specific day
   const toggleCompletion = (date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
-    console.log("formattedDate:", formattedDate);
-    setCompletion((prevCompletion) => ({
-      ...prevCompletion,
-      [formattedDate]: !prevCompletion[formattedDate], // Toggle status
+    console.log(formattedDate);
+    setTask((prevTask) => ({
+      ...prevTask,
+      completion: {
+        ...prevTask.completion,
+        [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
+      },
     }));
-    setToggleDate(null);
-    document.getElementById(`my_modal_${taskId}`).close();
+    console.log(task.completion);
   };
 
-  useEffect(() => {
-    if (completionDate && toggleDate) {
-      console.log(completion);
-      console.log("toggle", completionDate);
-      setEditMode(false);
-      if (completion[format(toggleDate, "yyyy-MM-dd")]) {
-        //set edit mode to true
-        setEditMode(true);
-        console.log("edit mode:", editMode);
-        setInitialData({
-          title: "",
-          description: "",
-          postToCommunities: true,
-          communitiesPost: [],
-          image: null,
-        });
-      }
-      // console.log("edit mode:", editMode);
-      document.getElementById(`my_modal_${taskId}`).showModal();
-    }
-  }, [completionDate, toggleDate, taskId]);
-
   return (
-    <div className=" collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
-      <CompletionModal
-        completionDate={completionDate}
-        toggleCompletion={toggleCompletion}
-        completion={completion}
-        toggleDate={toggleDate}
-        habit={task}
-        key={`my_modal_${taskId}`}
-        modalId={`my_modal_${taskId}`}
-        editMode={editMode}
-        setToggleDate={setToggleDate}
-        initialData={initialData}
-      ></CompletionModal>
+    <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
       <input type="checkbox" />
       <div className="collapse-title text-xl text-brown-light font-medium">
-        {task.habitName}
+        {task.name}
       </div>
-      <div className="collapse-content flex flex-col space-y-5 ">
-        <div role="tablist" className="tabs tabs-lifted max-w-[866px]">
+      <div className="collapse-content flex flex-col space-y-5">
+        <div role="tablist" className="tabs tabs-lifted max-w-[866px] ">
           <input
             type="radio"
-            name={task.habitName}
+            name={task.name}
             role="tab"
             className="tab [--tab-bg:aliceblue] [--tab-border-color:#32292F]"
             aria-label="Week"
             defaultChecked
           />
+
           <div
             role="tabpanel"
-            className="tab-content bg-[#f0f8ff] border-brown-dark rounded-box p-6"
+            className="tab-content bg-[#f0f8ff] border-brown-dark rounded-box p-6  "
           >
-            <div className="flex flex-col items-center justify-evenly h-40 space-y-5">
+            <div className="flex flex-col items-center justify-evenly h-40  space-y-5">
+              {/* Week Selector */}
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousWeek}>{`<`}</button>
                 <span
@@ -203,33 +130,40 @@ const TaskCard = (props) => {
                 </span>
                 <button onClick={goToNextWeek}>{`>`}</button>
               </div>
-              <div className="flex flex-row justify-evenly w-4/5 items-center">
+              {/* Calendar Grid */}
+              <div
+                className="flex flex-row justify-evenly w-4/5
+               items-center "
+              >
                 {weekDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
+                  const isCompleted = !!task.completion[formattedDate]; // Check if task is completed on this day
 
-                  const isCompleted = !!completion[formattedDate];
                   return (
                     <div
                       key={formattedDate}
-                      className="flex flex-col justify-center items-center w-1/7"
+                      className="flex flex-col justify-center items-center w-1/7 "
                     >
-                      <div className="font-bold">{format(date, "EE")}</div>
+                      <div className="font-bold">{format(date, "EE")}</div>{" "}
+                      {/* Full day name */}
                       <input
                         type="checkbox"
                         checked={isCompleted}
                         className="checkbox w-8 h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                        onChange={() => handleCheckbox(date)}
+                        onChange={() => toggleCompletion(date)}
                       />
                       <div>{format(date, "d")}</div>
+                      {/* Date number */}
                     </div>
                   );
                 })}
               </div>
             </div>
           </div>
+
           <input
             type="radio"
-            name={task.habitName}
+            name={task.name}
             role="tab"
             className="tab [--tab-bg:aliceblue]"
             aria-label="Month"
@@ -239,6 +173,7 @@ const TaskCard = (props) => {
             className="tab-content bg-[#f0f8ff] border-base-300 rounded-box p-6"
           >
             <div className="flex flex-col items-center justify-center space-y-5">
+              {/* Month Selector */}
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousMonth}>{`<`}</button>
                 <span
@@ -250,13 +185,15 @@ const TaskCard = (props) => {
                 </span>
                 <button onClick={goToNextMonth}>{`>`}</button>
               </div>
+              {/* Calendar Grid */}
               <div
                 className={`w-4/5 grid`}
                 style={{
-                  gridTemplateColumns: `repeat(${selectedDays.length}, minmax(0, 1fr))`,
+                  gridTemplateColumns: `repeat(${task.selectedDays.length}, minmax(0, 1fr))`,
                 }}
               >
-                {selectedDays.map((day) => (
+                {/* Day Labels */}
+                {task.selectedDays.map((day) => (
                   <div
                     key={day}
                     className="flex flex-col justify-center items-center font-bold"
@@ -264,6 +201,7 @@ const TaskCard = (props) => {
                     {day.slice(0, 3)}
                   </div>
                 ))}
+                {/* Empty cells for the days after the end of the month */}
                 {Array.from({
                   length: startOfMonth(currentMonth).getDay(),
                 }).map((_, index) => (
@@ -272,9 +210,11 @@ const TaskCard = (props) => {
                     className="flex flex-col justify-center items-center"
                   ></div>
                 ))}
+                {/* Render the checkboxes for days of the month */}
                 {monthDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
-                  const isCompleted = !!completion[formattedDate];
+                  const isCompleted = !!task.completion[formattedDate]; // Check if task is completed on this day
+
                   return (
                     <div
                       key={formattedDate}
@@ -284,7 +224,7 @@ const TaskCard = (props) => {
                         type="checkbox"
                         checked={isCompleted}
                         className="checkbox w-7 h-7 sm:w-8 sm:h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                        onChange={() => handleCheckbox(date)}
+                        onChange={() => toggleCompletion(date)}
                       />
                       <div className="text-sm">{format(date, "d")}</div>
                     </div>
@@ -293,9 +233,10 @@ const TaskCard = (props) => {
               </div>
             </div>
           </div>
+
           <input
             type="radio"
-            name={task.habitName}
+            name={task.name}
             role="tab"
             className="tab [--tab-bg:aliceblue]"
             aria-label="Year"
@@ -305,6 +246,7 @@ const TaskCard = (props) => {
             className="tab-content bg-[#f0f8ff] border-base-300 rounded-box p-6"
           >
             <div className="flex flex-col items-center space-y-6">
+              {/* Year Selector */}
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousYear}>{`<`}</button>
                 <span
@@ -316,12 +258,14 @@ const TaskCard = (props) => {
                 </span>
                 <button onClick={goToNextYear}>{`>`}</button>
               </div>
+              {/* Calendar Grid */}
               <div className="overflow-x-auto w-full">
                 <div className="flex flex-wrap flex-col h-40">
                   {yearDates.map((date) => {
                     const formattedDate = format(date, "yyyy-MM-dd");
-                    const isCompleted = !!completion[formattedDate];
+                    const isCompleted = !!task.completion[formattedDate];
                     const monthBox = format(date, "MM");
+
                     return (
                       <div
                         key={formattedDate}
@@ -337,7 +281,7 @@ const TaskCard = (props) => {
                               ? "border-brown-light [--chkbg:#FF0000] [--chkfg:#FFFFFF]"
                               : "border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
                           }`}
-                          // onChange={() => handleCheckbox(date)}
+                          onChange={() => toggleCompletion(date)}
                         />
                       </div>
                     );

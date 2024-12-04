@@ -1,8 +1,8 @@
-import { HomePage } from "./pages/HomePage";
+import { DashboardPage } from "./pages/DashboardPage";
 import "./App.css";
 
 function App() {
-  return <HomePage />;
+  return <DashboardPage />;
 }
 
 export default App;
