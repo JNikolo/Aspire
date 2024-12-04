@@ -13,14 +13,14 @@ const Timeline = ({ newPost }) => {
       {/* the oldest post will be to the left */}
       <div className="carousel rounded-box flex-none w-[358px] sm:w-full">
         {/*  dummy data 1 */}
-        <div className="carousel-item">
+        <div className="carousel-item mr-2">
           <div className="flex-none">
             <div className="bg-base-100 w-32 md:w-48 lg:w-56 shadow-xl">
               <img
                 src="https://www.coachup.com/nation/wp-content/uploads/2017/08/cropped-dreamstime_s_34232682.png"
                 alt="running"
               />
-              <div className="card-body flex-none p-2">
+              <div className="card-body flex-none p-2  bg-stone-300 text-black">
                 <h2 className="card-title text-sm md:text-md lg:text-lg">
                   1 Easy
                 </h2>
@@ -40,14 +40,14 @@ const Timeline = ({ newPost }) => {
           </div>
         </div>
         {/*  dummy data 1 */}
-        <div className="carousel-item">
+        <div className="carousel-item mr-2">
           <div className="flex-none">
             <div className="bg-base-100 w-32 md:w-48 lg:w-56 shadow-xl">
               <img
                 src="https://www.coachup.com/nation/wp-content/uploads/2017/08/cropped-dreamstime_s_34232682.png"
                 alt="running"
               />
-              <div className="card-body flex-none p-2">
+              <div className="card-body flex-none p-2  bg-stone-300 text-black">
                 <h2 className="card-title text-sm md:text-md lg:text-lg">
                   1 Easy
                 </h2>
@@ -65,14 +65,14 @@ const Timeline = ({ newPost }) => {
           </div>
         </div>
         {/*  dummy data 2 */}
-        <div className="carousel-item">
+        <div className="carousel-item mr-2">
           <div className="flex-none">
             <div className="bg-base-100 w-32 md:w-48 lg:w-56 shadow-xl">
               <img
                 src="https://www.coachup.com/nation/wp-content/uploads/2017/08/cropped-dreamstime_s_34232682.png"
                 alt="running"
               />
-              <div className="card-body flex-none p-2">
+              <div className="card-body flex-none p-2 bg-stone-300 text-black">
                 <h2 className="card-title text-sm md:text-md lg:text-lg">
                   10 Hard
                 </h2>
@@ -92,7 +92,7 @@ const Timeline = ({ newPost }) => {
         <div className="block"></div>
         <button
           onClick={newPost}
-          className="carousel-item bg-white items-center justify-center w-32 md:w-48 lg:w-56 hover:white-100"
+          className="carousel-item bg-stone-300 items-center justify-center w-32 md:w-48 lg:w-56 hover:white-100"
         >
           <MdAddCircle className="w-[50px] h-[50px]" />
           {/* add a new entry */}
