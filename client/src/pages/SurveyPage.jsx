@@ -1,124 +1,123 @@
-import { useState } from "react";
-import trash from "../assets/trash.png";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { BsTrash3 } from "react-icons/bs";
+import { useAuth } from "@clerk/clerk-react";
+import { LoadingOverlay } from "../components/LoadingOverlay";
+import { SurveyTitle } from "../components/Survey/SurveyTitle";
+import { HabitNameInput } from "../components/Survey/HabitNameInput";
+import { CheckboxGroup } from "../components/Survey/SurveyCheckboxGroup";
+import {
+  fetchHabit,
+  createHabit,
+  updateHabit,
+  deleteHabit,
+} from "../services/habitServices";
 
 export const SurveyPage = () => {
-  const [habitName, setHabitName] = useState(null);
-  const [profileName, setProfileName] = useState(null);
-  const [frequency, setFrequency] = useState([]);
-  const [notifications, setNotifications] = useState(false);
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [deleteHabit, setDeleteHabit] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      habitName: "",
+      frequency: [],
+      notifications: false,
+      selectedDays: [],
+    },
+  });
 
-  // Frequency of Habit
-  const handleFrequencyChange = (day) => {
-    setFrequency(
-      (prevSelectedDays) =>
-        prevSelectedDays.includes(day)
-          ? prevSelectedDays.filter((d) => d !== day) // Remove day if it's already selected
-          : [...prevSelectedDays, day] // Add day if it's not selected
-    );
-  };
+  const { habitId } = useParams();
+  const isEditMode = Boolean(habitId);
+  const { getToken } = useAuth();
+  const [loading, setLoading] = useState(null);
+  // watch is used to dynamically show/hide sections
+  const notifications = watch("notifications", false);
+  const frequency = watch("frequency", []);
+  const selectedDays = watch("selectedDays", []);
 
-  // Notification Preferences
-  const handleNotificationChange = () => {
-    setNotifications((prevNotifications) => !prevNotifications);
-  };
+  const navigate = useNavigate();
 
-  // Handle individual day selection for notifications
-  const handleNotificationDaysChange = (day) => {
-    setSelectedDays(
-      (prevSelectedDays) =>
-        prevSelectedDays.includes(day)
-          ? prevSelectedDays.filter((d) => d !== day) // Remove day if it's already selected
-          : [...prevSelectedDays, day] // Add day if it's not selected
-    );
+  useEffect(() => {
+    if (isEditMode) {
+      setLoading("fetching");
+      fetchHabit(habitId, reset, getToken)
+        .then(() => setLoading(null))
+        .catch(() => setLoading(null));
+    }
+  }, [isEditMode, habitId, getToken, reset]);
+
+  useEffect(() => {
+    if (!notifications) {
+      setValue("selectedDays", []);
+    }
+  }, [notifications, setValue]);
+
+  const onSubmit = (data) => {
+    // handle form submission
+    if (isEditMode) {
+      // handle edit mode
+      console.log("Edit Mode");
+      setLoading("editing");
+      updateHabit(getToken, habitId, data, navigate)
+        .then(() => setLoading(null))
+        .catch(() => setLoading(null));
+    } else {
+      // handle create mode
+      console.log("Create Mode");
+      setLoading("creating");
+      createHabit(getToken, data, navigate)
+        .then(() => setLoading(null))
+        .catch(() => setLoading(null));
+    }
   };
 
   // Delete Habit
-  const deleteUserHabit = () => {
-    setDeleteHabit(true);
+  const handleDeleteHabit = async () => {
+    setLoading("deleting");
+    deleteHabit(habitId, getToken, navigate)
+      .then(() => setLoading(null))
+      .catch(() => setLoading(null));
   };
 
   return (
     <div className=" bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex items-center justify-center p-4">
+      {/* Loading Overlay */}
+      <LoadingOverlay
+        isVisible={loading !== null}
+        message={
+          loading === "fetching"
+            ? "Fetching your habit..."
+            : loading === "updating"
+            ? "Updating your habit..."
+            : loading === "creating"
+            ? "Creating your habit..."
+            : "Deleting your habit..."
+        }
+      />
       {/* card from daisyui used to display content*/}
-      <div className="bg-stone-100 transparent card w-full max-w-4xl shadow-xl bg-opacity-85">
-        <div className="card-body flex">
-          <h3 className="card-title text-brown-dark text-2xl font-bold mb-6">
-            Let&apos;s Get Your
-            <span className="text-[#93C5FD]">Habit </span>
-            Ready!
-          </h3>
-          <h2 className="card-title text-[#32292F] text-2xl font-bold mb-6">
-            Please Take A Moment To Fill Out This Survey
-          </h2>
-          <hr className="my-1 border-t-4 border-[#60A5FA] w-full shadow-xl" />
-          <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="bg-stone-100 transparent card w-full max-w-4xl shadow-xl bg-opacity-85">
+          <div className="card-body flex">
+            <SurveyTitle isEditMode={isEditMode} />
+            <hr className="my-1 border-t-4 border-[#60A5FA] w-full shadow-xl" />
             {/* Survey questions */}
-            {/* Profile Name */}
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="font-bold text-brown-dark label-text">
-                  Choose a Profile Username
-                </span>
-              </label>
-              <input
-                type="text"
-                placeholder="Your Profile Name"
-                value={profileName}
-                onChange={(e) => setProfileName(e.target.value)}
-                className="input input-bordered w-full rounded-md border-gray-300 bg-white focus:border-blue-500 text-black"
-                required
-              />
-            </div>
             {/* Habit Name */}
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="font-bold text-brown-dark label-text">
-                  Choose a Name for Your Habit
-                </span>
-              </label>
-              <input
-                type="text"
-                placeholder="Your Habit Name"
-                value={habitName}
-                onChange={(e) => setHabitName(e.target.value)}
-                className="input input-bordered w-full rounded-md border-gray-300 bg-white focus:border-blue-500 text-black"
-                required
-              />
-            </div>
+            <HabitNameInput register={register} errors={errors} />
             {/* Frequency of Habit*/}
-            <div className="form-control mb-4">
-              <label className="label">
-                <span className="font-bold text-brown-dark label-text">
-                  How Often Would You Like to Work On This Habit?
-                </span>
-              </label>
-              <div className="form-control mb-4">
-                <div className="flex flex-wrap gap-2">
-                  {["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"].map(
-                    (day) => (
-                      <div key={day} className="form-control">
-                        <label className="label cursor-pointer">
-                          <input
-                            type="checkbox"
-                            className="checkbox hidden peer"
-                            checked={frequency.includes(day)}
-                            onChange={() => handleFrequencyChange(day)}
-                            required
-                          />
-                          <span
-                            className={`label-text btn btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl`}
-                          >
-                            {day}
-                          </span>
-                        </label>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            </div>
+            <CheckboxGroup
+              labelText="How Often Would You Like to Do This Habit?"
+              options={["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]}
+              register={register}
+              name="frequency"
+              selected={frequency}
+              error={errors.frequency?.message}
+              isRequired={true}
+            />
             {/* Notifications Toggle */}
             <div className="form-control mb-4">
               <div className="flex items-center gap-4">
@@ -129,94 +128,65 @@ export const SurveyPage = () => {
                 </label>
                 <input
                   type="checkbox"
-                  onChange={handleNotificationChange}
+                  {...register("notifications")}
                   className="toggle [--tglbg:white] bg-blue-dark"
-                  checked={notifications}
                 />
               </div>
             </div>
             {/* Notification Days Checkboxes */}
             {notifications && (
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="font-bold text-brown-dark label-text">
-                    When Do You Want to be Notified?
-                  </span>
-                </label>
-                <div className="flex flex-row gap-2">
-                  {["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"].map(
-                    (day) => (
-                      <div key={day} className="form-control">
-                        <label className="label cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="frequency"
-                            className="radio hidden peer"
-                            checked={selectedDays.includes(day)}
-                            onChange={() => handleNotificationDaysChange(day)}
-                          />
-                          <span className="label-text px-4 btn btn-circle btn-outline bg-white hover:bg-blue-dark peer-checked:bg-blue-dark text-brown-dark shadow-xl">
-                            {day}
-                          </span>
-                        </label>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
+              <CheckboxGroup
+                labelText="On Which Days Would You Like to Receive Notifications?"
+                options={["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]}
+                register={register}
+                name="selectedDays"
+                selected={selectedDays}
+                error={errors.selectedDays?.message}
+              />
             )}
             {/* Save Button */}
             <div className="form-control mt-6">
-              <button className="btn bg-brown-dark hover:bg-brown-light text-white">
+              <button
+                type="submit"
+                className="btn border-5 border-white bg-brown-dark hover:bg-brown-light hover:border-white  text-white"
+              >
                 Save Changes
               </button>
             </div>
-          </form>
-          {/*Trash icon*/}
-          <label
-            htmlFor="my_modal_6"
-            className="btn bg-red-600 btn-circle px-3 absolute top-4 right-4 flex items-center hover:bg-red-800"
-          >
-            <img src={trash} alt="Delete" className="w-12" />
-          </label>
-        </div>
-      </div>
-      {/* Delete Habit */}
-      <input type="checkbox" id="my_modal_6" className="modal-toggle" />
-      <div className="modal" role="dialog">
-        <div className="modal-box">
-          <h3 className="text-lg font-bold">Delete Habit</h3>
-          <p className="py-4">Are you sure you want to delete this habit?</p>
-          <div className="modal-action">
-            <label
-              htmlFor="my_modal_6"
-              className="btn bg-blue-light text-black hover:bg-gray"
-            >
-              <span>Yes</span>
-              <input
-                type="checkbox"
-                name="frequency"
-                className="radio hidden peer"
-                checked={deleteHabit}
-                onChange={() => deleteUserHabit()}
-              />
-            </label>
-            <label
-              htmlFor="my_modal_6"
-              className="btn bg-blue-300 text-black hover:bg-gray"
-            >
-              <span>No</span>
-              <input
-                type="checkbox"
-                name="frequency"
-                className="radio hidden peer"
-                checked={deleteHabit}
-                onChange={() => deleteUserHabit()}
-              />
-            </label>
+            {/*Trash icon*/}
+            {isEditMode && (
+              <label
+                htmlFor="my_modal_6"
+                className="btn btn-outline px-3 absolute top-4 right-4 flex items-center text-black hover:border-5 hover:border-white"
+              >
+                <BsTrash3 size={20} /> Delete
+              </label>
+            )}
           </div>
         </div>
-      </div>
+        {/* Delete Habit */}
+        <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+        <div className="modal">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold">Delete Habit</h3>
+            <p className="py-4">Are you sure you want to delete this habit?</p>
+            <div className="modal-action">
+              <button
+                className="btn text-black hover:bg-gray hover:text-white borrder-5 border-white"
+                onClick={handleDeleteHabit}
+              >
+                <span>Delete</span>
+              </button>
+              <label
+                htmlFor="my_modal_6"
+                className="btn bg-blue-light text-black hover:bg-gray hover:text-white border-5 border-white"
+              >
+                <span>Cancel</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
