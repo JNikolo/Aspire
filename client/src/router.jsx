@@ -3,6 +3,7 @@ import App from "./App";
 import { LoginPage } from "./pages/LoginPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { SurveyPage } from "./pages/SurveyPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { SSOFallback } from "./components/SSOFallback";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUpPage />,
+  },
+  {
+        path: '/profile',
+        element: <ProfilePage />
   },
   {
     path: "/sso-callback",
