@@ -198,14 +198,14 @@ const CompletionModal = ({
             placeholder="Title"
             name="title"
             value={formData.title}
-            className="input input-bordered input-primary w-full border-stone-400 bg-stone-50 max-w-xs"
+            className="input input-bordered input-primary w-full border-stone-400 bg-stone-50 text-brown-dark max-w-xs"
             {...register("title", { required: postToCommunities })}
           />
           {errors.description && (
             <div className="text-red-500 text-sm">Description is required</div>
           )}
           <textarea
-            className="textarea textarea-bordered border-stone-400 bg-stone-50"
+            className="textarea textarea-bordered border-stone-400 bg-stone-50 text-brown-dark"
             placeholder="Notes / Description"
             name="description"
             value={formData.description}

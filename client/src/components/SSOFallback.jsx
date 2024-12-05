@@ -36,7 +36,7 @@ export const SSOFallback = () => {
         if (newUser) {
           navigate("/survey/new");
         } else {
-          navigate("/");
+          navigate("/survey/new");
         }
       } catch (err) {
         console.error("Error during SSO callback handling: ", err);

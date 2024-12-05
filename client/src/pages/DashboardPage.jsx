@@ -61,7 +61,9 @@ export const DashboardPage = () => {
   return (
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
       <div className="flex flex-col w-full items-center space-y-10 h-full">
-        <h1 className="pt-10 pb-10 text-4xl">Welcome, {user?.firstName}</h1>
+        <h1 className="pt-10 pb-10 text-4xl text-brown-dark">
+          Welcome, {user?.firstName}
+        </h1>
         {!tasks && <div>Loading Your Habits...</div>}
         {tasks && tasks.length === 0 && (
           <div>

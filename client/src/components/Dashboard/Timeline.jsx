@@ -89,6 +89,32 @@ const Timeline = ({ newPost }) => {
             </div>
           </div>
         </div>
+        <div className="carousel-item mr-2">
+          <div className="flex-none">
+            <div className="bg-base-100 w-32 md:w-48 lg:w-56 shadow-xl">
+              <img
+                src="https://www.coachup.com/nation/wp-content/uploads/2017/08/cropped-dreamstime_s_34232682.png"
+                alt="running"
+              />
+              <div className="card-body flex-none p-2 bg-stone-300 text-black">
+                <h2 className="card-title text-sm md:text-md lg:text-lg">
+                  1 Hard
+                </h2>
+                <div className="badge badge-secondary text-xs md:text-sm lg:text-md">
+                  Leetcode Easy
+                </div>
+                <p className="text-sm md:text-md lg:text-lg">
+                  Completed while sleeping
+                </p>
+                <div className="card-actions justify-end">
+                  <div className="badge badge-outline text-xs md:text-md lg:text-lg">
+                    Dec 4
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="block"></div>
         <button
           onClick={newPost}

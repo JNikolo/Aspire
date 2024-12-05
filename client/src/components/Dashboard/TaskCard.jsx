@@ -24,7 +24,6 @@ const initialData = {
   communitiesPost: [],
   image: null,
 };
-const TASK_KEY = "customTask";
 
 const TaskCard = (props) => {
   const [task, setTask] = useState(props.task);
@@ -179,9 +178,11 @@ const TaskCard = (props) => {
         initialData={initialData}
       ></CompletionModal>
       <input type="checkbox" />
-      <div className="collapse-title text-xl text-brown-light font-medium">
+      <div className="flex flex-row items-center justify-between collapse-title text-xl text-brown-light font-medium">
         {task.habitName}
+        <input type="button" value="Edit Habit" className="btn ml-10"></input>
       </div>
+
       <div className="collapse-content flex flex-col space-y-5 ">
         <div role="tablist" className="tabs tabs-lifted max-w-[866px]">
           <input
