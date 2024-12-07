@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Timeline from "./Timeline";
 import CompletionModal from "./CompletionModal";
+import { LuPen, LuArrowBigLeft, LuArrowBigRight } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 import {
   format,
@@ -17,17 +19,11 @@ import {
   subMonths,
   isSameDay,
 } from "date-fns";
-const initialData = {
-  title: "Hello",
-  description: "bruh",
-  postToCommunities: true,
-  communitiesPost: [],
-  image: null,
-};
 
 const TaskCard = (props) => {
   const [task, setTask] = useState(props.task);
   const taskId = task?.id;
+  const [habitLogs, setHabitLogs] = useState(task?.HabitLog);
   const [initialData, setInitialData] = useState(null);
   const selectedDays = task.frequency.map((freq) => freq.dayOfWeek);
 
@@ -180,10 +176,18 @@ const TaskCard = (props) => {
       <input type="checkbox" />
       <div className="flex flex-row items-center justify-between collapse-title text-xl text-brown-light font-medium">
         {task.habitName}
-        <input type="button" value="Edit Habit" className="btn ml-10"></input>
       </div>
 
-      <div className="collapse-content flex flex-col space-y-5 ">
+      <div className="collapse-content flex flex-col space-y-1">
+        <div className="mr-.5 flex flex-row-reverse">
+          <button className="bg-blue-dark text-white border-brown-light absolute mt-.5 item-right btn btn-sm rounded-2xl w-max">
+            <LuPen className=" z-50 text-sm" />{" "}
+            <Link to={`/survey/${taskId}/edit`}>
+              <span className="text-sm">Edit Habit</span>
+            </Link>
+          </button>
+        </div>
+
         <div role="tablist" className="tabs tabs-lifted max-w-[866px]">
           <input
             type="radio"
@@ -193,23 +197,30 @@ const TaskCard = (props) => {
             aria-label="Week"
             defaultChecked
           />
+
           <div
             role="tabpanel"
             className="tab-content bg-[#f0f8ff] border-brown-dark rounded-box p-6"
           >
             <div className="flex flex-col items-center justify-evenly h-40 space-y-5">
               <div className="flex justify-center items-center">
-                <button onClick={goToPreviousWeek}>{`<`}</button>
-                <span
-                  style={{
-                    margin: "0 20px",
-                  }}
+                <button
+                  className="btn btn-circle bg-blue-light text-stone-200 btn-sm border-1 border-stone-200 hover:border-stone-300 shadow-md hover:bg-blue-500 hover:shadow-lg transition duration-300 ease-in-out"
+                  onClick={goToPreviousWeek}
                 >
+                  <LuArrowBigLeft className="text-2xl" />
+                </button>
+                <span className="text-md md:text-lg font-semibold text-gray-700 mx-3">
                   Week of {format(currentWeekStart, "MMM d, yyyy")}
                 </span>
-                <button onClick={goToNextWeek}>{`>`}</button>
+                <button
+                  className="btn btn-circle bg-blue-light text-stone-200 btn-sm border-1 border-stone-200 hover:border-stone-300 shadow-md hover:bg-blue-500 hover:shadow-lg transition duration-300 ease-in-out"
+                  onClick={goToNextWeek}
+                >
+                  <LuArrowBigRight className="text-2xl" />
+                </button>
               </div>
-              <div className="flex flex-row justify-evenly w-4/5 items-center">
+              <div className="flex flex-row justify-evenly w-4/5 ">
                 {weekDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
 
@@ -246,15 +257,21 @@ const TaskCard = (props) => {
           >
             <div className="flex flex-col items-center justify-center space-y-5">
               <div className="flex justify-center items-center">
-                <button onClick={goToPreviousMonth}>{`<`}</button>
-                <span
-                  style={{
-                    margin: "0 20px",
-                  }}
+                <button
+                  className="btn btn-circle bg-blue-light text-stone-200 btn-sm border-1 border-stone-200 hover:border-stone-300 shadow-md hover:bg-blue-500 hover:shadow-lg transition duration-300 ease-in-out"
+                  onClick={goToPreviousMonth}
                 >
-                  {format(currentMonth, "MMMM yyyy")}
+                  <LuArrowBigLeft className="text-2xl" />
+                </button>
+                <span className="text-md md:text-lg font-semibold text-gray-700 mx-3">
+                  {format(currentMonth, "MMM yyyy")}
                 </span>
-                <button onClick={goToNextMonth}>{`>`}</button>
+                <button
+                  className="btn btn-circle bg-blue-light text-stone-200 btn-sm border-1 border-stone-200 hover:border-stone-300 shadow-md hover:bg-blue-500 hover:shadow-lg transition duration-300 ease-in-out"
+                  onClick={goToNextMonth}
+                >
+                  <LuArrowBigRight className="text-2xl" />
+                </button>
               </div>
               <div
                 className={`w-4/5 grid`}
@@ -299,6 +316,7 @@ const TaskCard = (props) => {
               </div>
             </div>
           </div>
+          {/* Year */}
           <input
             type="radio"
             name={task.habitName}
@@ -312,22 +330,28 @@ const TaskCard = (props) => {
           >
             <div className="flex flex-col items-center space-y-6">
               <div className="flex justify-center items-center">
-                <button onClick={goToPreviousYear}>{`<`}</button>
-                <span
-                  style={{
-                    margin: "0 20px",
-                  }}
+                <button
+                  className="btn btn-circle bg-blue-light text-stone-200 btn-sm border-1 border-stone-200 hover:border-stone-300 shadow-md hover:bg-blue-500 hover:shadow-lg transition duration-300 ease-in-out"
+                  onClick={goToPreviousYear}
                 >
+                  <LuArrowBigLeft className="text-2xl" />
+                </button>
+                <span className="text-md md:text-lg font-semibold text-gray-700 mx-3">
                   {format(currentYear, "yyyy")}
                 </span>
-                <button onClick={goToNextYear}>{`>`}</button>
+                <button
+                  className="btn btn-circle bg-blue-light text-stone-200 btn-sm border-1 border-stone-200 hover:border-stone-300 shadow-md hover:bg-blue-500 hover:shadow-lg transition duration-300 ease-in-out"
+                  onClick={goToNextYear}
+                >
+                  <LuArrowBigRight className="text-2xl" />
+                </button>
               </div>
               <div className="overflow-x-auto w-full">
                 <div className="flex flex-wrap flex-col h-40">
                   {yearDates.map((date) => {
                     const formattedDate = format(date, "yyyy-MM-dd");
                     const isCompleted = !!completion[formattedDate];
-                    const monthBox = format(date, "MM");
+
                     return (
                       <div
                         key={formattedDate}
@@ -336,13 +360,7 @@ const TaskCard = (props) => {
                         <input
                           type="checkbox"
                           checked={isCompleted}
-                          onMouseEnter={() => setMonthHover(format(date, "MM"))}
-                          onMouseLeave={() => setMonthHover(null)}
-                          className={`checkbox w-4 h-4 sm:w-5 sm:h-5 border-2 rounded-sm border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56] ${
-                            monthHover == monthBox
-                              ? "border-brown-light [--chkbg:#FF0000] [--chkfg:#FFFFFF]"
-                              : "border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
-                          }`}
+                          className="checkbox w-4 h-4 sm:w-5 sm:h-5 border-2 rounded-sm border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
                           // onChange={() => handleCheckbox(date)}
                         />
                       </div>
@@ -353,11 +371,14 @@ const TaskCard = (props) => {
             </div>
           </div>
         </div>
+
         <div className="max-w-[866px]">
           <Timeline
             newPost={() => {
               document.getElementById(`my_modal_${taskId}`).showModal();
             }}
+            habitName={task.habitName}
+            habitLogs={habitLogs}
           ></Timeline>
         </div>
       </div>

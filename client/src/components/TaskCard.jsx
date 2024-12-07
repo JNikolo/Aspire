@@ -15,7 +15,7 @@ import {
   subMonths,
   isSameDay,
 } from "date-fns";
-
+import { Link } from "react-router-dom";
 const TASK_KEY = "customTask";
 
 const TaskCard = (props) => {
@@ -95,6 +95,10 @@ const TaskCard = (props) => {
     }));
     console.log(task.completion);
   };
+  const handleEditClick = () => {
+    // Simple client-side navigation
+    window.location.href = `/survey/${taskId}/edit`;
+  };
 
   return (
     <div className="collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
@@ -118,7 +122,6 @@ const TaskCard = (props) => {
             className="tab-content bg-[#f0f8ff] border-brown-dark rounded-box p-6  "
           >
             <div className="flex flex-col items-center justify-evenly h-40  space-y-5">
-              {/* Week Selector */}
               <div className="flex justify-center items-center">
                 <button onClick={goToPreviousWeek}>{`<`}</button>
                 <span
