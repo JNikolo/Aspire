@@ -6,12 +6,27 @@ import { SurveyPage } from "./pages/SurveyPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SSOFallback } from "./components/SSOFallback";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
+import { RootLayout } from "./components/RootLayout";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/survey/:habitId/edit",
+        element: <SurveyPage />,
+      },
+      {
+        path: "/survey/new",
+        element: <SurveyPage />,
+      },
+    ],
   },
+
   {
     path: "/login",
     element: <LoginPage />,
@@ -36,15 +51,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/survey/:habitId/edit",
-    element: <SurveyPage />,
-  },
-  {
     path: "/sso-fallback",
     element: <SSOFallback />,
-  },
-  {
-    path: "/survey/new",
-    element: <SurveyPage />,
   },
 ]);

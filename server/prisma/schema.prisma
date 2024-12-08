@@ -40,6 +40,10 @@ model Habit {
 
   // One-to-many relation with HabitFrequency (days of the week for frequency)
   frequency HabitFrequency[]
+  HabitLogs HabitLog[]
+
+  // Unique constraint to ensure habit name is unique for each user
+  @@unique([habitName, userId])
 }
 
 // HabitSelectedDays table (storing days selected for the habit)
@@ -64,4 +68,32 @@ model HabitFrequency {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// HabitProgress table (storing habit progress for each day)
+model HabitLog {
+  id          Int        @id @default(autoincrement())
+  habitId     Int
+  habit       Habit      @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  communityId Int?
+  community   Community? @relation(fields: [communityId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  title       String
+  description String?
+  picture     String?
+  logDate     DateTime
+  isPublic    Boolean
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([habitId, logDate]) // Ensure unique progress entry for each habit and date
+}
+
+model Community {
+  id        Int        @id @default(autoincrement())
+  name      String
+  logs      HabitLog[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

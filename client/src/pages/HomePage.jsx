@@ -64,12 +64,14 @@ export const HomePage = () => {
           </ul>
 
           {isSignedIn ? (
-            <button
-              onClick={handleSignOut}
-              className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded"
-            >
-              Sign Out
-            </button>
+            <>
+              <button
+                onClick={handleSignOut}
+                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded"
+              >
+                Sign Out
+              </button>
+            </>
           ) : (
             <button
               onClick={handleSignIn}
