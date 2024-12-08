@@ -3,7 +3,6 @@ import Calender from "../assets/calender.jpeg";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { ChatbotBubble } from "../components/ChatbotBubble";
 
 export const HomePage = () => {
   const { isSignedIn, user } = useUser();
@@ -72,7 +71,6 @@ export const HomePage = () => {
               >
                 Sign Out
               </button>
-              <ChatbotBubble />
             </>
           ) : (
             <button
