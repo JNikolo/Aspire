@@ -82,6 +82,7 @@ model HabitLog {
   description String?
   picture     String?
   logDate     DateTime
+  isPublic    Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

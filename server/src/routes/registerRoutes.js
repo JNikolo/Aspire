@@ -16,12 +16,17 @@ registerRouter.post("/create-after-signup", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    await prisma.user.create({
+    const profile = await prisma.user.create({
       data: {
         authId: user.id,
         profileName: user.emailAddresses[0].emailAddress.split("@")[0],
       },
     });
+
+    if (!profile) {
+      clerkClient.users.deleteUser(userId);
+      return res.status(500).json({ error: "Failed to create user" });
+    }
 
     res.json({ message: "User created successfully" });
   } catch (err) {
@@ -47,13 +52,18 @@ registerRouter.post("/sso-callback", async (req, res) => {
     });
 
     if (!existingUser) {
-      await prisma.user.create({
+      const new_user = await prisma.user.create({
         data: {
           authId: user.id,
           profileName: user.fullName,
           profilePicture: user.imageUrl,
         },
       });
+
+      if (!new_user) {
+        clerkClient.users.deleteUser(userId);
+        return res.status(500).json({ error: "Failed to create user" });
+      }
 
       res.json({ message: "User logged in successfully", newUser: true });
     } else {
