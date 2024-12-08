@@ -109,6 +109,7 @@ export async function generateResponse(messages, userId) {
         { role: "user", content: currentMessageContent },
       ],
       tools: tools,
+      max_tokens: 150,
     });
 
     console.log("Response generated:", response);
@@ -157,10 +158,8 @@ export async function generateResponse(messages, userId) {
           {
             role: "system",
             content: `You are a helpful coach assisting a user with their habits. 
-            Use the 'get_habits' tool to get the user's habits, 
-            and 'get_habit_logs' tool to get the progress of a specific habit.
-            Use this information to provide personalized advice and encouragement 
-            to help the user stay on track.`,
+            Provide concise and actionable tips and insights about a user's habit progress. 
+            Keep responses under 3 sentences or 150 words.`,
           },
           ...previousMessages,
           { role: "user", content: currentMessageContent },
@@ -180,7 +179,7 @@ export async function generateResponse(messages, userId) {
     }
 
     // If no tool call, return the generated response directly
-    return response.choices[0].message.content;
+    return response.choices[0].message;
   } catch (error) {
     console.error("Error during response generation:", error);
     return { error: "An error occurred during response generation" };
