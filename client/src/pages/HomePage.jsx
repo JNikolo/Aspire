@@ -1,23 +1,35 @@
-import Logo from "../../public/check-icon.png";
+// import Logo from "../../public/check-icon.png";
 import Calender from "../assets/calender.jpeg";
+import Shrek from "../assets/shrek.png";
+import Mountain from "../assets/mountain.jpeg";
+import Logo from "../assets/logo.svg";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { SiGithub, SiLinktree } from "react-icons/si";
+import AutoScrollCarousel from "../components/AutoScrollCarousel";
 
 export const HomePage = () => {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
   const navigate = useNavigate();
   const { signOut } = useAuth();
-
-  useEffect(() => {
-    if (isSignedIn) {
-      console.log("User is signed in");
-      console.log(user);
-      console.log(user.publicMetadata);
-      console.log(window.location.pathname);
-    }
-  }, [isSignedIn, navigate, user]);
-
+  const carouselItems = [
+    {
+      id: 1,
+      src: { Mountain },
+      alt: "Slide 1",
+    },
+    {
+      id: 2,
+      src: "https://via.placeholder.com/600x300?text=Slide+2",
+      alt: "Slide 2",
+    },
+    {
+      id: 3,
+      src: "https://via.placeholder.com/600x300?text=Slide+3",
+      alt: "Slide 3",
+    },
+  ];
   const handleSignOut = async () => {
     try {
       if (!isSignedIn) return;
@@ -32,56 +44,59 @@ export const HomePage = () => {
     navigate("/login");
   };
 
-  return (
-    <div className="font-sans">
-      <header className="flex justify-between items-center p-5 bg-gray-100 shadow-md">
-        <div className="flex items-center">
-          <img src={Logo} alt="Habit Tracker Logo" className="w-10 mr-3" />
-          <h1 className="text-xl font-bold">Aspire</h1>
-        </div>
-        <nav className="flex items-center space-x-5">
-          <ul className="flex space-x-5">
-            <li>
-              <a href="/" className="hover:text-blue-500">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="/my-habits" className="hover:text-blue-500">
-                My Habits
-              </a>
-            </li>
-            <li>
-              <a href="/statistics" className="hover:text-blue-500">
-                Statistics
-              </a>
-            </li>
-            <li>
-              <a href="/settings" className="hover:text-blue-500">
-                Settings
-              </a>
-            </li>
-          </ul>
+  const handleGetStarted = () => {
+    if (isSignedIn) {
+      navigate("/my-habits");
+    } else navigate("/login");
+  };
 
-          {isSignedIn ? (
-            <>
-              <button
-                onClick={handleSignOut}
-                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded"
-              >
-                Sign Out
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={handleSignIn}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            >
-              Sign In
+  return (
+    <div>
+      <div
+        className="hero min-h-screen relative"
+        style={{
+          backgroundImage: `url(${Mountain})`,
+        }}
+      >
+        <div className="absolute top-4 left-4">
+          <img src={Logo} alt="Logo" className="h-20 w-25" />
+        </div>
+        <div className="absolute top-8 right-4">
+          <a
+            className="btn bg-brown-dark text-white hover:bg-brown-light border-none"
+            onClick={handleGetStarted}
+          >
+            {isSignedIn ? "My Habits" : "Get Started"}
+          </a>
+        </div>
+        <div className="hero-overlay bg-opacity-40"></div>
+        <div className="hero-content text-neutral-content text-center">
+          <div className="max-w-md">
+            <h1 className="mb-5 text-6xl font-bold text-white">
+              Transform Your <span className="text-brown-light">Goals</span>{" "}
+              Into
+              <span className="text-brown-dark"> Habits That Last</span>
+            </h1>
+            <button className="btn bg-brown-dark text-white hover:bg-brown-light border-none">
+              {isSignedIn ? "My Habits" : "Get Started"}
             </button>
-          )}
-        </nav>
-      </header>
+          </div>
+        </div>
+      </div>
+      <div className="hero min-h-screen bg-base-200">
+        <div className="hero-content flex-col lg:flex-row-reverse gap-8 max-w-7xl">
+          <AutoScrollCarousel items={carouselItems} interval={5000} />
+          <div className="lg:w-1/2">
+            <h1 className="text-5xl font-bold">Box Office News!</h1>
+            <p className="py-6">
+              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
+              et a id nisi.
+            </p>
+            <button className="btn btn-primary">Get Started</button>
+          </div>
+        </div>
+      </div>
 
       <section className="flex justify-between items-center p-12 bg-teal-50">
         <div className="max-w-lg">
@@ -108,7 +123,7 @@ export const HomePage = () => {
       <section className="flex justify-between p-12 bg-white">
         <div className="text-center w-1/4">
           <img
-            src="/icon-habit.png"
+            src="/icon-habit.png?url"
             alt="Add Habit"
             className="w-20 mx-auto mb-4"
           />
@@ -129,11 +144,7 @@ export const HomePage = () => {
           </p>
         </div>
         <div className="text-center w-1/4">
-          <img
-            src="/icon-reminder.png"
-            alt="Reminders"
-            className="w-20 mx-auto mb-4"
-          />
+          <img src={Shrek} alt="Reminders" className="w-20 mx-auto mb-4" />
           <h3 className="text-xl text-teal-700 mb-2">
             Reminders & Notifications
           </h3>
@@ -172,30 +183,36 @@ export const HomePage = () => {
         </div>
       </section>
 
-      <footer className="text-center p-5 bg-teal-800 text-white">
-        <div className="mb-4">
-          <a href="/about" className="text-white hover:underline mx-2">
-            About Us
-          </a>
-          <a href="/privacy" className="text-white hover:underline mx-2">
-            Privacy Policy
-          </a>
-          <a href="/contact" className="text-white hover:underline mx-2">
-            Contact Support
-          </a>
-        </div>
-        <div className="flex justify-center space-x-4 mb-4">
-          <a href="https://facebook.com">
-            <img src="/icon-facebook.png" alt="Facebook" className="w-6" />
-          </a>
-          <a href="https://twitter.com">
-            <img src="/icon-twitter.png" alt="Twitter" className="w-6" />
-          </a>
-          <a href="https://instagram.com">
-            <img src="/icon-instagram.png" alt="Instagram" className="w-6" />
-          </a>
-        </div>
-        <p>© 2024 Habit Tracker</p>
+      <footer className="footer footer-center bg-black text-white p-10">
+        <aside>
+          <img src={Logo} alt="Logo" className="h-20 w-25" />
+          <p className="font-bold">
+            Habit Tracker App
+            <br />A CTP Class Project by Aspire
+          </p>
+          <p>Copyright © {new Date().getFullYear()} - All rights reserved</p>
+        </aside>
+        <nav>
+          <div className="grid grid-flow-col gap-4">
+            <a
+              href="https://github.com/JNikolo/Aspire"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tooltip"
+              data-tip="View Repository"
+            >
+              <SiGithub size={24} />
+            </a>
+            <a
+              href="https://linktr.ee/aspirectp"
+              className="tooltip"
+              data-tip="Visit Linktree"
+              target="_blank"
+            >
+              <SiLinktree size={24} />
+            </a>
+          </div>
+        </nav>
       </footer>
     </div>
   );
