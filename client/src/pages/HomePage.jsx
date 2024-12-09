@@ -77,48 +77,26 @@ export const HomePage = () => {
               Into
               <span className="text-brown-dark"> Habits That Last</span>
             </h1>
+          </div>
+        </div>
+      </div>
+      <div className="hero min-h-screen bg-white">
+        <div className="hero-content flex-col lg:flex-row-reverse gap-8 max-w-7xl">
+          <AutoScrollCarousel items={carouselItems} interval={3000} />
+          <div className="lg:w-1/2">
+            <h1 className="text-5xl font-bold">
+              Start tracking your progress today!
+            </h1>
+            <p className="py-6">
+              Join a community of achievers turning aspirations into reality,
+              with AI powered habit tracking and personalized goal setting.
+            </p>
             <button className="btn bg-brown-dark text-white hover:bg-brown-light border-none">
-              {isSignedIn ? "My Habits" : "Get Started"}
+              Get Started
             </button>
           </div>
         </div>
       </div>
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row-reverse gap-8 max-w-7xl">
-          <AutoScrollCarousel items={carouselItems} interval={5000} />
-          <div className="lg:w-1/2">
-            <h1 className="text-5xl font-bold">Box Office News!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
-            <button className="btn btn-primary">Get Started</button>
-          </div>
-        </div>
-      </div>
-
-      <section className="flex justify-between items-center p-12 bg-teal-50">
-        <div className="max-w-lg">
-          <h2 className="text-4xl font-bold text-teal-800">
-            Track Your Habits, Build Your Future
-          </h2>
-          <p className="text-lg mt-4 mb-6">
-            Consistency is key. Start tracking your daily habits and turn small
-            steps into big changes!
-          </p>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white text-lg px-6 py-3 rounded">
-            Get Started Now
-          </button>
-        </div>
-        <div className="max-w-md">
-          <img
-            src={Calender}
-            alt="Habit Tracking Illustration"
-            className="w-full"
-          />
-        </div>
-      </section>
 
       <section className="flex justify-between p-12 bg-white">
         <div className="text-center w-1/4">

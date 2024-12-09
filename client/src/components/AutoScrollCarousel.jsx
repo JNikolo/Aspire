@@ -24,55 +24,45 @@ const AutoScrollCarousel = ({ items, interval = 3000 }) => {
   }, [interval, items.length]);
 
   return (
-    <div className="relative w-full lg:w-1/2 h-[32rem] lg:h-[40rem]">
-      {/* Carousel Wrapper */}
-      <div className="relative w-full h-full overflow-hidden flex justify-center items-center">
-        {items.map((item, index) => (
-          <div
-            key={item.id}
-            className={`absolute w-full h-full transition-transform duration-500 ease-in-out ${
-              index === currentIndex
-                ? "translate-x-0"
-                : index < currentIndex
-                ? "-translate-x-full"
-                : "translate-x-full"
-            }`}
-            style={{ zIndex: index === currentIndex ? 1 : 0 }}
-          >
-            <div className="mockup-phone border-primary flex justify-center">
-              <div className="camera"></div>
-              <div className="display">
-                <div className="artboard artboard-demo phone-1 bg-base-200">
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
+    <div className="relative w-full lg:w-1/2">
+      <div className="flex justify-center items-center min-h-[600px]">
+        <div className="mockup-phone border-blue-dark">
+          <div className="camera"></div>
+          <div className="display">
+            <div className="artboard phone-1 bg-base-200 relative overflow-hidden">
+              {items.map((item, index) => (
+                <img
+                  key={item.id}
+                  src={item.src}
+                  alt={item.alt}
+                  className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ${
+                    index === currentIndex ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              ))}
             </div>
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Navigation Buttons */}
       <button
         onClick={handlePrev}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm lg:btn-md bg-gray-700 text-white hover:bg-gray-900 z-10"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm lg:btn-md bg-blue-light text-white hover:bg-blue-dark z-20"
         aria-label="Previous Slide"
       >
         ❮
       </button>
       <button
         onClick={handleNext}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm lg:btn-md bg-gray-700 text-white hover:bg-gray-900 z-10"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 btn btn-circle btn-sm lg:btn-md bg-blue-light text-white hover:bg-blue-dark z-20"
         aria-label="Next Slide"
       >
         ❯
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
         {items.map((_, index) => (
           <button
             key={index}
