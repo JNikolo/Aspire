@@ -1,6 +1,7 @@
 // import { LuEye, LuEyeOff,  } from "react-icons/lu";
-import { LuAlertCircle, LuEyeOff, LuEye } from "react-icons/lu";
-
+//LuAlertCircle
+import { LuEyeOff, LuEye } from "react-icons/lu";
+import { AiOutlineWarning } from 'react-icons/ai'; // Example replacement
 import PropTypes from "prop-types";
 
 export const FormInput = ({
