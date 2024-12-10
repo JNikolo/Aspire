@@ -21,7 +21,7 @@ const AutoScrollCarousel = ({ items, interval = 3000 }) => {
   useEffect(() => {
     const autoScroll = setInterval(handleNext, interval);
     return () => clearInterval(autoScroll);
-  }, [interval, items.length]);
+  }, [interval, items.length, currentIndex]);
 
   return (
     <div className="relative w-full lg:w-1/2">

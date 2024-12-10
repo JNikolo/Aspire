@@ -7,7 +7,9 @@ import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { SiGithub, SiLinktree } from "react-icons/si";
+import { LuCalendarDays } from "react-icons/lu";
 import AutoScrollCarousel from "../components/AutoScrollCarousel";
+import TimelineFeatures from "../components/FeaturesTimeline";
 
 export const HomePage = () => {
   const { isSignedIn } = useUser();
@@ -28,6 +30,37 @@ export const HomePage = () => {
       id: 3,
       src: "https://via.placeholder.com/600x300?text=Slide+3",
       alt: "Slide 3",
+    },
+  ];
+  const cardItems = [
+    {
+      id: 1,
+      src: { Calender },
+      alt: "Calender",
+      title: "Simple Habit Creation",
+      description:
+        "Easily add habits with a daily, weekly, or custom frequency.",
+    },
+    {
+      id: 2,
+      src: "https://via.placeholder.com/600x300?text=Progress+Tracking",
+      alt: "Progress Tracking",
+      title: "Progress Tracking",
+      description: "Visualize your progress with charts and streaks.",
+    },
+    {
+      id: 3,
+      src: "https://via.placeholder.com/600x300?text=Reminders",
+      alt: "Reminders",
+      title: "Reminders & Notifications",
+      description: "Stay on top of your goals with timely notifications.",
+    },
+    {
+      id: 4,
+      src: { Shrek },
+      alt: "Personalized Goals",
+      title: "Personalized Goals",
+      description: "Set goals that fit your life and track them over time.",
     },
   ];
   const handleSignOut = async () => {
@@ -69,12 +102,11 @@ export const HomePage = () => {
             {isSignedIn ? "My Habits" : "Get Started"}
           </a>
         </div>
-        <div className="hero-overlay bg-opacity-40"></div>
+        <div className="hero-overlay bg-opacity-70"></div>
         <div className="hero-content text-neutral-content text-center">
           <div className="max-w-md">
             <h1 className="mb-5 text-6xl font-bold text-white">
-              Transform Your <span className="text-brown-light">Goals</span>{" "}
-              Into
+              Transform Your <span className="text-blue-dark">Goals</span> Into
               <span className="text-brown-dark"> Habits That Last</span>
             </h1>
           </div>
@@ -98,68 +130,35 @@ export const HomePage = () => {
         </div>
       </div>
 
-      <section className="flex justify-between p-12 bg-white">
-        <div className="text-center w-1/4">
-          <img
-            src="/icon-habit.png?url"
-            alt="Add Habit"
-            className="w-20 mx-auto mb-4"
-          />
-          <h3 className="text-xl text-teal-700 mb-2">Simple Habit Creation</h3>
-          <p className="text-gray-600">
-            Easily add habits with a daily, weekly, or custom frequency.
-          </p>
-        </div>
-        <div className="text-center w-1/4">
-          <img
-            src="/icon-progress.png"
-            alt="Progress Tracking"
-            className="w-20 mx-auto mb-4"
-          />
-          <h3 className="text-xl text-teal-700 mb-2">Progress Tracking</h3>
-          <p className="text-gray-600">
-            Visualize your progress with charts and streaks.
-          </p>
-        </div>
-        <div className="text-center w-1/4">
-          <img src={Shrek} alt="Reminders" className="w-20 mx-auto mb-4" />
-          <h3 className="text-xl text-teal-700 mb-2">
-            Reminders & Notifications
-          </h3>
-          <p className="text-gray-600">
-            Stay on top of your goals with timely notifications.
-          </p>
-        </div>
-        <div className="text-center w-1/4">
-          <img
-            src="/icon-goals.png"
-            alt="Personalized Goals"
-            className="w-20 mx-auto mb-4"
-          />
-          <h3 className="text-xl text-teal-700 mb-2">Personalized Goals</h3>
-          <p className="text-gray-600">
-            Set goals that fit your life and track them over time.
-          </p>
-        </div>
-      </section>
+      <TimelineFeatures />
 
-      <section className="text-center p-12 bg-gray-100">
-        <h2 className="text-2xl text-teal-700 mb-8">What Our Users Say</h2>
-        <div className="italic mb-6">
-          <p>
-            &quot;Habit Tracker has helped me stay consistent and achieve my
-            goals like never before!&quot;
-          </p>
-          <p>— Sarah, daily user</p>
+      <div className="hero bg-base-200 min-h-screen">
+        <div className="hero-content flex-col lg:flex-row-reverse gap-8 max-w-7xl mx-auto p-4">
+          {/* Video Container */}
+          <div className="w-full lg:w-3/5 relative">
+            <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/eFBYfZ9FEC0?si=FFkXnIKumWAUV_vf"
+                title="Habit Tracker Demo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+
+          {/* Text Content */}
+          <div className="w-full lg:w-2/5 text-center lg:text-left">
+            <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+              See Habit Tracker in Action!
+            </h1>
+            <p className="py-6 text-lg opacity-90">
+              Watch how our app empowers users to transform their goals into
+              lasting habits.
+            </p>
+          </div>
         </div>
-        <div className="italic">
-          <p>
-            &quot;This app transformed the way I approach my daily
-            routine.&quot;
-          </p>
-          <p>— Jake, user for 6 months</p>
-        </div>
-      </section>
+      </div>
 
       <footer className="footer footer-center bg-black text-white p-10">
         <aside>
