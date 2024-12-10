@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "src/index.js"
     }
-  ],
-  "hooks": {
-    "build": "npx prisma generate"
-  }
+  ]
 }
