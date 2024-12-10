@@ -171,7 +171,12 @@ const TaskCard = (props) => {
 
   const isCurrentMonth = isSameDay(currentMonth, startOfMonth(new Date()));
   const isCurrentYear = isSameDay(currentYear, startOfYear(new Date()));
-
+  const isToday = (date) => {
+    return isSameDay(
+      format(date, "yyyy-MM-dd"),
+      format(new Date(), "yyyy-MM-dd")
+    );
+  };
   return (
     <div className=" collapse collapse-arrow bg-stone-100 transparent max-w-4xl shadow-xl bg-opacity-85">
       <CompletionModal
@@ -266,7 +271,11 @@ const TaskCard = (props) => {
                       <input
                         type="checkbox"
                         checked={isCompleted}
-                        className="checkbox w-8 h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
+                        className={`checkbox w-8 h-8 border-2 ${
+                          isToday(date)
+                            ? "border-brown-dark bg-blue-light/25"
+                            : "border-blue-light"
+                        } [--chkbg:#93C5FD] [--chkfg:#705D56]`}
                         onChange={() => handleCheckbox(date)}
                       />
                       <div>{format(date, "d")}</div>
@@ -348,7 +357,11 @@ const TaskCard = (props) => {
                       <input
                         type="checkbox"
                         checked={isCompleted}
-                        className="checkbox w-7 h-7 sm:w-8 sm:h-8 border-2 border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
+                        className={`checkbox w-7 h-7 sm:w-8 sm:h-8 border-2 border-blue-light ${
+                          isToday(date)
+                            ? "border-brown-dark bg-blue-light/25"
+                            : "border-blue-light"
+                        } [--chkbg:#93C5FD] [--chkfg:#705D56]`}
                         onChange={() => handleCheckbox(date)}
                       />
                       <div className="text-sm">{format(date, "d")}</div>
@@ -412,7 +425,11 @@ const TaskCard = (props) => {
                         <input
                           type="checkbox"
                           checked={isCompleted}
-                          className="checkbox w-4 h-4 sm:w-5 sm:h-5 border-2 rounded-sm border-blue-light [--chkbg:#93C5FD] [--chkfg:#705D56]"
+                          className={`checkbox w-4 h-4 sm:w-5 sm:h-5 border-2 rounded-sm border-blue-light ${
+                            isToday(date)
+                              ? "border-brown-dark bg-blue-light/25"
+                              : "border-blue-light"
+                          } [--chkbg:#93C5FD] [--chkfg:#705D56]`}
                           // onChange={() => handleCheckbox(date)}
                           readOnly
                         />

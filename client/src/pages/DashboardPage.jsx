@@ -18,11 +18,20 @@ export const DashboardPage = () => {
     if (user) {
       const firstName = user.firstName || "User";
       const motivationalStatements = [
-        `Keep pushing forward, ${firstName}!`,
-        `You're doing great, ${firstName}!`,
-        `Believe in yourself, ${firstName}!`,
-        `Stay positive and strong, ${firstName}!`,
-        `Every day is a new opportunity, ${firstName}!`,
+        "Keep pushing forward!",
+        "You're doing great!",
+        "Believe in yourself!",
+        "Stay positive and strong!",
+        "Every day is a new opportunity!",
+        "Post your wins!",
+        "Motivate others!",
+        "Stay focused!",
+        "Stay committed!",
+        "Stay dedicated!",
+        "Stay consistent!",
+        "Stay persistent!",
+        "Stay motivated!",
+        "Stay inspired!",
       ];
 
       const randomIndex = Math.floor(
@@ -30,22 +39,21 @@ export const DashboardPage = () => {
       );
       const randomStatement = motivationalStatements[randomIndex];
 
-      setWelcomeMessage(randomStatement);
+      const currentHour = new Date().getHours();
+      let timeOfDay;
+
+      if (currentHour < 12) {
+        timeOfDay = "Good Morning";
+      } else if (currentHour < 18) {
+        timeOfDay = "Good Afternoon";
+      } else {
+        timeOfDay = "Good Evening";
+      }
+
+      const welcomeMessage = `${timeOfDay}, ${firstName}\n${randomStatement}`;
+      setWelcomeMessage(welcomeMessage);
     }
   }, [user]);
-
-  const predefinedSelectedDays = ["Monday", "Thursday", "Saturday"];
-  const dayOrder = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  // Sort predefinedSelectedDays according to the custom order
 
   useEffect(() => {
     getHabits(getToken)
@@ -61,7 +69,12 @@ export const DashboardPage = () => {
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
       <div className="flex flex-col w-full items-center space-y-10 h-full">
         <h1 className="pt-10 text-center pb-10 text-4xl text-brown-dark">
-          {welcomeMessage}
+          <span className="block text-3xl font-bold text-blue-500 drop-shadow-lg">
+            {welcomeMessage.split("\n")[0]}
+          </span>
+          <span className="block text-2xl text-stone-700 italic mt-2">
+            {welcomeMessage.split("\n")[1]}
+          </span>
         </h1>
         {!tasks ? (
           <div>Loading Your Habits...</div>

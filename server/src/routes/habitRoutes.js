@@ -251,8 +251,9 @@ habitRouter.put("/:habitId/log/:logId", async (req, res) => {
   try {
     const { userId } = req.auth;
     const { habitId, logId } = req.params;
-    const { title, description, picture, logDate, isPublic } = req.body;
-
+    const { title, description, picture, logDate, isPublic, communityId } =
+      req.body;
+    console.log(req.body);
     const user = await prisma.user.findUnique({ where: { authId: userId } });
 
     if (!user) {
@@ -276,6 +277,7 @@ habitRouter.put("/:habitId/log/:logId", async (req, res) => {
         logDate: new Date(logDate),
         isPublic,
         updatedAt: new Date(),
+        communityId,
       },
     });
 

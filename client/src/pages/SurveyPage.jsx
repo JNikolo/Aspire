@@ -96,6 +96,8 @@ export const SurveyPage = () => {
             ? "Updating your habit..."
             : loading === "creating"
             ? "Creating your habit..."
+            : loading === "editing"
+            ? "Saving your habit..."
             : "Deleting your habit..."
         }
       />
