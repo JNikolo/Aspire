@@ -1,5 +1,6 @@
 import { react } from "react";
 import { Link } from "react-router-dom";
+import { UserButton } from "@clerk/clerk-react";
 
 export const NavBar = () => {
   return (
@@ -52,37 +53,14 @@ export const NavBar = () => {
           </li>
         </ul>
       </div>
-      {/* user icon */}
-      {/* habit survey and logout */}
+      {/* logout from clerk */}
       <div className="navbar-end">
-        <div className="flex-none">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-            >
-              <div className="w-10 rounded-full">
-                <img
-                  // user's profile picture (coming from singing in w/ google)
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
-              </div>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow text-white"
-            >
-              <li>
-                <Link to="/survey/:habitId/edit">Habit Survey</Link>
-              </li>
-              <li>
-                <a>Logout</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+        <ul>
+          <li>
+            {/* afte logout, bring user to landing page */}
+            <UserButton afterSignOutUrl="/landing" />
+          </li>
+        </ul>
       </div>
     </div>
   );
