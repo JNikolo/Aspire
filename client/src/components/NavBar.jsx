@@ -29,10 +29,10 @@ export const NavBar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow text-white"
           >
             <li>
-              <a>Dashboard</a>
+              <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <a>Communities</a>
+              <Link to="/communities">Communities</Link>
             </li>
           </ult>
         </div>
@@ -45,10 +45,10 @@ export const NavBar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-brown-dark">
           <li>
-            <a>Dashboard</a>
+            <Link to="/dashboard">Dashboard</Link>
           </li>
           <li>
-            <a>Communities</a>
+            <Link to="/communities">Communities</Link>
           </li>
         </ul>
       </div>
@@ -75,7 +75,7 @@ export const NavBar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow text-white"
             >
               <li>
-                <a className="justify-between">Habit Survey</a>
+                <Link to="/survey/:habitId/edit">Habit Survey</Link>
               </li>
               <li>
                 <a>Logout</a>
