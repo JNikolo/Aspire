@@ -57,8 +57,12 @@ export const NavBar = () => {
       <div className="navbar-end">
         <ul>
           <li>
-            {/* afte logout, bring user to landing page */}
-            <UserButton afterSignOutUrl="/landing" />
+            {/* after logout, bring user to landing page */}
+            <UserButton
+              afterSignOutUrl="/landing"
+              showName
+              userProfileMode="modal"
+            />
           </li>
         </ul>
       </div>
