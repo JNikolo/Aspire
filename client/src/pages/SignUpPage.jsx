@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FormInput } from "../components/FormInput";
-import { LuMail, LuAlertCircle, LuUser } from "react-icons/lu";
+import { LuMail, LuCircleAlert, LuUser } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { SsoButton } from "../components/SsoButton";
 
@@ -133,7 +133,7 @@ export function SignUpPage() {
 
           {error && (
             <div className="alert alert-error mb-6">
-              <LuAlertCircle className="h-6 w-6 flex-shrink-0" />
+              <LuCircleAlert className="h-6 w-6 flex-shrink-0" />
               <span className="text-sm">{error}</span>
             </div>
           )}
