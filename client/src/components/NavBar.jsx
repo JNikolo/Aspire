@@ -37,7 +37,9 @@ export const NavBar = () => {
           </ult>
         </div>
         {/* logo */}
-        <a className="btn btn-ghost text-xl">Aspire</a>
+        <a className="flex items-center">
+          <img src="/aspire.jpg" alt="Aspire Logo" className="h-10 w-auto" />
+        </a>
       </div>
       {/* navbar items on lg screen */}
       <div className="navbar-center hidden lg:flex">
@@ -50,7 +52,8 @@ export const NavBar = () => {
           </li>
         </ul>
       </div>
-      {/* user icon that accesses survey & allows them to signout */}
+      {/* user icon */}
+      {/* habit survey and logout */}
       <div className="navbar-end">
         <div className="flex-none">
           <div className="dropdown dropdown-end">
