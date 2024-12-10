@@ -2,7 +2,7 @@ export const fetchHabit = async (habitId, reset, getToken) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `http://127.0.0.1:3000/habit/${habitId}/survey`,
+      `${import.meta.env.VITE_API_URL}/habit/${habitId}/survey`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ export const fetchHabit = async (habitId, reset, getToken) => {
 export const createHabit = async (getToken, data, navigate) => {
   try {
     const token = await getToken();
-    const response = await fetch("http://127.0.0.1:3000/habit", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/habit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +47,7 @@ export const updateHabit = async (getToken, habitId, data, navigate) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `http://127.0.0.1:3000/habit/${habitId}/survey`,
+      `${import.meta.env.VITE_API_URL}/habit/${habitId}/survey`,
       {
         method: "PUT",
         headers: {
@@ -68,13 +68,16 @@ export const updateHabit = async (getToken, habitId, data, navigate) => {
 export const deleteHabit = async (habitId, getToken, navigate) => {
   try {
     const token = await getToken();
-    const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/habit/${habitId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       navigate("/");
