@@ -234,8 +234,10 @@ const CompletionModal = ({
     }
     setIsLoading(true);
     if (isEditMode) {
-      data.logDate = completionDate || new Date().toISOString();
-
+      data.logDate = toggleDate
+        ? new Date(toggleDate).toISOString()
+        : new Date().toISOString();
+      console.log(data);
       await updateHabitLog(habit.id, log.id, data, getToken)
         .then(() => {
           setIsLoading(false); // Set loading state to false after async operation completes
@@ -251,7 +253,10 @@ const CompletionModal = ({
           setIsLoading(false); // Ensure loading state is reset in case of error
         });
     } else {
-      data.logDate = completionDate || new Date().toISOString();
+      data.logDate = toggleDate
+        ? new Date(toggleDate).toISOString()
+        : new Date().toISOString();
+      console.log(data);
       await postHabitLog(habit.id, data, getToken)
         .then(() => {
           const modal = document.getElementById(modalId);
