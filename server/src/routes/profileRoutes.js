@@ -104,10 +104,6 @@ profileRouter.get("/communities", async (req, res) => {
       },
     });
 
-    if (habits.length === 0) {
-      return res.status(404).json({ error: "No habits found for the user." });
-    }
-
     const habitIds = habits.map((habit) => habit.id);
 
     const habitLogs = await prisma.habitLog.findMany({
@@ -119,20 +115,10 @@ profileRouter.get("/communities", async (req, res) => {
       },
     });
 
-    if (habitLogs.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No habit logs found for the user's habits." });
-    }
-
     const communityIds = habitLogs.map((log) => log.communityId);
     const uniqueCommunityIds = [...new Set(communityIds)].filter(
       (id) => id !== null
-    ); // Filter out null values
-
-    if (uniqueCommunityIds.length === 0) {
-      return res.status(404).json({ error: "No valid community IDs found." });
-    }
+    ); 
 
     const communities = await prisma.community.findMany({
       where: {
@@ -142,10 +128,6 @@ profileRouter.get("/communities", async (req, res) => {
         name: true,
       },
     });
-
-    if (communities.length === 0) {
-      return res.status(404).json({ error: "No communities found." });
-    }
 
     res.json(communities.map((community) => community.name));
   } catch (err) {

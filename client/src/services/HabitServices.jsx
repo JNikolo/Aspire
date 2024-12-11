@@ -25,7 +25,7 @@ export const fetchHabit = async (habitId, reset, getToken) => {
 export const getHabits = async (getToken) => {
   try {
     const token = await getToken();
-    const response = await fetch("http://127.0.0.1:3000/habit", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/habit`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -112,7 +112,7 @@ export const deleteHabit = async (habitId, getToken, navigate) => {
 export const postHabitLog = async (habitId, data, getToken) => {
   try {
     const token = await getToken();
-    const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}/log`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/habit/${habitId}/log`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -135,7 +135,7 @@ export const postHabitLog = async (habitId, data, getToken) => {
 export const fetchHabitLogs = async (habitId, getToken) => {
   try {
     const token = await getToken();
-    const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}/log`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/habit/${habitId}/log`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -156,7 +156,7 @@ export const updateHabitLog = async (habitId, logId, data, getToken) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `http://127.0.0.1:3000/habit/${habitId}/log/${logId}`,
+      `${import.meta.env.VITE_API_URL}/habit/${habitId}/log/${logId}`,
       {
         method: "PUT",
         headers: {
@@ -175,7 +175,7 @@ export const deleteHabitLog = async (habitId, logId, getToken) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `http://127.0.0.1:3000/habit/${habitId}/log/${logId}`,
+      `${import.meta.env.VITE_API_URL}/habit/${habitId}/log/${logId}`,
       {
         method: "DELETE",
         headers: {
