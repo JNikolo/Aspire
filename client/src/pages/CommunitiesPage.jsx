@@ -20,7 +20,7 @@ const log = [
     title: "React Hooks",
     description: "Spent 2 hours coding today",
     picture: "https://picsum.photos/200/300",
-    community: { name: "Coding" },
+    community: { name: "Code & Create" },
     logDate: new Date(),
   },
   {
