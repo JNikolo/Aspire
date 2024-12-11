@@ -253,7 +253,10 @@ const CompletionModal = ({
           setIsLoading(false); // Ensure loading state is reset in case of error
         });
     } else {
-      data.logDate = completionDate || new Date().toISOString();
+      data.logDate = toggleDate
+        ? new Date(toggleDate).toISOString()
+        : new Date().toISOString();
+      console.log(data);
       await postHabitLog(habit.id, data, getToken)
         .then(() => {
           const modal = document.getElementById(modalId);
