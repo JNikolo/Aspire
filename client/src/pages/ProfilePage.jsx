@@ -141,63 +141,63 @@ export const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-blue-100 min-h-screen flex flex-col items-center p-6">
-      {/* Profile */}
-      <div className="bg-white bg-opacity-90 rounded-lg shadow-xl p-6 w-full max-w-4xl flex items-center relative">
-        <div className="absolute top-4 right-4 flex flex-col gap-2">
-          {isEditingProfile ? (
-            <>
-              <button
-                onClick={saveChanges}
-                className="btn bg-green-500 text-white hover:bg-green-600 shadow-md px-4 py-2 rounded-lg"
-              >
-                Save Changes 💾
-              </button>
-              <button
-                onClick={discardChanges}
-                className="btn bg-red-500 text-white hover:bg-red-600 shadow-md px-4 py-2 rounded-lg"
-              >
-                Discard Changes 🗑️
-              </button>
-            </>
-          ) : (
+    <div className="bg-blue-100 min-h-screen flex flex-col items-center p-4 sm:p-6 overflow-hidden">
+      {/* Profile Section */}
+      <div className="bg-white bg-opacity-90 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-2xl flex flex-col sm:flex-row items-center relative">
+      <div className="absolute top-4 right-4 flex flex-col gap-2">
+        {isEditingProfile ? (
+          <>
             <button
-              onClick={() => {
-                setTempName(profileName);
-                setIsEditingProfile(true);
-              }}
-              className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg"
+              onClick={saveChanges}
+              className="btn bg-green-500 text-white hover:bg-green-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
             >
-              Edit Profile ✏️
+              Save 💾
             </button>
-          )}
+            <button
+              onClick={discardChanges}
+              className="btn bg-red-500 text-white hover:bg-red-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
+            >
+              Discard 🗑️
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => {
+              setTempName(profileName);
+              setIsEditingProfile(true);
+            }}
+            className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
+          >
+            Edit ✏️
+          </button>
+        )}
         </div>
-        <div className="flex-shrink-0 relative">
-            <img
-              src={profileImage}
-              loading="lazy"
-              className="w-36 h-36 rounded-full object-cover border-4 border-blue-300"
-            />
+        <div className="flex-shrink-0">
+          <img
+            src={profileImage}
+            loading="lazy"
+            className="w-24 h-24 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-blue-300 max-w-full"
+          />
         </div>
-        <div className="ml-6 flex-grow">
+        <div className="mt-4 sm:mt-0 sm:ml-6 flex-grow text-center sm:text-left">
           {isEditingProfile ? (
             <input
               type="text"
               value={tempName}
               onChange={(e) => setTempName(e.target.value)}
-              className="text-3xl font-bold text-black mb-4 border rounded-lg p-2 bg-white"
+              className="text-xl sm:text-3xl font-bold text-black mb-4 border rounded-lg p-2 bg-white w-full"
             />
           ) : (
-            <h2 className="text-3xl font-bold text-black mb-4">
+            <h2 className="text-xl sm:text-3xl font-bold text-black mb-4">
               {profileName}
             </h2>
           )}
           {/* Communities */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4">
             {communities.map((community, index) => (
               <div
                 key={index}
-                className="bg-blue-100 rounded-lg px-6 py-3 text-black shadow-md hover:bg-blue-200 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+                className="bg-blue-100 rounded-lg px-4 sm:px-6 py-2 sm:py-3 text-black shadow-md hover:bg-blue-200 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer text-sm sm:text-base"
               >
                 {community}
               </div>
@@ -206,35 +206,31 @@ export const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Habits */}
-      <div className="mt-8 bg-white bg-opacity-90 rounded-lg shadow-xl p-6 w-full max-w-4xl">
+      {/* Habits Section */}
+      <div className="mt-8 bg-white bg-opacity-90 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-2xl">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-2xl font-bold text-black">Your Habits</h3>
+          <h3 className="text-lg sm:text-2xl font-bold text-black">Your Habits</h3>
           <button
             onClick={() => navigate("/survey/new")}
-            className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg"
+            className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
           >
-            New Habit{" "}
-            <span role="img" aria-label="new habit">
-              🌱
-            </span>
+            New Habit 🌱
           </button>
         </div>
-
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           {habits.map((habit, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4"
+              className="bg-white rounded-lg shadow-lg p-4 sm:p-6 flex flex-col gap-3"
             >
-              <h4 className="text-xl font-semibold text-black">
+              <h4 className="text-base sm:text-xl font-semibold text-black">
                 {habit.habitName}
               </h4>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {habit.HabitLogs.map((log, logIndex) => (
                   <div
                     key={logIndex}
-                    className="bg-green-100 rounded-full px-6 py-2 text-green-800 text-sm font-medium flex items-center gap-2 hover:bg-green-200 transition-all duration-300 ease-in-out"
+                    className="bg-green-100 rounded-full px-4 sm:px-6 py-1 sm:py-2 text-green-800 text-xs sm:text-sm font-medium flex items-center gap-1 sm:gap-2 hover:bg-green-200 transition-all duration-300 ease-in-out"
                   >
                     <span role="img" aria-label="log-date">
                       📅

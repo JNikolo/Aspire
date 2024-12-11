@@ -448,15 +448,14 @@ const CompletionModal = ({
             </button>
           </form>
           {isCameraOpen && (
-            <div className="fixed inset-0 h-auto bg-black bg-opacity-75 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
               <div className="relative bg-white p-4 rounded-lg text-center max-h-full overflow-auto">
                 <video
                   ref={videoRef}
-                  className="w-auto rounded-lg"
+                  className="w-full max-w-xs md:max-w-sm lg:max-w-md aspect-video rounded-lg"
                   autoPlay
                   playsInline
                 />
-
                 <button
                   className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark hover:bg-blue-light text-brown-dark mt-4"
                   type="button"
