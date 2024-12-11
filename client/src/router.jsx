@@ -14,11 +14,11 @@ import { RootLayout } from "./components/RootLayout";
 
 export const router = createBrowserRouter([
   {
-    element: <RootLayout />,
+    element: <App />,
     children: [
       {
         path: "/",
-        element: <App />,
+        element: <HomePage />,
       },
       {
         path: "/survey/:habitId/edit",
@@ -28,6 +28,14 @@ export const router = createBrowserRouter([
         path: "/survey/new",
         element: <SurveyPage />,
       },
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
+      {
+        path: "/dashboard",
+        element: <DashboardPage />,
+      },
     ],
   },
 
@@ -36,16 +44,8 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/home",
-    element: <HomePage />,
-  },
-  {
     path: "/signup",
     element: <SignUpPage />,
-  },
-  {
-    path: "/profile",
-    element: <ProfilePage />,
   },
   {
     path: "/sso-callback",
@@ -61,13 +61,5 @@ export const router = createBrowserRouter([
   {
     path: "/sso-fallback",
     element: <SSOFallback />,
-  },
-  {
-    path: "/survey/new",
-    element: <SurveyPage />,
-  },
-  {
-    path: "/dashboard",
-    element: <DashboardPage />,
   },
 ]);

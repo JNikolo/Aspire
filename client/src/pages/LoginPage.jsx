@@ -42,7 +42,7 @@ export function LoginPage() {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (err) {
       setError(err.errors?.[0]?.message || "Invalid username or password");
@@ -61,7 +61,7 @@ export function LoginPage() {
       await signIn.authenticateWithRedirect({
         strategy: "oauth_google",
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/",
+        redirectUrlComplete: "/sso-fallback",
       });
     } catch (err) {
       console.error("Error during Google sign in:", err);

@@ -42,17 +42,20 @@ registerRouter.post("/sso-callback", async (req, res) => {
     const { userId } = req.auth;
 
     const user = await clerkClient.users.getUser(userId);
-
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Attempt to find an existing user
     const existingUser = await prisma.user.findUnique({
       where: { authId: user.id },
     });
 
+    console.log("existingUser: ", existingUser);
+
     if (!existingUser) {
-      const new_user = await prisma.user.create({
+      // No user exists, so create a new one
+      const newUser = await prisma.user.create({
         data: {
           authId: user.id,
           profileName: user.fullName,
@@ -60,14 +63,24 @@ registerRouter.post("/sso-callback", async (req, res) => {
         },
       });
 
-      if (!new_user) {
-        clerkClient.users.deleteUser(userId);
-        return res.status(500).json({ error: "Failed to create user" });
-      }
-
-      res.json({ message: "User logged in successfully", newUser: true });
+      res.json({
+        message: "User created successfully",
+        newUser: true,
+      });
     } else {
-      res.json({ message: "User logged in successfully", newUser: false });
+      // User already exists, update profile details
+      const updatedUser = await prisma.user.update({
+        where: { authId: user.id },
+        data: {
+          profileName: user.fullName,
+          profilePicture: user.imageUrl,
+        },
+      });
+
+      res.json({
+        message: "User logged in successfully",
+        newUser: false,
+      });
     }
   } catch (err) {
     console.error("Error during sso-callback:", err);

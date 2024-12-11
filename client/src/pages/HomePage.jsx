@@ -79,7 +79,7 @@ export const HomePage = () => {
 
   const handleGetStarted = () => {
     if (isSignedIn) {
-      navigate("/my-habits");
+      navigate("/profile");
     } else navigate("/login");
   };
 
