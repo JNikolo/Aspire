@@ -3,6 +3,7 @@ import Calender from "../assets/calender.jpeg";
 import Shrek from "../assets/shrek.png";
 import Mountain from "../assets/mountain.jpeg";
 import Logo from "../assets/logo.svg";
+import VideoDemo from "../assets/VideoDemo.mp4";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -139,7 +140,7 @@ export const HomePage = () => {
             <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/eFBYfZ9FEC0?si=FFkXnIKumWAUV_vf"
+                src={VideoDemo}
                 title="Habit Tracker Demo"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
