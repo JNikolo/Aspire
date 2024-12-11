@@ -6,6 +6,13 @@ import profileRouter from "./routes/profileRoutes.js";
 import cors from "cors";
 
 const app = Express();
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+  })
+);
+app.use(Express.json({ limit: "10mb" }));
+app.use(Express.urlencoded({ limit: "10mb", extended: true }));
 
 app.use(Express.json());
 app.use(cors());

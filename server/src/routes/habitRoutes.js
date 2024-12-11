@@ -1,4 +1,5 @@
 import { Router } from "express";
+import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "../middlewares/prisma.js";
 
@@ -174,9 +175,9 @@ habitRouter.post("/:habitId/log", async (req, res) => {
         title,
         description,
         picture,
-        logDate: new Date(logDate),
+        logDate: new Date(logDate).toISOString(),
         isPublic,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
         communityId,
       },
     });
@@ -276,9 +277,9 @@ habitRouter.put("/:habitId/log/:logId", async (req, res) => {
         title,
         description,
         picture,
-        logDate: new Date(logDate),
+        logDate: new Date(logDate).toISOString(),
         isPublic,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
         communityId,
       },
     });
