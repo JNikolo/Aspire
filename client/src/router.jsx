@@ -4,19 +4,33 @@ import App from "./App";
 import { LoginPage } from "./pages/LoginPage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { SurveyPage } from "./pages/SurveyPage";
+import { ProfilePage } from "./pages/ProfilePage";
 import { HomePage } from "./pages/HomePage";
 import { SSOFallback } from "./components/SSOFallback";
 import { DashboardPage } from "./pages/DashboardPage";
 
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
-
-// import {  } from "./pages/";
+import { RootLayout } from "./components/RootLayout";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/survey/:habitId/edit",
+        element: <SurveyPage />,
+      },
+      {
+        path: "/survey/new",
+        element: <SurveyPage />,
+      },
+    ],
   },
+
   {
     path: "/login",
     element: <LoginPage />,
@@ -30,6 +44,10 @@ export const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
+  {
     path: "/sso-callback",
     element: (
       <AuthenticateWithRedirectCallback
@@ -39,10 +57,6 @@ export const router = createBrowserRouter([
         signUpFallbackRedirectUrl={"/sso-fallback"}
       />
     ),
-  },
-  {
-    path: "/survey/:habitId/edit",
-    element: <SurveyPage />,
   },
   {
     path: "/sso-fallback",

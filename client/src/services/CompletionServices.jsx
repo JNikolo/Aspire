@@ -2,7 +2,7 @@ export const fetchHabit = async (habitId, reset, getToken) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `http://127.0.0.1:3000/habit/${habitId}/survey`,
+      `${import.meta.env.VITE_API_URL}}/habit/${habitId}/survey`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -47,7 +47,7 @@ export function SignUpPage() {
         // Get the token after setting active session
         const token = await getToken();
         const response = await fetch(
-          "http://localhost:3000/register/create-after-signup",
+          `${import.meta.env.VITE_API_URL}/register/create-after-signup`,
           {
             method: "POST",
             headers: {

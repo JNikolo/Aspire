@@ -1,4 +1,4 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "../middlewares/prisma.js";
 
@@ -12,6 +12,10 @@ habitRouter.get("/", async (req, res) => {
     const user = await prisma.user.findUnique({
       where: { authId: userId },
     });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     const habits = await prisma.habit.findMany({
       where: { userId: user.id },
@@ -77,18 +81,16 @@ habitRouter.get("/:habitId/survey", async (req, res) => {
 
     const habit = await prisma.habit.findUnique({
       where: { id: parseInt(habitId) },
-    });
-    const frequency = await prisma.habitFrequency.findMany({
-      where: { habitId: parseInt(habitId) },
-    });
-    const selectedDays = await prisma.habitSelectedDay.findMany({
-      where: { habitId: parseInt(habitId) },
+      include: {
+        frequency: true,
+        selectedDays: true,
+      },
     });
     if (!habit) {
       return res.status(404).json({ error: "Habit not found" });
     }
 
-    res.json({ ...habit, frequency, selectedDays });
+    res.json(habit);
   } catch (err) {
     console.error("Error during habit fetch:", err);
     res.status(500).json({ error: "An error occurred during habit fetch" });

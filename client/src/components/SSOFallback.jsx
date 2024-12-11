@@ -14,7 +14,7 @@ export const SSOFallback = () => {
 
         // Send user token to your backend
         const response = await fetch(
-          "http://localhost:3000/register/sso-callback",
+          `${import.meta.env.VITE_API_URL}/register/sso-callback`,
           {
             method: "POST",
             headers: {

@@ -12,7 +12,7 @@ import {
   createHabit,
   updateHabit,
   deleteHabit,
-} from "../services/habitServices";
+} from "../services/HabitServices";
 
 export const SurveyPage = () => {
   const {
