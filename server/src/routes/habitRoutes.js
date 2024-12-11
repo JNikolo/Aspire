@@ -1,4 +1,5 @@
 import { Router } from "express";
+import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "../middlewares/prisma.js";
 
@@ -174,9 +175,9 @@ habitRouter.post("/:habitId/log", async (req, res) => {
         title,
         description,
         picture,
-        logDate: new Date(logDate),
+        logDate: new Date(logDate).toISOString(),
         isPublic,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
         communityId,
       },
     });
@@ -201,12 +202,17 @@ habitRouter.get("/:habitId/log", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const habitLogs = await prisma.habitLog.findMany({
+    let habitLogs = await prisma.habitLog.findMany({
       where: { habitId: parseInt(habitId) },
       include: {
         community: true, // Include the community field
       },
     });
+
+    // Sort logs by date in ascending order
+    habitLogs = habitLogs.sort(
+      (a, b) => new Date(a.logDate) - new Date(b.logDate)
+    );
 
     res.json(habitLogs);
   } catch (err) {
@@ -276,9 +282,9 @@ habitRouter.put("/:habitId/log/:logId", async (req, res) => {
         title,
         description,
         picture,
-        logDate: new Date(logDate),
+        logDate: new Date(logDate).toISOString(),
         isPublic,
-        updatedAt: new Date(),
+        updatedAt: new Date().toISOString(),
         communityId,
       },
     });

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { format, set } from "date-fns";
+import { format, parseISO, set } from "date-fns";
 import { deleteHabitLog, updateHabitLog } from "../../services/HabitServices";
 import { BsTrash3 } from "react-icons/bs";
 import { createClient } from "@supabase/supabase-js";
@@ -98,15 +98,6 @@ const CompletionModal = ({
       };
     }
   }, [reset, modalId]);
-
-  useEffect(() => {
-    if (habitLogs.length > 0) {
-      const sortedLogs = [...habitLogs].sort(
-        (a, b) => new Date(b.logDate) - new Date(a.logDate)
-      );
-      setHabitLogs(sortedLogs);
-    }
-  }, [habitLogs]);
 
   const handleTakePhoto = async () => {
     setIsCameraOpen(true);
@@ -225,25 +216,30 @@ const CompletionModal = ({
       console.error("Error uploading image: ", error);
       return;
     }
-    data.picture = `${
-      import.meta.env.VITE_SUPABASE_URL
-    }/storage/v1/object/logImages/${fileName}`;
+
+    setValue(
+      "picture",
+      `${
+        import.meta.env.VITE_SUPABASE_URL
+      }/storage/v1/object/logImages/${fileName}`
+    );
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (data.picture && data.picture.startsWith("data:image")) {
       const base64Data = data.picture.split(",")[1];
+      console.log(base64Data);
       convertImageDataUpload(base64Data);
     }
-    console.log("community" + data.communityId);
 
     if (!data.isPublic) {
       data.communityId = null;
     }
     setIsLoading(true);
     if (isEditMode) {
-      data.logDate = completionDate || new Date();
-      updateHabitLog(habit.id, log.id, data, getToken)
+      data.logDate = completionDate || new Date().toISOString();
+
+      await updateHabitLog(habit.id, log.id, data, getToken)
         .then(() => {
           setIsLoading(false); // Set loading state to false after async operation completes
           const modal = document.getElementById(modalId);
@@ -257,8 +253,8 @@ const CompletionModal = ({
           setIsLoading(false); // Ensure loading state is reset in case of error
         });
     } else {
-      data.logDate = completionDate || new Date();
-      postHabitLog(habit.id, data, getToken)
+      data.logDate = completionDate || new Date().toISOString();
+      await postHabitLog(habit.id, data, getToken)
         .then(() => {
           const modal = document.getElementById(modalId);
           setIsLoading(false); // Set loading state to false after async operation completes
@@ -444,7 +440,7 @@ const CompletionModal = ({
               className="btn sticky bottom-0 border-5 border-white bg-brown-dark hover:bg-brown-light hover:border-white text-white"
             >
               {isLoading
-                ? "Loading..."
+                ? "Submitting..."
                 : isEditMode
                 ? isDirty
                   ? "Update Post"
@@ -455,11 +451,11 @@ const CompletionModal = ({
             </button>
           </form>
           {isCameraOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-              <div className="relative bg-white p-4 rounded-lg text-center">
+            <div className="fixed inset-0 h-auto bg-black bg-opacity-75 flex items-center justify-center z-50">
+              <div className="relative bg-white p-4 rounded-lg text-center max-h-full overflow-auto">
                 <video
                   ref={videoRef}
-                  className="w-full h-auto rounded-lg"
+                  className="w-auto h-full rounded-lg"
                   autoPlay
                   playsInline
                 />
