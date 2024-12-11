@@ -12,21 +12,21 @@ const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
         Timeline
       </h2>
       {/* the oldest post will be to the left */}
-      <div className="carousel carousel-end rounded-box flex-row w-[358px]  sm:w-full ">
+      <div className="carousel carousel-end rounded-box flex-row w-[358px] sm:w-full ">
         {/*  dummy data 1 */}
         {habitLogs &&
           habitLogs.map((log) => (
             <div
-              className="carousel-item rounded-box mr-2 bg-stone-300"
+              className="carousel-item rounded-box mr-2  bg-stone-300"
               key={log.id}
             >
               <div className="flex-none">
-                <div className=" md:w-48 shadow-xl h-60 md:h-64 w-40">
+                <div className=" md:w-48 shadow-xl h-56 md:h-64 w-40">
                   {log.picture && (
                     <img
                       src={log.picture}
                       alt="loading..."
-                      className="w-full p-1 object-cover h-2/5 rounded-t-box"
+                      className="w-full  object-cover h-2/5 rounded-t-box"
                     />
                   )}
 
@@ -48,7 +48,7 @@ const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
                       <p className="text-sm md:text-md ">{log.description}</p>
                     </div>
 
-                    <div className="card-actions justify-end h-1/5">
+                    <div className="card-actions justify-end ">
                       <div className="badge badge-outline text-xs md:text-md lg:text-lg">
                         {format(parseISO(log.logDate), "MMM d")}
                       </div>
