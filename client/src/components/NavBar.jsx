@@ -27,7 +27,7 @@ export const NavBar = () => {
           {/* access dashboard and communities pages */}
           <ult
             abIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow text-white"
+            className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow text-brown-dark"
           >
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -64,11 +64,7 @@ export const NavBar = () => {
         <ul>
           <li>
             {/* after logout, bring user to landing page */}
-            <UserButton
-              afterSignOutUrl="/landing"
-              showName
-              userProfileMode="modal"
-            />
+            <UserButton afterSignOutUrl="/" showName userProfileMode="modal" />
           </li>
         </ul>
       </div>

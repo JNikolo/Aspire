@@ -455,10 +455,11 @@ const CompletionModal = ({
               <div className="relative bg-white p-4 rounded-lg text-center max-h-full overflow-auto">
                 <video
                   ref={videoRef}
-                  className="w-auto h-full rounded-lg"
+                  className="w-auto rounded-lg"
                   autoPlay
                   playsInline
                 />
+
                 <button
                   className="btn btn-sm md:btn-md border-stone-400 bg-blue-dark hover:bg-blue-light text-brown-dark mt-4"
                   type="button"
