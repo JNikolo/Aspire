@@ -2,6 +2,7 @@ import Express from "express";
 import registerRouter from "./routes/registerRoutes.js";
 import habitRouter from "./routes/habitRoutes.js";
 import chatRouter from "./routes/chatRoutes.js";
+import profileRouter from "./routes/profileRoutes.js";
 import cors from "cors";
 
 const app = Express();
@@ -11,6 +12,7 @@ app.use(cors());
 app.use("/register", registerRouter);
 app.use("/habit", habitRouter);
 app.use("/chat", chatRouter);
+app.use("/profile", profileRouter);
 
 app.get("/", (req, res) => {
   console.log("got requested");
