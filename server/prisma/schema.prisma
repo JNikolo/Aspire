@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,14 +11,13 @@ datasource db {
 model User {
   id             String   @id @default(uuid())
   authId         String   @unique
-  profileName    String?
   profilePicture String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  profileName    String?
   Habit          Habit[]
 }
 
-// Habits table
 model Habit {
   id            Int     @id @default(autoincrement()) // Unique habit ID
   habitName     String // The name of the habit
@@ -48,17 +41,14 @@ model Habit {
 
 // HabitSelectedDays table (storing days selected for the habit)
 model HabitSelectedDay {
-  id        Int    @id @default(autoincrement())
-  dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')
-  habitId   Int // Foreign key to Habit
-
-  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
+  id        Int      @id @default(autoincrement())
+  habitId   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  dayOfWeek String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
 }
 
-// HabitFrequency table (storing frequency days for the habit)
 model HabitFrequency {
   id        Int    @id @default(autoincrement())
   dayOfWeek String // Day of the week (e.g., 'Monday', 'Tuesday')

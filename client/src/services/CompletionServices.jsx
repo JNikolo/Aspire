@@ -2,7 +2,7 @@ export const fetchHabit = async (habitId, reset, getToken) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/habit/${habitId}/survey`,
+      `${import.meta.env.VITE_API_URL}}/habit/${habitId}/survey`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -22,31 +22,11 @@ export const fetchHabit = async (habitId, reset, getToken) => {
     console.error("Error during habit fetch:", err);
   }
 };
-export const getHabits = async (getToken) => {
-  try {
-    const token = await getToken();
-    const response = await fetch("http://127.0.0.1:3000/habit", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch habits");
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error("Error during fetching all habits:", err);
-    throw err;
-  }
-};
 
 export const createHabit = async (getToken, data, navigate) => {
   try {
     const token = await getToken();
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/habit`, {
+    const response = await fetch("http://127.0.0.1:3000/habit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +36,7 @@ export const createHabit = async (getToken, data, navigate) => {
     });
 
     if (response.ok) {
-      navigate("/dashboard");
+      navigate("/");
     }
   } catch (err) {
     console.error("Error during habit creation:", err);
@@ -67,7 +47,7 @@ export const updateHabit = async (getToken, habitId, data, navigate) => {
   try {
     const token = await getToken();
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/habit/${habitId}/survey`,
+      `http://127.0.0.1:3000/habit/${habitId}/survey`,
       {
         method: "PUT",
         headers: {
@@ -78,7 +58,7 @@ export const updateHabit = async (getToken, habitId, data, navigate) => {
       }
     );
     if (response.ok) {
-      navigate("/dashboard");
+      navigate("/");
     }
   } catch (err) {
     console.error("Error during habit update:", err);
@@ -88,19 +68,16 @@ export const updateHabit = async (getToken, habitId, data, navigate) => {
 export const deleteHabit = async (habitId, getToken, navigate) => {
   try {
     const token = await getToken();
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/habit/${habitId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.ok) {
-      navigate("/dashboard");
+      navigate("/");
     } else {
       console.error("Failed to delete habit");
     }
