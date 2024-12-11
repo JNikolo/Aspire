@@ -1,6 +1,7 @@
 import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "../middlewares/prisma.js";
+import { clerkClient } from '@clerk/clerk-sdk-node';
 
 const profileRouter = express.Router();
 
@@ -9,32 +10,40 @@ profileRouter.use(clerkMiddleware());
 profileRouter.get("/", async (req, res) => {
   try {
     if (!req.auth || !req.auth.userId) {
-      return res
-        .status(401)
-        .json({ error: "Unauthorized access. Please log in." });
+      return res.status(401).json({ error: "Unauthorized access. Please log in." });
     }
 
-    const { userId } = req.auth;
+    const { userId } = req.auth; // `userId` comes from Clerk middleware
 
-    const user = await prisma.user.findUnique({
+    // Fetch profile name from Prisma/Supabase
+    const userProfile = await prisma.user.findUnique({
       where: { authId: userId },
       select: {
-        profileName: true,
-        profilePicture: true,
+        profileName: true,  // Prisma field for profile name
       },
     });
 
-    if (!user) {
+    if (!userProfile) {
       return res.status(404).json({
         error: "User profile not found. Please complete registration.",
       });
     }
 
-    res.json(user);
+    // Fetch profile image from Clerk
+    const user = await clerkClient.users.getUser(userId);
+    console.log(user);
+    const profileImage = user ? user.imageUrl : null;
+
+    console.log(profileImage);
+
+    const response = {
+      profileName: userProfile.profileName, // From Prisma
+      profilePicture: profileImage,         // From Clerk
+    };
+
+    res.json(response);
   } catch (err) {
-    res
-      .status(500)
-      .json({ error: "An error occurred while fetching the user profile." });
+    res.status(500).json({ error: "An error occurred while fetching the user profile." });
   }
 });
 

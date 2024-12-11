@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@clerk/clerk-react";
-import { supabase } from "../supabase/supabase";
-import { v4 as uuidv4 } from "uuid";
-import { FaPen } from "react-icons/fa";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 export const ProfilePage = () => {
-  //const { user } = useUser();
+  const { user } = useUser();
   const { getToken } = useAuth();
   const navigate = useNavigate();
 
@@ -14,9 +11,14 @@ export const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState("");
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [tempName, setTempName] = useState("");
-  const [tempImage, setTempImage] = useState("");
   const [habits, setHabits] = useState([]);
   const [communities, setCommunities] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      setProfileImage(user.imageUrl);
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -98,7 +100,6 @@ export const ProfilePage = () => {
 
         const habitsData = await response.json();
         setHabits(habitsData);
-        console.log(habitsData);
       } catch (error) {
         console.error("Error fetching habits:", error);
       }
@@ -107,24 +108,8 @@ export const ProfilePage = () => {
     fetchHabits();
   }, [getToken]);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setTempImage(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-    } else {
-      console.log("No file selected");
-    }
-  };
-
   const discardChanges = () => {
     setTempName(profileName);
-    setTempImage(profileImage);
     setIsEditingProfile(false);
   };
 
@@ -132,34 +117,6 @@ export const ProfilePage = () => {
     try {
       const token = await getToken();
       if (!token) throw new Error("Failed to retrieve auth token");
-
-      let uploadedImageUrl = profileImage;
-
-      if (tempImage.startsWith("data:image")) {
-        setProfileImage(tempImage);
-        const fileName = `public/${uuidv4()}.png`;
-
-        const response = await fetch(tempImage);
-        const blob = await response.blob();
-
-        const { data, error } = await supabase.storage
-          .from("images")
-          .upload(fileName, blob, { contentType: "image/png", upsert: true });
-
-        if (error) throw new Error(error.message);
-
-        uploadedImageUrl = `https://wmbdpoqbewenbpmsgaab.supabase.co/storage/v1/object/public/images/${data.path}`;
-
-        const oldFilePath = profileImage.split(
-          "/storage/v1/object/public/images/"
-        )[1];
-        if (oldFilePath) {
-          const { error: deleteError } = await supabase.storage
-            .from("images")
-            .remove([oldFilePath]);
-          if (deleteError) throw new Error(deleteError.message);
-        }
-      }
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/profile`, {
         method: "PUT",
@@ -169,7 +126,7 @@ export const ProfilePage = () => {
         },
         body: JSON.stringify({
           profileName: tempName,
-          profilePicture: uploadedImageUrl,
+          profilePicture: profileImage,
         }),
       });
 
@@ -177,7 +134,6 @@ export const ProfilePage = () => {
 
       const updatedUser = await response.json();
       setProfileName(updatedUser.profileName);
-      //setProfileImage(updatedUser.profilePicture);
       setIsEditingProfile(false);
     } catch (error) {
       console.error("Error saving profile changes:", error);
@@ -208,7 +164,6 @@ export const ProfilePage = () => {
             <button
               onClick={() => {
                 setTempName(profileName);
-                setTempImage(profileImage);
                 setIsEditingProfile(true);
               }}
               className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg"
@@ -218,31 +173,11 @@ export const ProfilePage = () => {
           )}
         </div>
         <div className="flex-shrink-0 relative">
-          {isEditingProfile ? (
-            <label className="cursor-pointer">
-              <img
-                src={tempImage}
-                loading="lazy"
-                className="w-36 h-36 rounded-full object-cover border-4 border-blue-300"
-              />
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-              {/* Pencil icon at top-right */}
-              <div className="absolute top-0 right-0 bg-white rounded-full p-2 shadow-md">
-                <FaPen className="text-blue-500" />
-              </div>
-            </label>
-          ) : (
             <img
               src={profileImage}
               loading="lazy"
               className="w-36 h-36 rounded-full object-cover border-4 border-blue-300"
             />
-          )}
         </div>
         <div className="ml-6 flex-grow">
           {isEditingProfile ? (
