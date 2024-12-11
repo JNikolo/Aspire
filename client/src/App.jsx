@@ -4,6 +4,8 @@ import { ChatbotBubble } from "./components/ChatbotBubble";
 import { useLocation } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CommunitiesPage from "./pages/CommunitiesPage";
 
 const routesWithNavbar = [
   "/profile",
@@ -22,6 +24,9 @@ function App() {
       {showNavbar && <NavBar />}
       <Outlet />
       {isSignedIn && <ChatbotBubble />}
+      <Routes>
+        <Route path="/" element={<CommunitiesPage />} />
+      </Routes>
     </>
   );
 }
