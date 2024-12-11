@@ -42,7 +42,7 @@ const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
                     </div>
 
                     <div className="badge badge-primary text-stone-50 h-1/5 text-xs md:text-sm h-1/12">
-                      {log.Community ? log.Community.name : "Personal"}
+                      {log.community ? log.community.name : "Personal"}
                     </div>
                     <div className="flex-grow overflow-y-scroll h-2/5">
                       <p className="text-sm md:text-md ">{log.description}</p>
