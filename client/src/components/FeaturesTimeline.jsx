@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import {
-  RiRocketLine,
-  RiShieldLine,
-  RiBrainLine,
-  RiArrowRightLine,
-  RiArrowDownLine,
-} from "react-icons/ri";
+  FaUsers,
+  FaBrain,
+  FaChartLine,
+  FaArrowRight,
+  FaArrowDown,
+} from "react-icons/fa";
+import Community from "../assets/community.jpg";
+import Coach from "../assets/coach.png";
+import Progress from "../assets/progress.jpg";
 
 const TimelineFeatures = () => {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -13,67 +16,74 @@ const TimelineFeatures = () => {
   const features = [
     {
       id: 0,
-      title: "Quick Launch",
-      icon: <RiRocketLine className="w-6 h-6" />,
-      description: "Get started in minutes with our intuitive setup process",
+      title: "Community Support",
+      icon: <FaUsers className="w-6 h-6" />,
+      description: "Connect with like-minded learners",
       content: (
         <div className="space-y-4">
-          <h3 className="text-xl font-bold">Quick Launch Features</h3>
-          <ul className="space-y-2">
-            <li>• One-click installation process</li>
-            <li>• Pre-configured templates</li>
-            <li>• Guided onboarding flow</li>
-            <li>• Instant deployment capabilities</li>
-          </ul>
+          <h3 className="text-xl font-bold">Community Engagement</h3>
           <p>
-            Our streamlined setup ensures you can go from zero to production in
-            record time. With automated configuration and intelligent defaults,
-            you'll be up and running before you know it.
+            Join a vibrant community of learners who support and motivate each
+            other. Participate in various learning activities and collaborate
+            with peers.
           </p>
+          <div className="mt-6 flex justify-center">
+            <div className="max-w-md">
+              <img
+                src={Community}
+                alt="Community collaboration"
+                className="rounded-lg shadow-md w-full h-48 object-cover"
+              />
+            </div>
+          </div>
         </div>
       ),
     },
     {
       id: 1,
-      title: "Enterprise Security",
-      icon: <RiShieldLine className="w-6 h-6" />,
-      description: "Bank-grade security with advanced encryption",
+      title: "AI Coach",
+      icon: <FaBrain className="w-6 h-6" />,
+      description: "Personalized AI-powered guidance",
       content: (
         <div className="space-y-4">
-          <h3 className="text-xl font-bold">Security Features</h3>
-          <ul className="space-y-2">
-            <li>• End-to-end encryption</li>
-            <li>• Multi-factor authentication</li>
-            <li>• Role-based access control</li>
-            <li>• Regular security audits</li>
-          </ul>
+          <h3 className="text-xl font-bold">Learning Progress</h3>
           <p>
-            Your data security is our top priority. We implement the latest
-            security protocols and regular penetration testing to ensure your
-            information stays protected.
+            Track your improvement with our AI coach. Get personalized
+            recommendations and see your performance improve over time.
           </p>
+          <div className="mt-6 flex justify-center">
+            <div className="max-w-md">
+              <img
+                src={Coach}
+                alt="AI coaching interface"
+                className="rounded-lg shadow-md w-full h-48 object-cover"
+              />
+            </div>
+          </div>
         </div>
       ),
     },
     {
       id: 2,
-      title: "AI Integration",
-      icon: <RiBrainLine className="w-6 h-6" />,
-      description: "Smart automation powered by advanced AI",
+      title: "Progress Tracking",
+      icon: <FaChartLine className="w-6 h-6" />,
+      description: "Monitor your learning journey",
       content: (
         <div className="space-y-4">
-          <h3 className="text-xl font-bold">AI Capabilities</h3>
-          <ul className="space-y-2">
-            <li>• Predictive analytics</li>
-            <li>• Automated workflows</li>
-            <li>• Smart recommendations</li>
-            <li>• Natural language processing</li>
-          </ul>
+          <h3 className="text-xl font-bold">Skill Progress</h3>
           <p>
-            Leverage the power of artificial intelligence to automate tasks,
-            gain insights, and make better decisions. Our AI engine learns from
-            your data to provide personalized experiences.
+            Monitor your progress across different skills and technologies. Set
+            goals and track your achievements.
           </p>
+          <div className="mt-6 flex justify-center">
+            <div className="max-w-md">
+              <img
+                src={Progress}
+                alt="Progress dashboard"
+                className="rounded-lg shadow-md w-full h-48 object-cover"
+              />
+            </div>
+          </div>
         </div>
       ),
     },
@@ -81,11 +91,10 @@ const TimelineFeatures = () => {
 
   return (
     <div className="container mx-auto p-4">
-      {/* Large Screen Layout */}
+      {/* Rest of the component remains the same */}
       <div className="hidden md:grid md:grid-cols-[300px_1fr] gap-8">
-        {/* Vertical Timeline */}
         <div className="relative">
-          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-brown-light opacity-20"></div>
+          <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200"></div>
 
           {features.map((feature, index) => (
             <div
@@ -93,67 +102,52 @@ const TimelineFeatures = () => {
               className={`relative pl-8 pr-4 py-4 mb-4 cursor-pointer transition-all
                 ${
                   activeFeature === index
-                    ? "bg-blue-light rounded-lg"
-                    : "hover:bg-blue-dark hover:rounded-lg"
+                    ? "bg-blue-50 rounded-lg"
+                    : "hover:bg-gray-50 hover:rounded-lg"
                 }
               `}
               onClick={() => setActiveFeature(index)}
             >
-              {/* Timeline dot */}
               <div
                 className={`absolute left-0 w-8 h-8 rounded-full border-2 flex items-center justify-center
-                ${
-                  activeFeature === index
-                    ? "bg-brown-light border-brown-light"
-                    : "bg-white border-brown-light border-opacity-40"
-                }
-              `}
+                  ${
+                    activeFeature === index
+                      ? "bg-blue-600 border-blue-600"
+                      : "bg-white border-gray-300"
+                  }
+                `}
               >
                 {activeFeature === index ? (
-                  <RiArrowRightLine className="w-4 h-4 text-white" />
+                  <FaArrowRight className="w-4 h-4 text-white" />
                 ) : null}
               </div>
-              {/* Timeline content */}
               <div className="flex items-center space-x-3">
                 <div
                   className={`p-2 rounded-lg ${
                     activeFeature === index
-                      ? "bg-blue-dark text-primary-content"
-                      : "bg-gray"
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100"
                   }`}
                 >
                   {feature.icon}
                 </div>
                 <div>
                   <h3 className="font-bold">{feature.title}</h3>
-                  <p className="text-sm opacity-70">{feature.description}</p>
+                  <p className="text-sm text-gray-600">{feature.description}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Content Area */}
-        <div className="bg-gray p-8 rounded-lg grid md:grid-cols-2 items-center gap-8">
-          {/* GIF Section */}
-          <div className="flex justify-center">
-            <img
-              src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"
-              alt="Feature GIF"
-              className="rounded-lg shadow-lg w-full max-w-sm"
-            />
-          </div>
-
-          {/* Text Section */}
-          <div>{features[activeFeature].content}</div>
+        <div className="bg-white p-8 rounded-lg shadow-sm">
+          {features[activeFeature].content}
         </div>
       </div>
 
-      {/* Small Screen Layout */}
-      <div className="md:hidden space-y-20">
-        {/* Horizontal Timeline */}
+      <div className="md:hidden space-y-16">
         <div className="relative flex justify-between items-center px-4">
-          <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-brown-light opacity-20"></div>
+          <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-gray-200"></div>
 
           {features.map((feature, index) => (
             <div
@@ -163,15 +157,15 @@ const TimelineFeatures = () => {
             >
               <div
                 className={`w-12 h-12 rounded-full border-2 flex items-center justify-center cursor-pointer
-          ${
-            activeFeature === index
-              ? "bg-blue-light border-brown-light"
-              : "bg-white border-brown-light border-opacity-40"
-          }
-        `}
+                  ${
+                    activeFeature === index
+                      ? "bg-blue-600 border-blue-600"
+                      : "bg-white border-gray-300"
+                  }
+                `}
               >
                 {activeFeature === index ? (
-                  <RiArrowDownLine className="w-6 h-6 text-white" />
+                  <FaArrowDown className="w-6 h-6 text-white" />
                 ) : (
                   feature.icon
                 )}
@@ -183,19 +177,8 @@ const TimelineFeatures = () => {
           ))}
         </div>
 
-        {/* Mobile Content Area */}
-        <div className="bg-base-200 p-6 rounded-lg flex flex-col items-center space-y-6">
-          {/* Text Section */}
-          <div className="w-full">{features[activeFeature].content}</div>
-
-          {/* GIF Section */}
-          <div className="flex justify-center">
-            <img
-              src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif"
-              alt="Feature GIF"
-              className="rounded-lg shadow-lg w-full max-w-xs"
-            />
-          </div>
+        <div className="bg-white p-6 rounded-lg shadow-sm">
+          {features[activeFeature].content}
         </div>
       </div>
     </div>
