@@ -7,6 +7,7 @@ import { SurveyPage } from "./pages/SurveyPage";
 import { HomePage } from "./pages/HomePage";
 import { SSOFallback } from "./components/SSOFallback";
 import { DashboardPage } from "./pages/DashboardPage";
+import { CommunitiesPage } from "./pages/CommunitiesPage";
 
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 
@@ -55,5 +56,9 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardPage />,
+  },
+  {
+    path: "/communities",
+    element: <CommunitiesPage />,
   },
 ]);
