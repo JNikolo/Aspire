@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import Select from "react-select";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { format, set } from "date-fns";
-import { deleteHabitLog, updateHabitLog } from "../../services/habitServices";
+import { deleteHabitLog, updateHabitLog } from "../../services/HabitServices";
 import { BsTrash3 } from "react-icons/bs";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";

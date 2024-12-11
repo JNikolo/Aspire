@@ -13,13 +13,12 @@ profileRouter.get("/", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized access. Please log in." });
     }
 
-    const { userId } = req.auth; // `userId` comes from Clerk middleware
+    const { userId } = req.auth; 
 
-    // Fetch profile name from Prisma/Supabase
     const userProfile = await prisma.user.findUnique({
       where: { authId: userId },
       select: {
-        profileName: true,  // Prisma field for profile name
+        profileName: true,  
       },
     });
 
@@ -29,7 +28,6 @@ profileRouter.get("/", async (req, res) => {
       });
     }
 
-    // Fetch profile image from Clerk
     const user = await clerkClient.users.getUser(userId);
     console.log(user);
     const profileImage = user ? user.imageUrl : null;
@@ -37,8 +35,8 @@ profileRouter.get("/", async (req, res) => {
     console.log(profileImage);
 
     const response = {
-      profileName: userProfile.profileName, // From Prisma
-      profilePicture: profileImage,         // From Clerk
+      profileName: userProfile.profileName, 
+      profilePicture: profileImage,         
     };
 
     res.json(response);
