@@ -6,7 +6,7 @@ import {
   getHabits,
   deleteHabit,
   fetchHabitLogs,
-} from "../services/habitServices";
+} from "../services/HabitServices";
 
 export const DashboardPage = () => {
   const { isSignedIn, user } = useUser();
