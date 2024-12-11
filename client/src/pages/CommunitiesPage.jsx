@@ -148,13 +148,13 @@ export const CommunitiesPage = () => {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="h-auto sm:w-auto s:h-auto md:h-60 md:w-auto lg:h-auto shadow-xl bg-stone-300"
+                className="h-auto sm:w-auto s:h-auto md:h-60 md:w-auto lg:h-auto shadow-xl bg-stone-300 rounded-box"
               >
                 {item.picture && (
                   <img
                     src={item.picture}
                     alt="post"
-                    className="w-full object-cover h-1/3"
+                    className="w-full object-cover h-1/3 rounded-t-box"
                   />
                 )}
                 <div
@@ -162,19 +162,19 @@ export const CommunitiesPage = () => {
                     item.picture ? "h-2/3" : "h-full"
                   }`}
                 >
-                  <div className="flex-grow overflow-y-clip">
-                    <h2 className="card-title flex-grow overflow-y-clip text-sm md:text-md">
+                  <div className="flex-grow overflow-y-clip ">
+                    <h2 className="card-title flex-grow overflow-y-clip text-sm md:text-md ">
                       {item.title}
                     </h2>
                   </div>
-                  <div className="badge badge-primary text-stone-50 text-xs md:text-sm h-1/12">
+                  <div className="badge badge-primary text-stone-50 text-xs md:text-sm h-1/12 ">
                     {item.community.name}
                   </div>
                   <div className="flex-grow overflow-y-scroll h-2/3">
                     <p className="text-sm md:text-md">{item.description}</p>
                   </div>
                   <div className="card-actions justify-end">
-                    <div className="badge badge-outline text-xs md:text-md lg:text-lg">
+                    <div className="badge badge-outline text-xs md:text-md lg:text-lg text-stone-600">
                       {format(new Date(item.logDate), "MMM dd")}
                     </div>
                   </div>
