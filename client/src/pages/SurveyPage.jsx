@@ -96,6 +96,8 @@ export const SurveyPage = () => {
             ? "Updating your habit..."
             : loading === "creating"
             ? "Creating your habit..."
+            : loading === "editing"
+            ? "Saving your habit..."
             : "Deleting your habit..."
         }
       />
@@ -111,7 +113,7 @@ export const SurveyPage = () => {
             {/* Frequency of Habit*/}
             <CheckboxGroup
               labelText="How Often Would You Like to Do This Habit?"
-              options={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+              options={["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]}
               register={register}
               name="frequency"
               selected={frequency}
@@ -137,7 +139,7 @@ export const SurveyPage = () => {
             {notifications && (
               <CheckboxGroup
                 labelText="On Which Days Would You Like to Receive Notifications?"
-                options={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+                options={["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"]}
                 register={register}
                 name="selectedDays"
                 selected={selectedDays}

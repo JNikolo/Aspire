@@ -108,3 +108,82 @@ export const deleteHabit = async (habitId, getToken, navigate) => {
     console.error("Error during habit deletion:", err);
   }
 };
+
+export const postHabitLog = async (habitId, data, getToken) => {
+  try {
+    const token = await getToken();
+    const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}/log`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create habit log");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error during habit log creation:", err);
+    throw err;
+  }
+};
+
+export const fetchHabitLogs = async (habitId, getToken) => {
+  try {
+    const token = await getToken();
+    const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}/log`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch habit logs");
+    }
+
+    return await response.json();
+  } catch (err) {
+    console.error("Error during habit logs fetch:", err);
+    throw err;
+  }
+};
+
+export const updateHabitLog = async (habitId, logId, data, getToken) => {
+  try {
+    const token = await getToken();
+    const response = await fetch(
+      `http://127.0.0.1:3000/habit/${habitId}/log/${logId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+  } catch (err) {
+    console.error("Error during habit log update:", err);
+  }
+};
+
+export const deleteHabitLog = async (habitId, logId, getToken) => {
+  try {
+    const token = await getToken();
+    const response = await fetch(
+      `http://127.0.0.1:3000/habit/${habitId}/log/${logId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  } catch (err) {
+    console.error("Error during habit log deletion:", err);
+  }
+};

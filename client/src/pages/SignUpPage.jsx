@@ -4,9 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FormInput } from "../components/FormInput";
-import { LuMail, LuUser } from "react-icons/lu";
-//LuAlertCircle wasn't working so I replaced it with AiOutlineWarning
-import { AiOutlineWarning } from 'react-icons/ai'; // Example replacement
+import { LuMail, LuCircleAlert, LuUser } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { SsoButton } from "../components/SsoButton";
 
@@ -135,7 +133,7 @@ export function SignUpPage() {
 
           {error && (
             <div className="alert alert-error mb-6">
-              <AiOutlineWarning className="h-6 w-6 flex-shrink-0" />
+              <LuCircleAlert className="h-6 w-6 flex-shrink-0" />
               <span className="text-sm">{error}</span>
             </div>
           )}
