@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 import { useAuth, useUser } from "@clerk/clerk-react";
-import { format, set } from "date-fns";
+import { format, parseISO, set } from "date-fns";
 import { deleteHabitLog, updateHabitLog } from "../../services/HabitServices";
 import { BsTrash3 } from "react-icons/bs";
 import { createClient } from "@supabase/supabase-js";
@@ -98,15 +98,6 @@ const CompletionModal = ({
       };
     }
   }, [reset, modalId]);
-
-  useEffect(() => {
-    if (habitLogs.length > 0) {
-      const sortedLogs = [...habitLogs].sort(
-        (a, b) => new Date(b.logDate) - new Date(a.logDate)
-      );
-      setHabitLogs(sortedLogs);
-    }
-  }, [habitLogs]);
 
   const handleTakePhoto = async () => {
     setIsCameraOpen(true);
@@ -246,7 +237,7 @@ const CompletionModal = ({
     }
     setIsLoading(true);
     if (isEditMode) {
-      data.logDate = completionDate || new Date();
+      data.logDate = completionDate || new Date().toISOString();
 
       await updateHabitLog(habit.id, log.id, data, getToken)
         .then(() => {
@@ -262,7 +253,7 @@ const CompletionModal = ({
           setIsLoading(false); // Ensure loading state is reset in case of error
         });
     } else {
-      data.logDate = completionDate || new Date();
+      data.logDate = completionDate || new Date().toISOString();
       await postHabitLog(habit.id, data, getToken)
         .then(() => {
           const modal = document.getElementById(modalId);

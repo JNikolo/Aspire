@@ -202,12 +202,17 @@ habitRouter.get("/:habitId/log", async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    const habitLogs = await prisma.habitLog.findMany({
+    let habitLogs = await prisma.habitLog.findMany({
       where: { habitId: parseInt(habitId) },
       include: {
         community: true, // Include the community field
       },
     });
+
+    // Sort logs by date in ascending order
+    habitLogs = habitLogs.sort(
+      (a, b) => new Date(a.logDate) - new Date(b.logDate)
+    );
 
     res.json(habitLogs);
   } catch (err) {

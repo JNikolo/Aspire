@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { MdAddCircle } from "react-icons/md";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
 const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
   useEffect(() => {
@@ -50,7 +50,7 @@ const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
 
                     <div className="card-actions justify-end h-1/5">
                       <div className="badge badge-outline text-xs md:text-md lg:text-lg">
-                        {format(new Date(log.logDate), "MMM d")}
+                        {format(parseISO(log.logDate), "MMM d")}
                       </div>
                     </div>
                   </div>
