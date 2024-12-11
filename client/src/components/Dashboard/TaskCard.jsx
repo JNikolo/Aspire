@@ -3,7 +3,7 @@ import Timeline from "./Timeline";
 import CompletionModal from "./CompletionModal";
 import { LuPen, LuArrowBigLeft, LuArrowBigRight } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { fetchHabitLogs, postHabitLog } from "../../services/habitServices";
+import { fetchHabitLogs, postHabitLog } from "../../services/HabitServices";
 import { useAuth } from "@clerk/clerk-react";
 
 import {

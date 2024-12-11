@@ -204,7 +204,7 @@ habitRouter.get("/:habitId/log", async (req, res) => {
     const habitLogs = await prisma.habitLog.findMany({
       where: { habitId: parseInt(habitId) },
       include: {
-        Community: true, // Include the community field
+        community: true, // Include the community field
       },
     });
 

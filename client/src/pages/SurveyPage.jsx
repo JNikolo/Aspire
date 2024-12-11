@@ -144,6 +144,7 @@ export const SurveyPage = () => {
                 name="selectedDays"
                 selected={selectedDays}
                 error={errors.selectedDays?.message}
+                isRequired={notifications ? true : false}
               />
             )}
             {/* Save Button */}
