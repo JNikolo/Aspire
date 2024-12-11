@@ -182,9 +182,6 @@ const CompletionModal = ({
   };
 
   const handleDeleteButton = () => {
-    console.log("hello");
-    console.log(habit.id, log.id);
-
     deleteHabitLog(habit.id, log.id, getToken).then(() => {
       const modal = document.getElementById(modalId);
       if (modal) {
@@ -228,7 +225,7 @@ const CompletionModal = ({
   const onSubmit = async (data) => {
     if (data.picture && data.picture.startsWith("data:image")) {
       const base64Data = data.picture.split(",")[1];
-      console.log(base64Data);
+
       convertImageDataUpload(base64Data);
     }
 

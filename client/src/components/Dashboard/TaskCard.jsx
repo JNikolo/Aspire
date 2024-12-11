@@ -20,7 +20,6 @@ import {
   addMonths,
   subMonths,
   isSameDay,
-  parseISO,
 } from "date-fns";
 
 const TaskCard = (props) => {
@@ -30,32 +29,32 @@ const TaskCard = (props) => {
   const [habitLogs, setHabitLogs] = useState([]);
   const selectedDays = task.frequency.map((freq) => freq.dayOfWeek.slice(0, 3)); // Select only the first 3 letters of each day
   const [toggleDate, setToggleDate] = useState(null);
-  const [currentDate, setCurrentDate] = useState(new Date().toISOString()); // Track the current date
+  const [currentDate, setCurrentDate] = useState(new Date()); // Track the current date
   const [currentWeekStart, setCurrentWeekStart] = useState(
-    startOfWeek(new Date().toISOString(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
+    startOfWeek(new Date(), { weekStartsOn: 0 }) // Start of the current week (Sunday)
   );
-  const [currentMonth, setCurrentMonth] = useState(
-    startOfMonth(new Date().toISOString())
-  );
-  const [currentYear, setCurrentYear] = useState(
-    startOfYear(new Date().toISOString())
-  );
+  const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
+  const [currentYear, setCurrentYear] = useState(startOfYear(new Date()));
 
   const [monthDates, setMonthDates] = useState([]);
   const [weekDates, setWeekDates] = useState([]);
   const [monthHover, setMonthHover] = useState(null);
   const [log, setLog] = useState(null);
+
   useEffect(() => {
+    // Fetch habit logs when the component mounts
     fetchHabitLogs(taskId, getToken).then((data) => {
       setHabitLogs(data);
     });
   }, [taskId, toggleDate]);
-  //check if date is in habitLogs
+
   const checkDate = (date) => {
-    return habitLogs.some((log) => isSameDay(parseISO(log.logDate), date));
+    // Check if the date is in the habit logs
+    return habitLogs.some((log) => isSameDay(new Date(log.logDate), date));
   };
 
   useEffect(() => {
+    // Update the month dates when the current month changes
     if (selectedDays && selectedDays.length > 0) {
       const newMonthDates = eachDayOfInterval({
         start: startOfMonth(currentMonth),
@@ -66,6 +65,7 @@ const TaskCard = (props) => {
   }, [currentMonth]);
 
   useEffect(() => {
+    // Update the week dates when the current week start changes
     if (selectedDays && selectedDays.length > 0) {
       const newWeekDates = eachDayOfInterval({
         start: startOfWeek(currentWeekStart, { weekStartsOn: 0 }),
@@ -81,8 +81,8 @@ const TaskCard = (props) => {
   useEffect(() => {
     if (selectedDays && selectedDays.length > 0) {
       const newYearDates = eachDayOfInterval({
-        start: startOfYear(new Date().toISOString()),
-        end: endOfYear(new Date().toISOString()),
+        start: startOfYear(new Date()),
+        end: endOfYear(new Date()),
       }).filter((date) => {
         const formattedDate = format(date, "EEE");
 
@@ -114,17 +114,15 @@ const TaskCard = (props) => {
   };
 
   const goToCurrentWeek = () => {
-    setCurrentWeekStart(
-      startOfWeek(new Date().toISOString(), { weekStartsOn: 0 })
-    );
+    setCurrentWeekStart(startOfWeek(new Date(), { weekStartsOn: 0 }));
   };
 
   const goToCurrentMonth = () => {
-    setCurrentMonth(startOfMonth(new Date().toISOString()));
+    setCurrentMonth(startOfMonth(new Date()));
   };
 
   const goToCurrentYear = () => {
-    setCurrentYear(startOfYear(new Date().toISOString()));
+    setCurrentYear(startOfYear(new Date()));
   };
 
   const [completionDate, setCompletionDate] = useState(null);
@@ -132,7 +130,6 @@ const TaskCard = (props) => {
   const [completion, setCompletion] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const handleCheckbox = (date) => {
-    console.log("date", date);
     setCompletionDate(format(date, "MMM d, yyyy"));
     setToggleDate(date);
   };
@@ -149,19 +146,19 @@ const TaskCard = (props) => {
   };
 
   useEffect(() => {
-    if (completionDate && toggleDate) {
+    if (toggleDate) {
       setEditMode(false);
       //check if date exists in habit log
       //set state log to the found log
       const log = habitLogs.find((log) =>
-        isSameDay(parseISO(log.logDate), completionDate)
+        isSameDay(new Date(log.logDate), completionDate)
       );
       setLog(log);
 
       //if date exists in habit log
       if (
         habitLogs.some((log) =>
-          isSameDay(parseISO(log.logDate), completionDate)
+          isSameDay(new Date(log.logDate), completionDate)
         )
       ) {
         //set edit mode to true
@@ -174,21 +171,15 @@ const TaskCard = (props) => {
 
   const isCurrentWeek = isSameDay(
     currentWeekStart,
-    startOfWeek(new Date().toISOString(), { weekStartsOn: 0 })
+    startOfWeek(new Date(), { weekStartsOn: 0 })
   );
 
-  const isCurrentMonth = isSameDay(
-    currentMonth,
-    startOfMonth(new Date().toISOString())
-  );
-  const isCurrentYear = isSameDay(
-    currentYear,
-    startOfYear(new Date().toISOString())
-  );
+  const isCurrentMonth = isSameDay(currentMonth, startOfMonth(new Date()));
+  const isCurrentYear = isSameDay(currentYear, startOfYear(new Date()));
   const isToday = (date) => {
     return isSameDay(
       format(date, "yyyy-MM-dd"),
-      format(new Date().toISOString(), "yyyy-MM-dd")
+      format(new Date(), "yyyy-MM-dd")
     );
   };
   return (
@@ -459,9 +450,7 @@ const TaskCard = (props) => {
         <div className="max-w-[866px]">
           <Timeline
             newPost={() => {
-              const date = new Date().toISOString();
-              console.log(date);
-              setToggleDate(date);
+              setToggleDate(new Date());
               document.getElementById(`my_modal_${taskId}`).showModal();
             }}
             habit={task}

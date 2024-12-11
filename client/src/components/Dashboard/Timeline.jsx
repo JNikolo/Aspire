@@ -26,7 +26,7 @@ const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
                     <img
                       src={log.picture}
                       alt="loading..."
-                      className="w-full p-1 object-cover h-2/5 rounded-box"
+                      className="w-full p-1 object-cover h-2/5 rounded-t-box"
                     />
                   )}
 
