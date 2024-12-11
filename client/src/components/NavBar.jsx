@@ -8,7 +8,6 @@ export const NavBar = () => {
   return (
     <div className="navbar bg-white">
       <div className="navbar-start">
-        {/* dropdown will be visible in md and sm screens */}
         <div className="dropdown">
           <button
             className="btn btn-ghost lg:hidden cursor-pointer"
@@ -29,7 +28,6 @@ export const NavBar = () => {
               />
             </svg>
           </button>
-          {/* access dashboard and communities pages */}
           {isDropdownOpen && (
             <ul
               className="menu menu-sm dropdown-content bg-white rounded-box z-[50] mt-3 w-52 p-2 shadow text-brown-dark"
@@ -46,12 +44,10 @@ export const NavBar = () => {
             </ul>
           )}
         </div>
-        {/* logo */}
         <a className="flex items-center">
           <img src="/aspire.jpg" alt="Aspire Logo" className="h-10 w-auto" />
         </a>
       </div>
-      {/* navbar items on lg screen */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-brown-dark">
           <li>
@@ -65,11 +61,9 @@ export const NavBar = () => {
           </li>
         </ul>
       </div>
-      {/* logout from clerk */}
       <div className="navbar-end">
         <ul>
           <li>
-            {/* after logout, bring user to landing page */}
             <UserButton afterSignOutUrl="/" showName userProfileMode="modal" />
           </li>
         </ul>
