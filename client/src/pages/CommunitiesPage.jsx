@@ -83,20 +83,21 @@ export const CommunitiesPage = () => {
   return (
     <>
       <NavBar />
-      <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
-        <div className="flex flex-col items-center">
-          <h1 className="text-4xl font-bold text-blue-light mt-8">
+      <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center px-4 sm:px-6 md:px-8">
+        <div className="flex flex-col items-center w-full max-w-7xl mx-auto">
+          <h1 className="text-4xl font-bold text-blue-light mt-8 text-center">
             Communities
           </h1>
-          <p className="text-gray mt-2">
+          <p className="text-gray mt-2 text-center">
             Join a community to connect with like-minded individuals.
           </p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full max-w">
+
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full max-w-full mx-auto">
           {displayCommunities.map((community) => (
             <div
               key={community.value}
-              className="card bg-white/90 hover:bg-white transition-colors flex flex-col items-center justify-center p-5 rounded-lg shadow-md h-32 w-60 cursor-pointer"
+              className="card bg-white/90 hover:bg-white transition-colors flex flex-col items-center justify-center p-5 rounded-lg shadow-md h-32 w-full max-w-xs mx-auto cursor-pointer"
               onClick={() => setSelectedCommunities(community)}
             >
               <div className="text-xl font-bold text-blue-light text-center">
@@ -107,9 +108,10 @@ export const CommunitiesPage = () => {
               </button>
             </div>
           ))}
+
           {showAll ? (
             <div
-              className="card bg-white/90 hover:bg-white transition-colors flex items-center justify-center cursor-pointer p-5 shadow-md h-32 w-60"
+              className="card bg-white/90 hover:bg-white transition-colors flex items-center justify-center cursor-pointer p-5 shadow-md h-32 w-full max-w-xs mx-auto"
               onClick={() => setShowAll(false)}
             >
               <div className="text-xl font-bold text-brown-dark">
@@ -119,7 +121,7 @@ export const CommunitiesPage = () => {
           ) : (
             communityOptions.length > initialDisplay && (
               <div
-                className="card bg-white/90 hover:bg-white transition-colors flex items-center justify-center cursor-pointer p-5 rounded-lg shadow-md h-32 w-60"
+                className="card bg-white/90 hover:bg-white transition-colors flex items-center justify-center cursor-pointer p-5 rounded-lg shadow-md h-32 w-full max-w-xs mx-auto"
                 onClick={() => setShowAll(true)}
               >
                 <div className="text-xl font-bold text-brown-dark">
@@ -129,6 +131,9 @@ export const CommunitiesPage = () => {
             )
           )}
         </div>
+
+
+
 
         <div className="mt-8 w-full max-w-10xl flex">
           <div className="card-body bg-white bg-opacity-50 shadow-md p-6 rounded-lg">
