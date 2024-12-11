@@ -1,14 +1,19 @@
-import { react } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { UserButton } from "@clerk/clerk-react";
 
 export const NavBar = () => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   return (
     <div className="navbar bg-white">
       <div className="navbar-start">
         {/* dropdown will be visible in md and sm screens */}
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <button
+            className="btn btn-ghost lg:hidden cursor-pointer"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -23,22 +28,23 @@ export const NavBar = () => {
                 d="M4 6h16M4 12h8m-8 6h16"
               />
             </svg>
-          </div>
+          </button>
           {/* access dashboard and communities pages */}
-          <ult
-            abIndex={0}
-            className="menu menu-sm dropdown-content bg-white rounded-box z-[1] mt-3 w-52 p-2 shadow text-brown-dark"
-          >
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/communities">Communities</Link>
-            </li>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-          </ult>
+          {isDropdownOpen && (
+            <ul
+              className="menu menu-sm dropdown-content bg-white rounded-box z-[50] mt-3 w-52 p-2 shadow text-brown-dark"
+            >
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/communities">Communities</Link>
+              </li>
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+            </ul>
+          )}
         </div>
         {/* logo */}
         <a className="flex items-center">
