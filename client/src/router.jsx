@@ -8,6 +8,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { HomePage } from "./pages/HomePage";
 import { SSOFallback } from "./components/SSOFallback";
 import { DashboardPage } from "./pages/DashboardPage";
+import { CommunitiesPage } from "./pages/CommunitiesPage";
 
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 import { RootLayout } from "./components/RootLayout";
@@ -61,5 +62,17 @@ export const router = createBrowserRouter([
   {
     path: "/sso-fallback",
     element: <SSOFallback />,
+  },
+  {
+    path: "/survey/new",
+    element: <SurveyPage />,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardPage />,
+  },
+  {
+    path: "/communities",
+    element: <CommunitiesPage />,
   },
 ]);
