@@ -1,17 +1,13 @@
-import { React, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
 
 const communityOptions = [
-  { value: "1", label: "Book Club" },
-  { value: "2", label: "Fitness Goals" },
-  { value: "3", label: "Running Crew" },
-  { value: "4", label: "Code & Create" },
-  { value: "5", label: "Mindful Living" },
-  { value: "6", label: "Language Learners" },
-  { value: "7", label: "Music Journey" },
-  { value: "8", label: "Culinary Adventures" },
-  { value: "9", label: "Creative Crafts" },
-  { value: "10", label: "Sustainable Living" },
+  { value: "1", label: "Mindful Living" },
+  { value: "2", label: "Language Learners" },
+  { value: "3", label: "Music Journey" },
+  { value: "4", label: "Culinary Adventures" },
+  { value: "5", label: "Creative Crafts" },
+  { value: "6", label: "Sustainable Living" },
 ];
 
 const log = [
@@ -58,6 +54,8 @@ const log = [
 ];
 
 export const CommunitiesPage = () => {
+  const [items, setItems] = useState(log);
+  const [filter, setFilter] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [selectedCommunities, setSelectedCommunities] = useState(
     communityOptions[0]
@@ -67,6 +65,20 @@ export const CommunitiesPage = () => {
     ? communityOptions
     : communityOptions.slice(0, initialDisplay);
 
+  const handleCommunityChange = (event) => {
+    const selectedCommunity = event.target.value;
+    setFilter(selectedCommunity);
+
+    if (selectedCommunity) {
+      const filteredItems = log.filter(
+        (item) => item.community.name === selectedCommunity
+      );
+      setItems(filteredItems);
+    } else {
+      setItems(log);
+    }
+  };
+
   return (
     <div className="bg-[url('assets/mountain.jpeg')] bg-cover min-h-screen flex flex-col items-center p-4">
       <div className="flex flex-col items-center">
@@ -75,11 +87,11 @@ export const CommunitiesPage = () => {
           Join a community to connect with like-minded individuals.
         </p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 lg:pl-10 gap-4 mt-8 w-full max-w">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full max-w">
         {displayCommunities.map((community) => (
           <div
             key={community.value}
-            className="card bg-white/90 hover:bg-white transition-colors flex flex-col items-center justify-center p-5 rounded-lg shadow-md h-32 w-60 cursor pointer display-flex"
+            className="card bg-white/90 hover:bg-white transition-colors flex flex-col items-center justify-center p-5 rounded-lg shadow-md h-32 w-60 cursor-pointer"
             onClick={() => setSelectedCommunities(community)}
           >
             <div className="text-xl font-bold text-blue-light text-center">
@@ -90,7 +102,6 @@ export const CommunitiesPage = () => {
             </button>
           </div>
         ))}
-        {/* display more than 4 communities  */}
         {showAll ? (
           <div
             className="card bg-white/90 hover:bg-white transition-colors flex items-center justify-center cursor-pointer p-5 shadow-md h-32 w-60"
@@ -110,54 +121,67 @@ export const CommunitiesPage = () => {
         )}
       </div>
 
-      {/* display community posts */}
       <div className="mt-8 w-full max-w-10xl flex">
         <div className="card-body bg-white bg-opacity-50 shadow-md p-6 rounded-lg">
-          <h2 className="text-2xl font-bold text-blue-light">
-            {selectedCommunities.label}
+          <h2 className="text-4xl font-bold text-blue-light text-center">
+            Community Feed
           </h2>
-          <p className="text-gray mt-2">Explore posts from this community.</p>
-          {log.map((log) => (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 lg:pl-10 gap-4 mt-8 w-full max-w">
+          <label className="form-control w-full max-w-xs text-center">
+            <div className="label">
+              <p className="text-stone-600 mt-2">
+                Explore posts from this community.
+              </p>
+            </div>
+            <select
+              className="select select-bordered bg-slate-200 text-stone-600"
+              value={filter}
+              onChange={handleCommunityChange}
+            >
+              <option value="">All Communities</option>
+              <option value="Code & Create">Code & Create</option>
+              <option value="Book Club">Book Club</option>
+              <option value="Running Crew">Running Crew</option>
+              <option value="Fitness Goals">Fitness Goals</option>
+            </select>
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 w-full max-w">
+            {items.map((item) => (
               <div
-                key={log.id}
-                className="w-32 md:w-48 shadow-xl h-60 md:h-68 bg-stone-300"
+                key={item.id}
+                className="h-auto sm:w-auto s:h-auto md:h-60 md:w-auto lg:h-auto shadow-xl bg-stone-300"
               >
-                {log.picture && (
+                {item.picture && (
                   <img
-                    src={log.picture}
-                    alt="running"
+                    src={item.picture}
+                    alt="post"
                     className="w-full object-cover h-1/3"
                   />
                 )}
                 <div
-                  className={`card-body rounded-box  flex-none p-2 bg-stone-300 text-black ${
-                    log.picture ? "h-2/3" : "h-full"
+                  className={`card-body rounded-box flex-none p-2 bg-stone-300 text-black ${
+                    item.picture ? "h-2/3" : "h-full"
                   }`}
                 >
                   <div className="flex-grow overflow-y-clip">
                     <h2 className="card-title flex-grow overflow-y-clip text-sm md:text-md">
-                      {log.title}
+                      {item.title}
                     </h2>
                   </div>
-
                   <div className="badge badge-primary text-stone-50 text-xs md:text-sm h-1/12">
-                    {log.community.name}
+                    {item.community.name}
                   </div>
-
                   <div className="flex-grow overflow-y-scroll h-2/3">
-                    <p className="text-sm md:text-md ">{log.description}</p>
+                    <p className="text-sm md:text-md">{item.description}</p>
                   </div>
-
                   <div className="card-actions justify-end">
                     <div className="badge badge-outline text-xs md:text-md lg:text-lg">
-                      {format(new Date(log.logDate), "MMM dd")}
+                      {format(new Date(item.logDate), "MMM dd")}
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
