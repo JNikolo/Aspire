@@ -35,6 +35,9 @@ export const NavBar = () => {
             <li>
               <Link to="/communities">Communities</Link>
             </li>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
           </ult>
         </div>
         {/* logo */}
@@ -50,6 +53,9 @@ export const NavBar = () => {
           </li>
           <li>
             <Link to="/communities">Communities</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile</Link>
           </li>
         </ul>
       </div>

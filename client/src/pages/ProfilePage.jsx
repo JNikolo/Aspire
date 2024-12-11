@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
-import { supabase } from "../supabase/supabase" 
-import { v4 as uuidv4 } from 'uuid'; 
-import { FaPen } from 'react-icons/fa';
+import { supabase } from "../supabase/supabase";
+import { v4 as uuidv4 } from "uuid";
+import { FaPen } from "react-icons/fa";
 
 export const ProfilePage = () => {
   //const { user } = useUser();
@@ -24,11 +24,14 @@ export const ProfilePage = () => {
         const token = await getToken();
         if (!token) throw new Error("Failed to retrieve auth token");
 
-        const response = await fetch("http://localhost:3000/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/profile`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -51,11 +54,14 @@ export const ProfilePage = () => {
         const token = await getToken();
         if (!token) throw new Error("Failed to retrieve auth token");
 
-        const response = await fetch("http://localhost:3000/profile/communities", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/profile/communities`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -77,11 +83,14 @@ export const ProfilePage = () => {
         const token = await getToken();
         if (!token) throw new Error("Failed to retrieve auth token");
 
-        const response = await fetch("http://localhost:3000/profile/habits", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/profile/habits`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -89,6 +98,7 @@ export const ProfilePage = () => {
 
         const habitsData = await response.json();
         setHabits(habitsData);
+        console.log(habitsData);
       } catch (error) {
         console.error("Error fetching habits:", error);
       }
@@ -101,17 +111,16 @@ export const ProfilePage = () => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-  
+
       reader.onloadend = () => {
         setTempImage(reader.result);
       };
-  
-      reader.readAsDataURL(file); 
+
+      reader.readAsDataURL(file);
     } else {
       console.log("No file selected");
     }
   };
-  
 
   const discardChanges = () => {
     setTempName(profileName);
@@ -123,25 +132,27 @@ export const ProfilePage = () => {
     try {
       const token = await getToken();
       if (!token) throw new Error("Failed to retrieve auth token");
-  
-      let uploadedImageUrl = profileImage; 
-  
+
+      let uploadedImageUrl = profileImage;
+
       if (tempImage.startsWith("data:image")) {
         setProfileImage(tempImage);
         const fileName = `public/${uuidv4()}.png`;
-  
+
         const response = await fetch(tempImage);
         const blob = await response.blob();
-  
+
         const { data, error } = await supabase.storage
           .from("images")
           .upload(fileName, blob, { contentType: "image/png", upsert: true });
-  
+
         if (error) throw new Error(error.message);
-  
+
         uploadedImageUrl = `https://wmbdpoqbewenbpmsgaab.supabase.co/storage/v1/object/public/images/${data.path}`;
-  
-        const oldFilePath = profileImage.split("/storage/v1/object/public/images/")[1];
+
+        const oldFilePath = profileImage.split(
+          "/storage/v1/object/public/images/"
+        )[1];
         if (oldFilePath) {
           const { error: deleteError } = await supabase.storage
             .from("images")
@@ -149,8 +160,8 @@ export const ProfilePage = () => {
           if (deleteError) throw new Error(deleteError.message);
         }
       }
-  
-      const response = await fetch("http://localhost:3000/profile", {
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -161,9 +172,9 @@ export const ProfilePage = () => {
           profilePicture: uploadedImageUrl,
         }),
       });
-  
+
       if (!response.ok) throw new Error("Failed to save profile changes");
-  
+
       const updatedUser = await response.json();
       setProfileName(updatedUser.profileName);
       //setProfileImage(updatedUser.profilePicture);
@@ -172,7 +183,6 @@ export const ProfilePage = () => {
       console.error("Error saving profile changes:", error);
     }
   };
-  
 
   return (
     <div className="bg-blue-100 min-h-screen flex flex-col items-center p-6">
@@ -243,18 +253,20 @@ export const ProfilePage = () => {
               className="text-3xl font-bold text-black mb-4 border rounded-lg p-2 bg-white"
             />
           ) : (
-            <h2 className="text-3xl font-bold text-black mb-4">{profileName}</h2>
+            <h2 className="text-3xl font-bold text-black mb-4">
+              {profileName}
+            </h2>
           )}
           {/* Communities */}
           <div className="flex flex-wrap gap-4">
             {communities.map((community, index) => (
-                <div
-                  key={index}
-                  className="bg-blue-100 rounded-lg px-6 py-3 text-black shadow-md hover:bg-blue-200 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
-                >
-                  {community}
-                </div>
-              ))}
+              <div
+                key={index}
+                className="bg-blue-100 rounded-lg px-6 py-3 text-black shadow-md hover:bg-blue-200 transition-all duration-300 ease-in-out transform hover:scale-105 cursor-pointer"
+              >
+                {community}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -267,7 +279,10 @@ export const ProfilePage = () => {
             onClick={() => navigate("/survey/new")}
             className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg"
           >
-            New Habit <span role="img" aria-label="new habit">🌱</span>
+            New Habit{" "}
+            <span role="img" aria-label="new habit">
+              🌱
+            </span>
           </button>
         </div>
 
@@ -277,14 +292,18 @@ export const ProfilePage = () => {
               key={index}
               className="bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4"
             >
-              <h4 className="text-xl font-semibold text-black">{habit.habitName}</h4>
+              <h4 className="text-xl font-semibold text-black">
+                {habit.habitName}
+              </h4>
               <div className="flex flex-wrap gap-3">
-                {habit.HabitLog.map((log, logIndex) => (
+                {habit.HabitLogs.map((log, logIndex) => (
                   <div
                     key={logIndex}
                     className="bg-green-100 rounded-full px-6 py-2 text-green-800 text-sm font-medium flex items-center gap-2 hover:bg-green-200 transition-all duration-300 ease-in-out"
                   >
-                    <span role="img" aria-label="log-date">📅</span>
+                    <span role="img" aria-label="log-date">
+                      📅
+                    </span>
                     <span className="hover:underline">
                       {new Date(log.logDate).toLocaleDateString()}
                     </span>
