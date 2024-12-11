@@ -185,7 +185,7 @@ const CompletionModal = ({
     deleteHabitLog(habit.id, log.id, getToken).then(() => {
       const modal = document.getElementById(modalId);
       if (modal) {
-        toggleCompletion(completionDate);
+        toggleCompletion(toggleDate);
         setToggleDate(null);
         modal.close();
       }
@@ -242,7 +242,8 @@ const CompletionModal = ({
           const modal = document.getElementById(modalId);
           if (modal) {
             modal.close();
-            toggleCompletion(completionDate);
+
+            toggleCompletion(toggleDate);
             setToggleDate(null);
           }
         })

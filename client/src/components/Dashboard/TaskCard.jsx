@@ -136,11 +136,8 @@ const TaskCard = (props) => {
 
   const toggleCompletion = (date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
-
-    setCompletion((prevCompletion) => ({
-      ...prevCompletion,
-      [formattedDate]: !prevCompletion[formattedDate], // Toggle status
-    }));
+    console.log("formattedDate this should be checked after", formattedDate); // Check the formatted date
+    console.log("completion", completion); // Check the completion state
     setToggleDate(null);
     document.getElementById(`my_modal_${taskId}`).close();
   };
@@ -265,7 +262,6 @@ const TaskCard = (props) => {
               <div className="flex flex-row justify-evenly w-4/5 ">
                 {weekDates.map((date) => {
                   const formattedDate = format(date, "yyyy-MM-dd");
-
                   const isCompleted = checkDate(date);
                   return (
                     <div
