@@ -125,6 +125,7 @@ const TaskCard = (props) => {
   const [completion, setCompletion] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const handleCheckbox = (date) => {
+    console.log("date", date);
     setCompletionDate(format(date, "MMM d, yyyy"));
     setToggleDate(date);
   };
@@ -445,7 +446,9 @@ const TaskCard = (props) => {
         <div className="max-w-[866px]">
           <Timeline
             newPost={() => {
-              setToggleDate(new Date());
+              const date = new Date();
+              console.log(date);
+              setToggleDate(date);
               document.getElementById(`my_modal_${taskId}`).showModal();
             }}
             habit={task}
