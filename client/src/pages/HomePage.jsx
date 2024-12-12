@@ -4,6 +4,9 @@ import Shrek from "../assets/shrek.png";
 import Mountain from "../assets/mountain.jpeg";
 import Logo from "../assets/logo.svg";
 import VideoDemo from "../assets/VideoDemo.mp4";
+import Calender_2 from "../assets/Calender.png";
+import Chat from "../assets/Chat.png";
+import Community from "../assets/Community.png";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -19,17 +22,17 @@ export const HomePage = () => {
   const carouselItems = [
     {
       id: 1,
-      src: { Mountain },
+      src: { Calender_2 },
       alt: "Slide 1",
     },
     {
       id: 2,
-      src: "https://via.placeholder.com/600x300?text=Slide+2",
+      src: { Chat },
       alt: "Slide 2",
     },
     {
       id: 3,
-      src: "https://via.placeholder.com/600x300?text=Slide+3",
+      src: { Community },
       alt: "Slide 3",
     },
   ];
