@@ -64,7 +64,7 @@ export function LoginPage() {
         redirectUrlComplete: "/sso-fallback",
       });
     } catch (err) {
-      console.error("Error during Google sign in:", err);
+      console.error("Error during Google sign in");
       setError("An error occurred during Google sign in");
     } finally {
       setLoading(false);

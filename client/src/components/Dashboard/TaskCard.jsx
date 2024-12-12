@@ -136,8 +136,6 @@ const TaskCard = (props) => {
 
   const toggleCompletion = (date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
-    console.log("formattedDate this should be checked after", formattedDate); // Check the formatted date
-    console.log("completion", completion); // Check the completion state
     setToggleDate(null);
     document.getElementById(`my_modal_${taskId}`).close();
   };

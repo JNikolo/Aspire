@@ -25,7 +25,6 @@ habitRouter.get("/", async (req, res) => {
         selectedDays: true, // Include the selectedDays field if needed
       },
     });
-    console.log(habits);
     res.json(habits);
   } catch (err) {
     console.error("Error during habits fetch:", err);
@@ -261,7 +260,6 @@ habitRouter.put("/:habitId/log/:logId", async (req, res) => {
     const { habitId, logId } = req.params;
     const { title, description, picture, logDate, isPublic, communityId } =
       req.body;
-    console.log(req.body);
     const user = await prisma.user.findUnique({ where: { authId: userId } });
 
     if (!user) {
@@ -299,52 +297,3 @@ habitRouter.put("/:habitId/log/:logId", async (req, res) => {
 });
 
 export default habitRouter;
-
-// export const postHabitLog = async (habitId, data, getToken) => {
-//   try {
-//     const token = await getToken();
-//     const response = await fetch(`http://127.0.0.1:3000/habit/${habitId}/log`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: JSON.stringify(data),
-//     });
-//   } catch (err) {
-//     console.error("Error during habit log creation:", err);
-//   }
-// };
-
-//habit schema for prisma
-// model Habit {
-//   id            Int                @id @default(autoincrement())
-//   habitName     String
-//   notifications Boolean
-//   userId        String
-//   createdAt     DateTime           @default(now())
-//   updatedAt     DateTime           @updatedAt
-//   user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   frequency     HabitFrequency[]
-//   HabitLog      HabitLog[]
-//   selectedDays  HabitSelectedDay[]
-
-//   @@unique([habitName, userId])
-// }
-
-// model HabitLog {
-//   id          Int        @id @default(autoincrement())
-//   habitId     Int
-//   communityId Int?
-//   title       String
-//   description String?
-//   picture     String?
-//   logDate     DateTime
-//   createdAt   DateTime   @default(now())
-//   updatedAt   DateTime
-//   isPublic    Boolean
-//   Community   Community? @relation(fields: [communityId], references: [id])
-//   Habit       Habit      @relation(fields: [habitId], references: [id], onDelete: Cascade)
-
-//   @@unique([habitId, logDate])
-// }

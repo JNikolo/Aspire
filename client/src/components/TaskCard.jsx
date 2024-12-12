@@ -85,7 +85,6 @@ const TaskCard = (props) => {
   // JSON.stringify(task)); }, [task]); Toggle task completion for a specific day
   const toggleCompletion = (date) => {
     const formattedDate = format(date, "yyyy-MM-dd");
-    console.log(formattedDate);
     setTask((prevTask) => ({
       ...prevTask,
       completion: {
@@ -93,7 +92,6 @@ const TaskCard = (props) => {
         [formattedDate]: !prevTask.completion[formattedDate], // Toggle status
       },
     }));
-    console.log(task.completion);
   };
   const handleEditClick = () => {
     // Simple client-side navigation

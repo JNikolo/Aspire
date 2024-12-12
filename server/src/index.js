@@ -18,7 +18,6 @@ app.use("/chat", chatRouter);
 app.use("/profile", profileRouter);
 
 app.get("/", (req, res) => {
-  console.log("got requested");
   res.send("Hello World");
 });
 

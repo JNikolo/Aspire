@@ -1,7 +1,7 @@
 import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import { prisma } from "../middlewares/prisma.js";
-import { clerkClient } from '@clerk/clerk-sdk-node';
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 const profileRouter = express.Router();
 
@@ -10,15 +10,17 @@ profileRouter.use(clerkMiddleware());
 profileRouter.get("/", async (req, res) => {
   try {
     if (!req.auth || !req.auth.userId) {
-      return res.status(401).json({ error: "Unauthorized access. Please log in." });
+      return res
+        .status(401)
+        .json({ error: "Unauthorized access. Please log in." });
     }
 
-    const { userId } = req.auth; 
+    const { userId } = req.auth;
 
     const userProfile = await prisma.user.findUnique({
       where: { authId: userId },
       select: {
-        profileName: true,  
+        profileName: true,
       },
     });
 
@@ -29,19 +31,18 @@ profileRouter.get("/", async (req, res) => {
     }
 
     const user = await clerkClient.users.getUser(userId);
-    console.log(user);
     const profileImage = user ? user.imageUrl : null;
 
-    console.log(profileImage);
-
     const response = {
-      profileName: userProfile.profileName, 
-      profilePicture: profileImage,         
+      profileName: userProfile.profileName,
+      profilePicture: profileImage,
     };
 
     res.json(response);
   } catch (err) {
-    res.status(500).json({ error: "An error occurred while fetching the user profile." });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the user profile." });
   }
 });
 
@@ -118,7 +119,7 @@ profileRouter.get("/communities", async (req, res) => {
     const communityIds = habitLogs.map((log) => log.communityId);
     const uniqueCommunityIds = [...new Set(communityIds)].filter(
       (id) => id !== null
-    ); 
+    );
 
     const communities = await prisma.community.findMany({
       where: {

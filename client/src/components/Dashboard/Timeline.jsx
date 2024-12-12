@@ -3,9 +3,6 @@ import { MdAddCircle } from "react-icons/md";
 import { format, parseISO } from "date-fns";
 
 const Timeline = ({ newPost, habitLogs, habitName, habit }) => {
-  useEffect(() => {
-    console.log(habitLogs);
-  }, [habitLogs]);
   return (
     <div>
       <h2 className="text-left text-xl text-brown-light font-medium my-4">

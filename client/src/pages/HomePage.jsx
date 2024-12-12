@@ -34,50 +34,6 @@ export const HomePage = () => {
       alt: "Slide 3",
     },
   ];
-  // const cardItems = [
-  //   {
-  //     id: 1,
-  //     src: { Calender },
-  //     alt: "Calender",
-  //     title: "Simple Habit Creation",
-  //     description:
-  //       "Easily add habits with a daily, weekly, or custom frequency.",
-  //   },
-  //   {
-  //     id: 2,
-  //     src: "https://via.placeholder.com/600x300?text=Progress+Tracking",
-  //     alt: "Progress Tracking",
-  //     title: "Progress Tracking",
-  //     description: "Visualize your progress with charts and streaks.",
-  //   },
-  //   {
-  //     id: 3,
-  //     src: "https://via.placeholder.com/600x300?text=Reminders",
-  //     alt: "Reminders",
-  //     title: "Reminders & Notifications",
-  //     description: "Stay on top of your goals with timely notifications.",
-  //   },
-  //   {
-  //     id: 4,
-  //     src: { Shrek },
-  //     alt: "Personalized Goals",
-  //     title: "Personalized Goals",
-  //     description: "Set goals that fit your life and track them over time.",
-  //   },
-  // ];
-  const handleSignOut = async () => {
-    try {
-      if (!isSignedIn) return;
-      await signOut();
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleSignIn = () => {
-    navigate("/login");
-  };
 
   const handleGetStarted = () => {
     if (isSignedIn) {

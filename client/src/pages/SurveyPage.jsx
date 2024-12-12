@@ -61,14 +61,12 @@ export const SurveyPage = () => {
     // handle form submission
     if (isEditMode) {
       // handle edit mode
-      console.log("Edit Mode");
       setLoading("editing");
       updateHabit(getToken, habitId, data, navigate)
         .then(() => setLoading(null))
         .catch(() => setLoading(null));
     } else {
       // handle create mode
-      console.log("Create Mode");
       setLoading("creating");
       createHabit(getToken, data, navigate)
         .then(() => setLoading(null))

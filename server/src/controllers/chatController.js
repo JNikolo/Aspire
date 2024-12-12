@@ -89,7 +89,6 @@ async function executeTool(toolName, args, userId) {
 }
 
 export async function generateResponse(messages, userId) {
-  console.log("Generating response for messages:", messages);
   const currentMessageContent = messages[messages.length - 1].content;
 
   try {
@@ -112,12 +111,9 @@ export async function generateResponse(messages, userId) {
       max_tokens: 150,
     });
 
-    console.log("Response generated:", response);
-
     // Check if the model requested a tool call
     if (response.choices[0].finish_reason === "tool_calls") {
       const toolCalls = response.choices[0].message.tool_calls;
-      console.log("Tool calls:", toolCalls);
       const toolResults = await Promise.all(
         toolCalls.map(async (toolCall) => {
           const { name, arguments: argsString } = toolCall.function;
@@ -172,8 +168,6 @@ export async function generateResponse(messages, userId) {
         model: completionPayload.model,
         messages: completionPayload.messages,
       });
-
-      console.log("Final response:", finalResponse.choices[0].message.content);
 
       return finalResponse.choices[0].message;
     }

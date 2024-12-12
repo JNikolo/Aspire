@@ -35,7 +35,6 @@ export function SignUpPage() {
     try {
       setError("");
       setLoading(true);
-      console.log("Signing up with data:", data);
       const result = await signUp.create({
         emailAddress: data.email,
         username: data.username,
@@ -81,7 +80,6 @@ export function SignUpPage() {
         redirectUrl: "/sso-callback",
       });
     } catch (err) {
-      console.error("Error during Google sign in:", err);
       setError("An error occurred during Google sign in");
     } finally {
       setLoading(false);

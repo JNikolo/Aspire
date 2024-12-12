@@ -51,8 +51,6 @@ registerRouter.post("/sso-callback", async (req, res) => {
       where: { authId: user.id },
     });
 
-    console.log("existingUser: ", existingUser);
-
     if (!existingUser) {
       // No user exists, so create a new one
       const newUser = await prisma.user.create({

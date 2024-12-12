@@ -43,7 +43,7 @@ export const ProfilePage = () => {
         setProfileName(data?.profileName);
         setProfileImage(data?.profilePicture);
       } catch (error) {
-        console.error("Error fetching profile:", error);
+        console.error("Error fetching profile");
       }
     };
 
@@ -72,7 +72,7 @@ export const ProfilePage = () => {
         const communitiesData = await response.json();
         setCommunities(communitiesData);
       } catch (error) {
-        console.error("Error fetching communities:", error);
+        console.error("Error fetching communities");
       }
     };
 
@@ -101,7 +101,7 @@ export const ProfilePage = () => {
         const habitsData = await response.json();
         setHabits(habitsData);
       } catch (error) {
-        console.error("Error fetching habits:", error);
+        console.error("Error fetching habits");
       }
     };
 
@@ -136,7 +136,7 @@ export const ProfilePage = () => {
       setProfileName(updatedUser.profileName);
       setIsEditingProfile(false);
     } catch (error) {
-      console.error("Error saving profile changes:", error);
+      console.error("Error saving profile changes");
     }
   };
 
@@ -144,33 +144,33 @@ export const ProfilePage = () => {
     <div className="bg-blue-100 min-h-screen flex flex-col items-center p-4 sm:p-6 overflow-hidden">
       {/* Profile Section */}
       <div className="bg-white bg-opacity-90 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-2xl flex flex-col sm:flex-row items-center relative">
-      <div className="absolute top-4 right-4 flex flex-col gap-2">
-        {isEditingProfile ? (
-          <>
+        <div className="absolute top-4 right-4 flex flex-col gap-2">
+          {isEditingProfile ? (
+            <>
+              <button
+                onClick={saveChanges}
+                className="btn bg-green-500 text-white hover:bg-green-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
+              >
+                Save 💾
+              </button>
+              <button
+                onClick={discardChanges}
+                className="btn bg-red-500 text-white hover:bg-red-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
+              >
+                Discard 🗑️
+              </button>
+            </>
+          ) : (
             <button
-              onClick={saveChanges}
-              className="btn bg-green-500 text-white hover:bg-green-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
+              onClick={() => {
+                setTempName(profileName);
+                setIsEditingProfile(true);
+              }}
+              className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
             >
-              Save 💾
+              Edit ✏️
             </button>
-            <button
-              onClick={discardChanges}
-              className="btn bg-red-500 text-white hover:bg-red-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
-            >
-              Discard 🗑️
-            </button>
-          </>
-        ) : (
-          <button
-            onClick={() => {
-              setTempName(profileName);
-              setIsEditingProfile(true);
-            }}
-            className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"
-          >
-            Edit ✏️
-          </button>
-        )}
+          )}
         </div>
         <div className="flex-shrink-0">
           <img
@@ -209,7 +209,9 @@ export const ProfilePage = () => {
       {/* Habits Section */}
       <div className="mt-8 bg-white bg-opacity-90 rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-2xl">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg sm:text-2xl font-bold text-black">Your Habits</h3>
+          <h3 className="text-lg sm:text-2xl font-bold text-black">
+            Your Habits
+          </h3>
           <button
             onClick={() => navigate("/survey/new")}
             className="btn bg-blue-500 text-white hover:bg-blue-600 shadow-md px-4 py-2 rounded-lg text-sm sm:text-base"

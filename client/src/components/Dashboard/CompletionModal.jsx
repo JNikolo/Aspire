@@ -237,7 +237,6 @@ const CompletionModal = ({
       data.logDate = toggleDate
         ? new Date(toggleDate).toISOString()
         : new Date().toISOString();
-      console.log(data);
       await updateHabitLog(habit.id, log.id, data, getToken)
         .then(() => {
           setIsLoading(false); // Set loading state to false after async operation completes
@@ -256,7 +255,6 @@ const CompletionModal = ({
       data.logDate = toggleDate
         ? new Date(toggleDate).toISOString()
         : new Date().toISOString();
-      console.log(data);
       await postHabitLog(habit.id, data, getToken)
         .then(() => {
           const modal = document.getElementById(modalId);
