@@ -6,6 +6,7 @@ import { NavBar } from "./components/NavBar";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CommunitiesPage from "./pages/CommunitiesPage";
+import { Children } from "react";
 
 const routesWithNavbar = [
   "/profile",
@@ -24,9 +25,6 @@ function App() {
       {showNavbar && <NavBar />}
       <Outlet />
       {isSignedIn && <ChatbotBubble />}
-      <Routes>
-        <Route path="/" element={<CommunitiesPage />} />
-      </Routes>
     </>
   );
 }

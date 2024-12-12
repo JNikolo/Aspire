@@ -35,7 +35,7 @@ const AutoScrollCarousel = ({ items, interval = 3000 }) => {
                   key={item.id}
                   src={item.src}
                   alt={item.alt}
-                  className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-500 ${
+                  className={`absolute top-0 left-0 w-full h-90 object-cover transition-opacity duration-500 ${
                     index === currentIndex ? "opacity-100" : "opacity-0"
                   }`}
                 />

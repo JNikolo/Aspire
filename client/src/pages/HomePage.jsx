@@ -1,12 +1,10 @@
 // import Logo from "../../public/check-icon.png";
-import Calender from "../assets/calender.jpeg";
-import Shrek from "../assets/shrek.png";
 import Mountain from "../assets/mountain.jpeg";
 import Logo from "../assets/logo.svg";
 import VideoDemo from "../assets/VideoDemo.mp4";
-import Calender_2 from "../assets/Calender.png";
-import Chat from "../assets/Chat.png";
-import Community from "../assets/Community.png";
+import Calender from "../../public/Calender.png";
+import Chat from "../../public/Chat.png";
+import Community from "../../public/Community.png";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -22,51 +20,51 @@ export const HomePage = () => {
   const carouselItems = [
     {
       id: 1,
-      src: { Calender_2 },
+      src: Calender,
       alt: "Slide 1",
     },
     {
       id: 2,
-      src: { Chat },
+      src: Chat,
       alt: "Slide 2",
     },
     {
       id: 3,
-      src: { Community },
+      src: Community,
       alt: "Slide 3",
     },
   ];
-  const cardItems = [
-    {
-      id: 1,
-      src: { Calender },
-      alt: "Calender",
-      title: "Simple Habit Creation",
-      description:
-        "Easily add habits with a daily, weekly, or custom frequency.",
-    },
-    {
-      id: 2,
-      src: "https://via.placeholder.com/600x300?text=Progress+Tracking",
-      alt: "Progress Tracking",
-      title: "Progress Tracking",
-      description: "Visualize your progress with charts and streaks.",
-    },
-    {
-      id: 3,
-      src: "https://via.placeholder.com/600x300?text=Reminders",
-      alt: "Reminders",
-      title: "Reminders & Notifications",
-      description: "Stay on top of your goals with timely notifications.",
-    },
-    {
-      id: 4,
-      src: { Shrek },
-      alt: "Personalized Goals",
-      title: "Personalized Goals",
-      description: "Set goals that fit your life and track them over time.",
-    },
-  ];
+  // const cardItems = [
+  //   {
+  //     id: 1,
+  //     src: { Calender },
+  //     alt: "Calender",
+  //     title: "Simple Habit Creation",
+  //     description:
+  //       "Easily add habits with a daily, weekly, or custom frequency.",
+  //   },
+  //   {
+  //     id: 2,
+  //     src: "https://via.placeholder.com/600x300?text=Progress+Tracking",
+  //     alt: "Progress Tracking",
+  //     title: "Progress Tracking",
+  //     description: "Visualize your progress with charts and streaks.",
+  //   },
+  //   {
+  //     id: 3,
+  //     src: "https://via.placeholder.com/600x300?text=Reminders",
+  //     alt: "Reminders",
+  //     title: "Reminders & Notifications",
+  //     description: "Stay on top of your goals with timely notifications.",
+  //   },
+  //   {
+  //     id: 4,
+  //     src: { Shrek },
+  //     alt: "Personalized Goals",
+  //     title: "Personalized Goals",
+  //     description: "Set goals that fit your life and track them over time.",
+  //   },
+  // ];
   const handleSignOut = async () => {
     try {
       if (!isSignedIn) return;
